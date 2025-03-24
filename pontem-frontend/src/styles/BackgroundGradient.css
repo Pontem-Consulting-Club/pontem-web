@@ -1,0 +1,23 @@
+/* Definir la animación del gradiente abstracto */
+@keyframes gradient-abstract {
+  0% {
+    background-position: 0% 50%, 50% 50%, 50% 0%, 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%, 50% 100%, 50% 100%, 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%, 50% 50%, 50% 0%, 0% 50%;
+  }
+}
+
+/* Aplicar el gradiente abstracto animado al fondo */
+body {
+  background: rgb(255,66,29);
+  background: -moz-radial-gradient(circle, rgba(255,66,29,0.15) 0%, rgba(0,237,191,0.1) 100%);
+  background: -webkit-radial-gradient(circle, rgba(255,66,29,0.15) 0%, rgba(0,237,191,0.1) 100%);
+  background: radial-gradient(circle, rgba(255,66,29,0.15) 0%, rgba(0,237,191,0.1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ff421d", endColorstr="#00edbf", GradientType=1);
+  background-size: 200% 200%;
+  animation: gradient-abstract 15s ease infinite alternate both;
+}

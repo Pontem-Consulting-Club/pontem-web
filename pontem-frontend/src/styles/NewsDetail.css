@@ -1,0 +1,89 @@
+.news-detail {
+  max-width: 900px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.news-detail-image {
+  width: 45%;
+  height: auto;
+  border-radius: 10px;
+  margin: 0 0 20px 20px;
+  float: right;
+}
+
+.news-detail-content {
+  text-align: left;
+  min-width: 40%;
+}
+
+.news-detail-title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.news-detail-type {
+  display: inline-block;
+  padding: 2px 15px;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  margin-right: 10px;
+  opacity: 0.8;
+}
+
+.news-detail-author,
+.news-detail-date {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+.news-detail-subtitle {
+  font-size: 1.2rem;
+  color: #666;
+  margin-bottom: 15px;
+}
+
+.news-detail-content-text {
+  font-size: 1rem;
+  color: #444;
+  line-height: 1.6;
+  margin-top: 20px;
+  text-align: justify;
+}
+
+.back-button {
+  border: none !important;
+  background-color: #bbbbbb30 !important;
+  color: #555 !important;
+  font-weight: 500 !important;
+  white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+  width: 100px; /* Ancho fijo para todos los botones */
+  text-align: center; /* Centra el texto dentro del botón */
+  overflow: hidden; /* Asegura que el contenido no se salga */
+  padding: 5px 10px !important;
+  margin-bottom: 20px;
+}
+
+.back-button:hover {
+  transition: background-color 0.3s ease-in-out;
+  background-color: #888 !important;
+  color: white !important;
+}
+
+/* Media query para pantallas pequeñas */
+@media (max-width: 768px) {
+  .news-detail-image {
+    width: 100%;
+    margin: 0 0 20px 0;
+    float: none;
+  }
+}

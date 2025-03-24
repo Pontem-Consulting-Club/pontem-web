@@ -1,0 +1,85 @@
+.login-form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70vh;
+  margin-bottom: 100px;
+}
+
+.login-card {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 300px;
+}
+
+.form-title {
+  font-weight: bold;
+  margin-bottom: 30px;
+  color: #686868;
+  font-size: 1.2em;
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+  outline: 1px solid #eee;
+  border-radius: 8px;
+}
+
+.login-button {
+  width: 50%;
+  padding: 10px;
+  background-color: #eee !important;
+  color: #555 !important;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  display: block;
+  margin: 0 auto;
+}
+
+.login-button:hover {
+  background-color: #555 !important;
+  color: #fff !important;
+}
+
+.password-container {
+  position: relative;
+}
+
+.password-container input {
+  width: 100%;
+  padding-right: 30px;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #888;
+  cursor: pointer;
+}
+
+.error-message {
+  color: rgb(165, 1, 1);
+  background-color: #fae4e6;
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}

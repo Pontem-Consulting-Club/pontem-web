@@ -1,0 +1,374 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Estilos generales para la aplicación */
+html, body {
+  height: 100%;
+  margin: 0;
+  scroll-behavior: smooth;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  font-family: 'Raleway', sans-serif !important;
+}
+
+a {
+  outline: none !important;
+}
+
+p a, li a {
+  color: white;
+  text-decoration: none;
+}
+
+p a:hover, li a:hover {
+  font-weight: bold;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 92vh;
+}
+
+.content {
+  flex: 1;
+}
+
+/* Estilos para los botones */
+.btn-custom {
+  position: relative; /* Necesario para posicionar el pseudo-elemento */
+  background-color: #bbbbbb70 !important; /* Fondo con poca opacidad */
+  color: #eeeeee !important; /* Texto oscuro */
+  border: none !important;
+  padding: 10px 20px;
+  border-radius: 8px; /* Opcional, redondear esquinas */
+  overflow: hidden; /* Para ocultar cualquier cosa que sobresalga del botón */
+  transition: background-color 0.3s ease-in-out !important;
+  cursor: pointer;
+}
+
+.btn-custom:hover {
+  color: rgb(16, 16, 16) !important; /* Texto oscuro al hacer hover */
+  background-color: white !important; /* Fondo blanco al hacer hover */
+}
+
+.btn-custom:active {
+  transform: scale(0.95) !important; /* Hace el botón un poco más pequeño */
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.btn-custom::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, #ff431d10, #00edbf10); /* Gradiente encima */
+}
+
+.btn-custom:hover::before {
+  background: linear-gradient(90deg, #ff431d50, #00edbf50);
+  background-size: 150% 150%;
+  animation: gradient-animation 3s ease infinite alternate both;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+}
+
+.btn-custom span {
+  position: relative; /* Para asegurarse de que el texto esté encima del gradiente */
+  z-index: 2; /* Aumentar el z-index para asegurar que el texto esté por encima del gradiente */
+}
+
+/* Estilos personalizados para los botones con borde */
+.btn-outline-custom {
+  background-color: transparent !important; /* Fondo transparente */
+  color: #541e50 !important; /* Verde para el texto */
+  border: 2px solid #541e50 !important; /* Borde verde */
+  transition: background-color 0.5s, color 0.5s !important;
+}
+
+.btn-outline-custom:hover {
+  background-color: #541e50 !important; /* Verde de fondo al hacer hover */
+  color: white !important; /* Letras blancas al hacer hover */
+}
+
+.btn-outline-custom:active {
+  background-color: #541e50 !important; /* Verde más oscuro al estar activo */
+  color: white !important; /* Letras blancas al estar activo */
+  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125) !important;
+}
+
+.btn-outline-custom:focus {
+  outline: none !important;
+  box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.5) !important;
+}
+
+/* Estilos del footer */
+.footer {
+  padding-top: 100px !important;
+  color: white !important;
+  background-color: rgba(88, 87, 87, 0.5); /* Fondo semi-transparente */;
+  clip-path: ellipse(150% 60% at 30% 61%);
+  position: relative;
+  margin-top: 100px;
+}
+
+.footer-logo {
+  max-height: 150px; /* Ajusta la altura máxima de la imagen */
+  width: auto; /* Mantiene la proporción de la imagen */
+  object-fit: contain; /* Asegura que la imagen se ajuste dentro del contenedor */
+}
+
+.footer-contact {
+  display: inline-flex; /* Cambia a inline-flex para ajustar al contenido */
+  align-items: center;
+  white-space: nowrap;
+  color: white;
+  text-decoration: none;
+  margin-bottom: 10px;
+  transition: color 0.3s ease, background 0.3s ease;
+  padding: 5px 10px; /* Ajusta el relleno para que no sea excesivo */
+  border-radius: 5px;
+  transform-origin: center;
+  position: relative;
+}
+
+.footer-contact:hover {
+  font-weight: bold;
+  transition: background 0.3s ease; /* Transición para el fondo al hacer hover */
+}
+
+.footer-contact svg {
+  margin-right: 8px;
+  font-size: 1.2em;
+}
+
+/* Estilo específico para LinkedIn */
+.footer-contact.linkedin:hover {
+  background-color: #0b65c2;
+  transition: background 0.3s ease;
+}
+
+/* Estilo específico para Instagram */
+.footer-contact.instagram:hover {
+  background: linear-gradient(45deg, #ffb101, #f71563, #7e33f5);
+  transition: background 0.3s ease;
+}
+
+/* Estilo específico para Email */
+.footer-contact.email:hover {
+  background: linear-gradient(to bottom, #1d52ee, #17e5fe);
+  transition: background 0.3s ease;
+}
+
+/* Estilos para la sección de introducción */
+.introduction-section {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  height: 80vh;
+  width: 100%;
+  color: white;
+}
+
+/* Pseudo-elemento ::before para el fondo de la imagen */
+.introduction-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-image: var(--background-image);
+  filter: grayscale(100%);
+  z-index: 1;
+}
+
+/* Pseudo-elemento ::after para el overlay oscuro */
+.introduction-section::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 2;
+}
+
+.content {
+  position: relative;
+  z-index: 3;
+}
+
+.intro-margin {
+  margin-left: 140px;
+  max-width: 50%;
+}
+
+@media (min-width: 992px) {
+  .content {
+    text-align: left;
+  }
+}
+
+.introduction-section h1 {
+  font-size: 50px;
+  font-weight: bold;
+  margin-top: 0;
+}
+
+.introduction-section h5 {
+  font-size: 1.25rem;
+}
+
+.btn-custom {
+  background-color: #007bff;
+  border: none;
+}
+
+@media (max-width: 768px) {
+  .introduction-section {
+    align-items: center;
+    text-align: center;
+  }
+  .intro-margin {
+    margin-left: 0;
+    max-width: 70%;
+    align-self: center;
+  }
+
+  .introduction-section h1 {
+    font-size: 2.5rem;
+  }
+
+  .introduction-section h5 {
+    font-size: 1rem;
+  }
+}
+
+.section-text {
+  text-align: center;
+  color: #686868;
+  position: relative;
+  z-index: 3;
+  padding-top: 5%;
+  padding-bottom: 5%;
+  max-width: 800px !important;
+  margin: 0 auto !important;
+}
+
+.section-text h3 {
+  font-size: 2rem;
+  font-weight: bold;
+  padding-top: 20px;
+  margin-bottom: 50px;
+}
+
+.section-text p {
+  font-size: 1rem;
+  text-align: justify;
+  line-height: 1.6;
+  max-width: 85%;
+  margin: auto;
+  font-weight: 500;
+  padding-bottom: 15px;
+}
+
+.soft-shadow {
+  background-color: rgba(0, 0, 0, 0.1);
+  width: 100% !important;
+  clip-path: ellipse(150% 70% at 40% 70%);
+  margin-top: 50px;
+}
+
+.soft-shadow p {
+  width: 70%;
+  margin: auto;
+}
+
+.padding-slider {
+  padding-top: 5%;
+  background-color: rgba(0, 0, 0, 0.1);
+  clip-path: ellipse(80% 70% at 30% 0%);
+}
+
+.gradient-text {
+  font-size: 48px;
+  font-weight: bold;
+  background: linear-gradient(45deg, #ff421d, #3d07845c, #00edbf);
+  background-size: 100% 100%; /* cambiar primero a 200% para transicion */
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: gradient-animation 15s ease infinite alternate both;
+}
+
+@keyframes gradient-animation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.next-events-container {
+  width: 100%; /* Ancho por defecto para pantallas pequeñas */
+}
+
+@media (min-width: 992px) { /* Media query para pantallas grandes */
+  .next-events-container {
+    width: 60%; /* Ancho del 60% para pantallas grandes */
+    margin: 0 auto; /* Centra el contenedor horizontalmente */
+    margin-top: 50px;
+  }
+}

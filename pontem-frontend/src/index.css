@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  margin: 0;
+  font-family: 'Raleway', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+} */
+
+/* Estilos para los botones */
+.btn-custom {
+  background-color: #80c950; /* Verde */
+  color: white; /* Letras blancas */
+  border: none;
+  transition: background-color 0.3s;
+}
+
+.btn-custom:hover {
+  background-color: #45a416; /* Verde más oscuro al hacer hover */
+}
+
+.btn-custom:active {
+  background-color: #4dbf15; /* Verde más oscuro al estar activo */
+  box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+}
+
+.btn-custom:focus {
+  outline: none;
+  box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.5);
+}

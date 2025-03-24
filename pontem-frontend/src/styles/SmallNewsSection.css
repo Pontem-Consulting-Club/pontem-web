@@ -1,0 +1,91 @@
+/* Estilos del componente SmallNewsSection */
+
+.small-news-section-title {
+  font-size: 2rem;
+  color: #686868;
+  font-weight: bold;
+  margin-top: 80px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.small-news-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)) !important;
+  gap: 20px;
+}
+
+.small-news-card {
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 270px !important;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .small-news-grid {
+    gap: 10px;
+  }
+
+  .small-news-card {
+    height: 320px !important;
+  }
+}
+
+.small-news-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.small-news-card .card-body {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.small-news-image {
+  width: 100% !important;
+  height: 120px !important;
+  object-fit: cover !important;
+  border-radius: 10px 10px 0 0;
+}
+
+.small-news-type {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 50px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+  margin-right: 10px;
+  opacity: 0.8;
+  width: fit-content;
+}
+
+.small-news-item-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 5px !important;
+  text-align: left !important;
+}
+
+.small-news-item-subtitle {
+  font-size: 0.9rem;
+  color: #888;
+  margin-bottom: 10px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

@@ -1,0 +1,29 @@
+.social-media-links {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.social-media-links-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #686868;
+  text-align: center;
+  margin-top: 80px;
+  margin-bottom: 15px;
+}
+
+.social-logo {
+  cursor: pointer;
+  width: 70px;
+  height: auto;
+  margin: 0 20px;
+  transition: transform 0.2s ease;
+  filter: grayscale(100%);
+  margin-bottom: 40px;
+}
+
+.social-logo:hover {
+  transform: scale(1.1);
+  filter: grayscale(0%);
+} 

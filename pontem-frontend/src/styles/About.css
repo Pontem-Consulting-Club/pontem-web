@@ -1,0 +1,126 @@
+.about-title {
+  font-size: 2rem;
+  font-weight: bold;
+  padding-top: 20px;
+  margin-bottom: 35px;
+  color: #686868;
+}
+
+.history-image {
+  border-radius: 24px !important; /* Bordes redondeados */
+  max-width: 100%; /* Asegura que la imagen ocupe todo el ancho disponible */
+  height: auto; /* Ajusta la altura automáticamente */
+  filter: grayscale(100%);
+  margin-bottom: 20px;
+}
+
+.card {
+  background-color: rgba(249, 249, 249, 0.8) !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 12px !important;
+  min-height: auto;
+  padding: 15px;
+}
+
+.card-title {
+  font-size: 1.5rem;
+  font-weight: bold !important;
+  color: #686868 !important;
+  text-align: center;
+  margin-bottom: 15px !important;
+}
+
+@media (max-width: 767px) {
+  .card {
+    margin-bottom: 15px !important;
+    padding: 5px;
+  }
+
+  .history-image {
+    max-width: 90% !important;
+    margin: 20px auto;
+  }
+}
+
+.team-card {
+  background-color: rgba(249, 249, 249, 0.8);
+  border-radius: 24px; /* Bordes redondeados */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 10vh;
+}
+
+.team-container {
+  /* max-width: 85% !important; */
+  margin: 0 auto;
+  text-align: center;
+  color: #686868;
+}
+
+.team-image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 24px;
+  border: 1px solid #ccc;
+  filter: grayscale(100%);
+}
+
+.team-card:nth-child(even) .team-image {
+  border-radius: 24px 0 0 24px; /* Esquinas redondeadas solo en la parte izquierda */
+}
+
+.team-card:nth-child(odd) .team-image {
+  border-radius: 0 24px 24px 0; /* Esquinas redondeadas solo en la parte derecha */
+}
+
+.team-content {
+  color: #686868;
+  padding-left: 20px;
+}
+
+.team-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  margin-top: 25px;
+  text-align: left;
+  padding: 0 5%;
+}
+
+.team-text {
+  font-size: 0.9rem;
+  margin-bottom: 15px;
+  line-height: 1.5;
+  text-align: left;
+  padding: 0 5%;
+}
+
+@media (max-width: 767px) {
+  .team-container {
+    max-width: 95% !important;
+  }
+
+  .team-content {
+    max-width: 95%;
+  }
+
+  .team-card {
+    margin-bottom: 5vh;
+  }
+
+  .team-image {
+    border-radius: 24px 24px 0 0 !important;
+  }
+
+  .team-text {
+    font-size: 1rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  .team-container {
+    max-width: 900px !important;
+  }
+}
