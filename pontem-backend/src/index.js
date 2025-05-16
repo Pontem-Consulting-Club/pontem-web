@@ -21,13 +21,18 @@ const app = express();
 const port = process.env.PORT || 8000;
 
 
-const allowedOrigins = [ process.env.ALLOWED_ORIGIN, process.env.ALLOWED_ORIGIN_1  ];
+// const allowedOrigins = [ process.env.ALLOWED_ORIGIN, process.env.ALLOWED_ORIGIN_1  ];
 
-app.use(
+const options = [
   cors({
-    origin: "*",
+    origin: '*',
+    methods: '*',
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
   })
-);
+];
+
+app.use(options);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
