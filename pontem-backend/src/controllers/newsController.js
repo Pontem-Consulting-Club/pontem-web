@@ -5,6 +5,7 @@ const getNews = async (req, res) => {
     const result = await db.query('SELECT * FROM "News"');
     res.json(result.rows);
   } catch (error) {
+    console.log(error)
     res.status(500).json({ error: 'Error fetching news' });
   }
 };
