@@ -20,29 +20,8 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 8000;
 
-// Obtener las URLs permitidas desde las variables de entorno
-const allowedOrigins = [
-  process.env.ALLOWED_ORIGIN_1,
-  process.env.ALLOWED_ORIGIN_2,
-];
 
-// Configurar CORS
-const corsOptions = {
-  origin: function (origin, callback) {
-    if (
-      !origin ||
-      allowedOrigins.some((allowedOrigin) =>
-        new RegExp(`^${allowedOrigin}`).test(origin)
-      )
-    ) {
-      callback(null, true);
-    } else {
-      callback(new Error('No permitido por CORS'));
-    }
-  },
-};
-
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
