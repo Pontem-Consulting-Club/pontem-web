@@ -21,18 +21,26 @@ const app = express();
 const port = process.env.PORT || 8000;
 
 
-
-console.log(process.env.ALLOWED_ORIGIN)
+const allowedOrigins = [ process.env.ALLOWED_ORIGIN, process.env.ALLOWED_ORIGIN_1  ];
 
 app.use(
   cors({
-    origin: process.env.ALLOWED_ORIGIN,
+    origin: (origin, callback) => {
+      // origin === undefined cuando es petición same‑origin o via herramientas como cURL/postman
+      if (!origin || allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      // Si llega aquí, es un origen no permitido
+      console.log(`🛑 Bloqueado por CORS: request desde origen NO permitido → ${origin}`);
+      return callback(new Error('Origen no permitido por CORS'), false);
+    },
     methods: ['GET','POST','PUT','PATCH','DELETE','OPTIONS'],
     allowedHeaders: ['Content-Type','Authorization'],
     optionsSuccessStatus: 200,
     maxAge: 86400
   })
 );
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
