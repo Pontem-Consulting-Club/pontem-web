@@ -63,7 +63,7 @@ function News() {
   useEffect(() => {
     const fetchNews = async () => {
       try {
-        const response = await api.get('/news/news');
+        const response = await api.get('/news/news/');
         const sortedNews = response.data.sort(
           (a, b) => new Date(b.published_date) - new Date(a.published_date)
         );
