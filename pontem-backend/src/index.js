@@ -23,6 +23,9 @@ const port = process.env.PORT || 8000;
 
 // const allowedOrigins = [ process.env.ALLOWED_ORIGIN, process.env.ALLOWED_ORIGIN_1  ];
 
+console.log('Hola, mundo 1!');
+
+
 const options = [
   cors({
     origin: '*',
@@ -32,7 +35,11 @@ const options = [
   })
 ];
 
+console.log('Hola, mundo 2!');
+
 app.use(options);
+
+console.log('Hola, mundo 3!');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
