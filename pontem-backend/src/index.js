@@ -21,7 +21,29 @@ const app = express();
 const port = process.env.PORT || 8000;
 
 
-app.use(cors());
+const cors = require('cors');
+
+// 1) Primero, un middleware manual que cubre cualquier petición (incluye preflight y headers personalizados)
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*')                       // cualquiera
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+  )
+  if (req.method === 'OPTIONS') {
+    // Preflight
+    res.header(
+      'Access-Control-Allow-Methods',
+      'GET, POST, PUT, PATCH, DELETE, OPTIONS'
+    )
+    return res.sendStatus(200)
+  }
+  next()
+})
+
+// 2) Después cargamos el cors “estándar” por si hay algo más que cubrir
+app.use(cors())
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
