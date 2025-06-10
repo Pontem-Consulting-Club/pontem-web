@@ -48,7 +48,7 @@ const teamData = [
     role: 'Gestionar ingresos, gastos y presupuestos del club, explorando nuevas fuentes de financiamiento para cada una de las áreas y proyectos. Encargada de apoyar a otras áreas en proyectos inter-coordinaciones. Responsable de avances en materia de constitución legal de Pontem.',
     imageUrl: 'equipos/Finanzas.JPG',
   }
-  // TODO: Agregar equipo de TI (Tecnología e Información)
+  // TODO: Agregar equipo de TI
   ];
 
     export default teamData;
