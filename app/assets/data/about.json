@@ -1,0 +1,62 @@
+{
+    "title": "Nosotros - Pontem",
+    "history": [
+        {
+            "year": "2020",
+            "title": "Fundación",
+            "description": "Pontem Consulting Club fue fundado por estudiantes apasionados por la consultoría."
+        },
+        {
+            "year": "2021",
+            "title": "Primer Proyecto Social",
+            "description": "Completamos nuestro primer proyecto de consultoría social con una ONG local."
+        },
+        {
+            "year": "2022",
+            "title": "Crecimiento",
+            "description": "Expandimos nuestro equipo y aumentamos el número de proyectos y eventos."
+        },
+        {
+            "year": "2023",
+            "title": "Reconocimiento",
+            "description": "Nos convertimos en uno de los clubes de consultoría más activos de la universidad."
+        },
+        {
+            "year": "2024",
+            "title": "Nuevos Horizontes",
+            "description": "Continuamos creciendo y buscando nuevas oportunidades para nuestros miembros."
+        }
+    ],
+    "team": [
+        {
+            "name": "Cristóbal Lobos",
+            "role": "Presidente — Liderazgo Estratégico",
+            "profilePicture": "equipos/Direccion.JPG"
+        },
+        {
+            "name": "Ignacio Massú",
+            "role": "Vicepresidente — Operaciones",
+            "profilePicture": "equipos/Direccion.JPG"
+        },
+        {
+            "name": "Matías Campos",
+            "role": "Director de Proyectos — Consultoría Social",
+            "profilePicture": "equipos/CS.JPG"
+        },
+        {
+            "name": "Pedro Munita",
+            "role": "Director de Eventos — Actividades y Networking",
+            "profilePicture": "equipos/RelacionesExternas.JPG"
+        },
+        {
+            "name": "Consuelo Moreno",
+            "role": "Director de Comunicaciones — Marketing y RRSS",
+            "profilePicture": "equipos/C&M.JPG"
+        },
+        {
+            "name": "Gaspar Villarroel",
+            "role": "Director de Membresías — Reclutamiento y Retención",
+            "profilePicture": "equipos/GDP.JPG"
+        }
+    ]
+}

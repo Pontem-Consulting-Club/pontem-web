@@ -1,0 +1,31 @@
+{
+    "title": "Material de Estudio - Pontem",
+    "driveLink": "https://drive.google.com/drive/folders/1VMvUCSLVQ4ZeAVuzffJVIIHwkJqUGPZ8?usp=drive_link",
+    "stages": [
+        {
+            "title": "CV y Cover Letter",
+            "description": "Preparación de documentos de postulación"
+        },
+        {
+            "title": "Online Test",
+            "description": "Pruebas de aptitud y razonamiento"
+        },
+        {
+            "title": "Entrevista de Fit",
+            "description": "Evaluación de compatibilidad cultural"
+        },
+        {
+            "title": "Case Interview",
+            "description": "Resolución de casos de negocio"
+        },
+        {
+            "title": "Final Round",
+            "description": "Entrevistas finales con partners"
+        }
+    ],
+    "caseBooks": [
+        "McKinsey Case Book",
+        "BCG Case Book",
+        "Bain Case Book"
+    ]
+}

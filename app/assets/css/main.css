@@ -1,0 +1,132 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+@font-face {
+  font-family: 'Raleway';
+  src: url('~/assets/fonts/Raleway-Regular.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Raleway';
+  src: url('~/assets/fonts/Raleway-Italic.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: italic;
+}
+
+:root {
+  --font-sans: 'Raleway', sans-serif;
+  --ui-text-dimmed: var(--ui-color-neutral-400);
+  --ui-text-muted: var(--ui-color-neutral-500);
+  --ui-text-toned: var(--ui-color-neutral-600);
+  --ui-text: var(--ui-color-neutral-700);
+  --ui-text-highlighted: var(--ui-color-neutral-900);
+  --ui-text-inverted: #ffffff;
+  --ui-bg: #ffffff;
+  --ui-bg-muted: var(--ui-color-neutral-50);
+  --ui-bg-elevated: var(--ui-color-neutral-100);
+  --ui-bg-accented: var(--ui-color-neutral-200);
+  --ui-bg-inverted: var(--ui-color-neutral-900);
+  --ui-border: var(--ui-color-neutral-200);
+  --ui-border-muted: var(--ui-color-neutral-200);
+  --ui-border-accented: var(--ui-color-neutral-300);
+  --ui-border-inverted: var(--ui-color-neutral-900);
+  --ui-radius: 0.25rem;
+  --ui-primary: var(--color-pontemred-500);
+  --ui-secondary: var(--color-pontemteal-500);
+  --ui-accent: var(--color-pontempurple-500);
+}
+
+.dark {
+  --ui-text-dimmed: var(--ui-color-neutral-400);
+  --ui-text-muted: var(--ui-color-neutral-300);
+  --ui-text-toned: var(--ui-color-neutral-200);
+  --ui-text: #ffffff;
+  --ui-text-highlighted: #ffffff;
+  --ui-text-inverted: #ffffff;
+  --ui-bg: var(--ui-color-slate-900);
+  --ui-bg-muted: var(--ui-color-slate-800);
+  --ui-bg-elevated: var(--ui-color-slate-700);
+  --ui-bg-accented: var(--ui-color-slate-600);
+  --ui-bg-inverted: var(--ui-color-slate-500);
+  --ui-border: var(--ui-color-neutral-800);
+  --ui-border-muted: var(--ui-color-neutral-800);
+  --ui-border-accented: var(--ui-color-neutral-700);
+  --ui-border-inverted: var(--ui-color-neutral-800);
+  --ui-radius: 0.25rem;
+  --ui-primary: var(--color-pontemred-400);
+  --ui-secondary: var(--color-pontemteal-400);
+  --ui-accent: var(--color-pontempurple-400);
+}
+
+/* stylelint-disable at-rule-no-unknown */
+@theme static {
+  --color-pontemred-50: #fff2f0;
+  --color-pontemred-100: #ffe5e0;
+  --color-pontemred-200: #ffc3b8;
+  --color-pontemred-300: #ff907a;
+  --color-pontemred-400: #ff5433;
+  --color-pontemred-500: #FF421D;
+  --color-pontemred-600: #e62600;
+  --color-pontemred-700: #a31b00;
+  --color-pontemred-800: #751300;
+  --color-pontemred-900: #4d0d00;
+  --color-pontemred-950: #330800;
+
+  --color-pontemteal-50: #f0fffc;
+  --color-pontemteal-100: #e0fff9;
+  --color-pontemteal-200: #b8fff1;
+  --color-pontemteal-300: #7affe5;
+  --color-pontemteal-400: #33ffd7;
+  --color-pontemteal-500: #00EDBF;
+  --color-pontemteal-600: #00e6b9;
+  --color-pontemteal-700: #00a384;
+  --color-pontemteal-800: #00755f;
+  --color-pontemteal-900: #004d3e;
+  --color-pontemteal-950: #003329;
+  
+  --color-pontempurple-50: #f6f0fe;
+  --color-pontempurple-100: #eee2fd;
+  --color-pontempurple-200: #d7bbfb;
+  --color-pontempurple-300: #b581f8;
+  --color-pontempurple-400: #8d3df5;
+  --color-pontempurple-500: #3D0784;
+  --color-pontempurple-600: #6406df;
+  --color-pontempurple-700: #4701a2;
+  --color-pontempurple-800: #330372;
+  --color-pontempurple-900: #220449;
+  --color-pontempurple-950: #160330;
+}
+/* stylelint-enable at-rule-no-unknown */
+
+/* Map semantic UI variables to brand palettes */
+:root {
+  --ui-primary: var(--color-pontemred-500);
+  --ui-secondary: var(--color-pontemteal-500);
+  --ui-accent: var(--color-pontempurple-500);
+}
+
+@keyframes gradient-abstract {
+  0% {
+    background-position: 0% 50%, 50% 50%, 50% 0%, 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%, 50% 100%, 50% 100%, 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%, 50% 50%, 50% 0%, 0% 50%;
+  }
+}
+
+.bg-abstract-gradient {
+  background: rgb(255, 66, 29);
+  background: -moz-radial-gradient(circle, rgba(255, 66, 29, 0.15) 0%, rgba(0, 237, 191, 0.1) 100%);
+  background: -webkit-radial-gradient(circle, rgba(255, 66, 29, 0.15) 0%, rgba(0, 237, 191, 0.1) 100%);
+  background: radial-gradient(circle, rgba(255, 66, 29, 0.15) 0%, rgba(0, 237, 191, 0.1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ff421d", endColorstr="#00edbf", GradientType=1);
+  background-size: 200% 200%;
+  animation: gradient-abstract 15s ease infinite alternate both;
+}
