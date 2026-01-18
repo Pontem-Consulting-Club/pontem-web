@@ -5,7 +5,7 @@ useHead({
   title: 'Noticias y Blog - Pontem'
 })
 
-const { data: news, status } = await useFetch<NewsRecord[]>('/api/news/news', {
+const { data: news, status, refresh } = await useFetch<NewsRecord[]>('/api/news/news', {
   default: () => []
 })
 
@@ -51,14 +51,14 @@ const totalPages = computed(() => Math.ceil(filteredNews.value.length / newsPerP
 
       <LoadingSpinner v-if="status === 'pending'" />
 
-      <div v-else-if="paginatedNews.length === 0"
-      class="text-center">
+      <div v-else-if="paginatedNews.length === 0" class="text-center">
         <UIcon name="i-lucide-inbox" class="w-16 h-16 mx-auto mb-4" />
         <p>No hay noticias disponibles</p>
       </div>
 
       <div v-else class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <NewsCard v-for="newsItem in paginatedNews" :key="newsItem.id" :news-item="newsItem" variant="card" />
+        <NewsCard v-for="newsItem in paginatedNews" :key="newsItem.id" :news-item="newsItem" variant="card"
+          @updated="refresh" />
       </div>
 
       <!-- Pagination -->

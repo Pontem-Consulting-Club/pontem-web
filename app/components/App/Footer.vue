@@ -1,6 +1,5 @@
 <template>
-  <footer class="bg-gray-600/75 mt-24 pt-24 pb-12 text-white"
-    style="clip-path: ellipse(150% 60% at 30% 61%);">
+  <footer class="bg-gray-600/75 mt-24 pt-24 pb-12 text-white" style="clip-path: ellipse(150% 60% at 30% 61%);">
     <UContainer>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
         <!-- Logo Column -->
@@ -53,28 +52,26 @@
 <script setup lang="ts">
 const { navigation } = useNavigation()
 
-const navigationWithAdmin = [...navigation, { label: 'Admin', to: '/admin' }]
+const navigationWithAdmin = [...navigation, { label: 'Admin', to: '/admin/login' }]
 
 const socialLinks = [
-  { 
-    label: 'Email', 
+  {
+    label: 'Email',
     href: 'mailto:clubconsultoria.uc@gmail.com',
     icon: 'i-lucide-mail',
     hoverClass: 'hover:bg-gradient-to-b hover:from-electric-500 hover:to-sky-500 hover:text-white'
   },
-  { 
-    label: 'LinkedIn', 
+  {
+    label: 'LinkedIn',
     href: 'https://www.linkedin.com/company/pontemcc/mycompany/',
     icon: 'i-simple-icons-linkedin',
     hoverClass: 'hover:bg-linkedin-500 hover:text-white'
   },
-  { 
-    label: 'Instagram', 
+  {
+    label: 'Instagram',
     href: 'https://www.instagram.com/pontemconsultingclub/',
     icon: 'i-simple-icons-instagram',
     hoverClass: 'hover:bg-gradient-to-r hover:from-instagram-amber-500 hover:via-instagram-pink-500 hover:to-instagram-violet-500 hover:text-white'
   }
 ]
 </script>
-
-

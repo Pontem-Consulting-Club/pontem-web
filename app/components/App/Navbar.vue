@@ -13,6 +13,10 @@
           active-class="text-pontemred-500">
           {{ item.label }}
         </NuxtLink>
+        <UButton v-if="isAuthenticated" icon="i-lucide-log-out" color="error" variant="outline" size="xs"
+          @click="logout">
+          Cerrar Sesión
+        </UButton>
       </div>
 
       <!-- Mobile Menu Toggle -->
@@ -39,6 +43,10 @@
             class="px-5 py-2 gap-5 transition-colors text-left font-medium" active-class="text-pontemred-500">
             {{ item.label }}
           </NuxtLink>
+          <UButton v-if="isAuthenticated" icon="i-lucide-log-out" color="error" variant="outline" size="xs" class="m-2"
+            @click="handleLogout">
+            Cerrar Sesión
+          </UButton>
         </nav>
       </div>
 
@@ -57,6 +65,7 @@
 <script setup lang="ts">
 const isMobileMenuOpen = ref(false)
 const { navigation } = useNavigation()
+const { logout, isAuthenticated } = useAuth()
 
 const menuRef = ref<HTMLElement | null>(null)
 const menuButtonRef = ref<HTMLElement | null>(null)
@@ -67,6 +76,11 @@ const toggleMobileMenu = () => {
 
 const closeMobileMenu = () => {
   isMobileMenuOpen.value = false
+}
+
+const handleLogout = () => {
+  logout()
+  closeMobileMenu()
 }
 
 const onDocumentClick = (e: MouseEvent) => {

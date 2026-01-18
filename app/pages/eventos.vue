@@ -5,7 +5,7 @@ useHead({
   title: 'Eventos - Pontem'
 })
 
-const { data: events, status } = await useFetch<EventRecord[]>('/api/events/scheduled', {
+const { data: events, status, refresh } = await useFetch<EventRecord[]>('/api/events/scheduled', {
   default: () => []
 })
 
@@ -39,7 +39,7 @@ const pastEvents = computed(() => {
           <SectionHeaderWithIcon title="Próximos Eventos" icon="i-lucide-calendar" icon-color="text-primary-600" />
 
           <div class="space-y-8">
-            <EventCard v-for="event in futureEvents" :key="event.id" :event="event" variant="full" />
+            <EventCard v-for="event in futureEvents" :key="event.id" :event="event" variant="full" @updated="refresh" />
           </div>
         </section>
 
@@ -48,7 +48,7 @@ const pastEvents = computed(() => {
           <SectionHeaderWithIcon title="Eventos Pasados" icon="i-lucide-history" icon-color="" />
 
           <div class="space-y-4">
-            <EventCard v-for="event in pastEvents" :key="event.id" :event="event" variant="past" />
+            <EventCard v-for="event in pastEvents" :key="event.id" :event="event" variant="past" @updated="refresh" />
           </div>
         </section>
 

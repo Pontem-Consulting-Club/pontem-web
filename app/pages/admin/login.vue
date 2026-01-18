@@ -70,7 +70,7 @@ const handleSubmit = async () => {
     const result = await login(email.value, password.value)
 
     if (result.success) {
-      router.push('/admin')
+      router.push('/')
     } else {
       error.value = result.error || 'Error al iniciar sesión'
     }

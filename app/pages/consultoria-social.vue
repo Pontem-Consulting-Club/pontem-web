@@ -5,7 +5,7 @@ useHead({
   title: 'Consultoría Social - Pontem'
 })
 
-const { data: projects, status } = await useFetch<ProjectRecord[]>('/api/projects/social-consulting', {
+const { data: projects, status, refresh } = await useFetch<ProjectRecord[]>('/api/projects/social-consulting', {
   default: () => []
 })
 </script>
@@ -26,7 +26,7 @@ const { data: projects, status } = await useFetch<ProjectRecord[]>('/api/project
       <EmptyState v-else-if="projects && projects.length === 0" message="No hay proyectos disponibles" />
 
       <div v-else class="flex flex-col gap-10">
-        <ProjectCard v-for="project in projects" :key="project.id" :project="project" />
+        <ProjectCard v-for="project in projects" :key="project.id" :project="project" @updated="refresh" />
       </div>
     </UContainer>
   </div>

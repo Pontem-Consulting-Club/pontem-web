@@ -12,7 +12,7 @@ export default defineNuxtConfig({
     '@nuxt/image',
   ],
   supabase: {
-      redirectOptions: {
+    redirectOptions: {
       login: '/admin/login',
       callback: '/admin',
       include: ['/admin/**']

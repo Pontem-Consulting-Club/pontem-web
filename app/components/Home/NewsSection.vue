@@ -15,7 +15,8 @@
       <EmptyState v-else-if="latestNews.length === 0" message="No hay noticias disponibles" />
 
       <div v-else class="grid md:grid-cols-3 gap-6">
-        <NewsCard v-for="newsItem in latestNews" :key="newsItem.id" :news-item="newsItem" variant="list" />
+        <NewsCard v-for="newsItem in latestNews" :key="newsItem.id" :news-item="newsItem" variant="list"
+          @updated="refresh" />
       </div>
 
       <div class="text-center mt-10">
@@ -31,7 +32,7 @@
 <script setup lang="ts">
 import type { NewsRecord } from '~/types/content'
 
-const { data: news, status } = await useFetch<NewsRecord[]>('/api/news/news', {
+const { data: news, status, refresh } = await useFetch<NewsRecord[]>('/api/news/news', {
   default: () => []
 })
 
