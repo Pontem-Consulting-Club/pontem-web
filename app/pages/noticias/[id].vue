@@ -165,7 +165,21 @@ const buildPayload = () => ({
   type: normalizeValue(form.value.type as string | null)
 })
 
-const saveEdit = async () => {
+const buildFormData = (payload: ReturnType<typeof buildPayload>, file?: File | null) => {
+  const formData = new FormData()
+
+  Object.entries(payload).forEach(([key, value]) => {
+    formData.append(key, value ?? '')
+  })
+
+  if (file) {
+    formData.append('image', file)
+  }
+
+  return formData
+}
+
+const saveEdit = async (file?: File | null) => {
   const validationError = validateForm()
   if (validationError) {
     formError.value = validationError
@@ -177,11 +191,12 @@ const saveEdit = async () => {
 
   try {
     const payload = buildPayload()
+    const formData = buildFormData(payload, file)
     if (isNew) {
-      await $fetch('/api/admin/news', { method: 'POST', body: payload })
+      await $fetch('/api/admin/news', { method: 'POST', body: formData })
       handleCreated()
     } else if (editNews.value) {
-      await $fetch(`/api/admin/news/${editNews.value.id}`, { method: 'PUT', body: payload })
+      await $fetch(`/api/admin/news/${editNews.value.id}`, { method: 'PUT', body: formData })
       await handleUpdated()
     }
   } catch (error: unknown) {

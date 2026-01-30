@@ -8,7 +8,7 @@
         <UForm class="flex flex-col gap-5" @submit.prevent="handleSubmit">
             <UFormField>
                 <UFileUpload :model-value="pendingFile" accept="image/*" variant="area" size="md" :preview="false"
-                    :interactive="false" :disabled="isSaving || isUploading || !!isDeleting" class="min-h-48"
+                    :interactive="false" :disabled="isSaving || !!isDeleting" class="min-h-48"
                     :ui="{ base: 'h-full', wrapper: 'h-full', files: 'hidden', label: 'hidden', description: 'hidden' }"
                     @update:model-value="setPendingFile">
                     <template #default="{ open }">
@@ -88,7 +88,8 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-    (event: 'submit' | 'cancel' | 'delete'): void
+    (event: 'submit', file?: File | null): void
+    (event: 'cancel' | 'delete'): void
 }>()
 
 const newsTypes = ['Evento', 'Artículo', 'Anuncio']
@@ -116,14 +117,27 @@ const publishedDateModel = computed<string | undefined>({
     }
 })
 
-const {
-    pendingFile,
-    previewUrl: uploadPreviewUrl,
-    isUploading,
-    error: uploadError,
-    setPendingFile,
-    uploadPendingFile
-} = useDeferredImageUpload({ folder: 'news' })
+const pendingFile = ref<File | null>(null)
+const uploadPreviewUrl = ref<string | null>(null)
+const uploadError = ref('')
+
+const revokePreviewUrl = () => {
+    if (!uploadPreviewUrl.value) return
+    try {
+        URL.revokeObjectURL(uploadPreviewUrl.value)
+    } catch {
+        // ignore
+    }
+    uploadPreviewUrl.value = null
+}
+
+const setPendingFile = (file: File | null | undefined) => {
+    pendingFile.value = file ?? null
+    revokePreviewUrl()
+    if (pendingFile.value) {
+        uploadPreviewUrl.value = URL.createObjectURL(pendingFile.value)
+    }
+}
 
 const formImagePath = computed(() => {
     const value = form.value.image_url?.toString().trim()
@@ -148,13 +162,11 @@ const uploadBackgroundStyle = computed(() => {
 
 const displayError = computed(() => uploadError.value || props.formError)
 
-const handleSubmit = async () => {
-    const uploadedPath = await uploadPendingFile()
-    if (uploadError.value) return
-    if (uploadedPath) {
-        form.value.image_url = uploadedPath
-    }
-
-    emit('submit')
+const handleSubmit = () => {
+    emit('submit', pendingFile.value)
 }
+
+onBeforeUnmount(() => {
+    revokePreviewUrl()
+})
 </script>

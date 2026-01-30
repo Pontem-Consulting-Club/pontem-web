@@ -26,8 +26,8 @@
     </div>
 
     <div class="mt-auto">
-      <UButton :to="`/noticias/${newsItem.id}`" variant="soft"
-        class="transition-colors duration-300 rounded-lg px-5 py-2">
+      <UButton :to="`/noticias/${newsItem.id}`" variant="soft" size="lg"
+        class="transition-colors duration-300 rounded-lg">
         Leer más
       </UButton>
     </div>
