@@ -8,7 +8,7 @@
         <UForm class="flex flex-col gap-5" @submit.prevent="handleSubmit">
             <UFormField>
                 <UFileUpload :model-value="pendingFile" accept="image/*" variant="area" size="md" :preview="false"
-                    :interactive="false" :disabled="isSaving || isUploading" class="min-h-48"
+                    :interactive="false" :disabled="isSaving || isUploading || !!isDeleting" class="min-h-48"
                     :ui="{ base: 'h-full', wrapper: 'h-full', files: 'hidden', label: 'hidden', description: 'hidden' }"
                     @update:model-value="setPendingFile">
                     <template #default="{ open }">
@@ -59,8 +59,13 @@
             <UAlert v-if="displayError" color="error" icon="i-lucide-alert-circle" :description="displayError"
                 class="mb-4" />
 
-            <div class="flex justify-end">
-                <UButton type="submit" color="primary" size="md" variant="soft" :loading="isSaving">
+            <div class="flex justify-between">
+                <UButton v-if="!isNew" type="button" color="error" variant="soft" size="md" icon="i-lucide-trash-2"
+                    :loading="!!isDeleting" :disabled="isSaving || !!isDeleting" @click="emit('delete')">
+                    Eliminar
+                </UButton>
+                <UButton type="submit" color="primary" size="md" variant="soft" :loading="isSaving"
+                    :disabled="!!isDeleting">
                     Guardar
                 </UButton>
             </div>
@@ -78,11 +83,12 @@ const form = defineModel<Partial<NewsRecord>>('form', { required: true })
 const props = defineProps<{
     isNew: boolean
     isSaving: boolean
+    isDeleting?: boolean
     formError: string
 }>()
 
 const emit = defineEmits<{
-    (event: 'submit' | 'cancel'): void
+    (event: 'submit' | 'cancel' | 'delete'): void
 }>()
 
 const newsTypes = ['Evento', 'Artículo', 'Anuncio']

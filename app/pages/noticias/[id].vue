@@ -5,8 +5,9 @@
       button-text="Volver a noticias" button-link="/noticias" />
 
     <div v-else>
-      <NewsEditForm v-if="isEditMode" v-model:form="form" :is-new="isNew" :is-saving="isSaving" :form-error="formError"
-        @submit="saveEdit" @cancel="handleCancel" />
+      <NewsEditForm v-if="isEditMode" v-model:form="form" :is-new="isNew" :is-saving="isSaving"
+        :is-deleting="isDeleting" :form-error="formError" @submit="saveEdit" @cancel="handleCancel"
+        @delete="handleDelete" />
 
       <NewsDisplay v-else-if="newsItem" :news-item="newsItem" :is-authenticated="isAuthenticated" :id-param="idParam" />
       <NotFoundState v-else icon="i-lucide-file-x" title="Noticia no encontrada" button-text="Volver a noticias"
@@ -53,6 +54,7 @@ useHead({
 const form = ref<Partial<NewsRecord>>({})
 const formError = ref('')
 const isSaving = ref(false)
+const isDeleting = ref(false)
 
 const editNews = computed<NewsRecord | null>(() => {
   if (isNew) {
@@ -101,6 +103,32 @@ const handleUpdated = async () => {
 
 const handleCreated = () => {
   router.push('/noticias')
+}
+
+const handleDelete = async () => {
+  if (isNew || !editNews.value) return
+  const confirmed = typeof window !== 'undefined'
+    ? window.confirm('¿Eliminar esta noticia? Esta acción no se puede deshacer.')
+    : false
+
+  if (!confirmed) return
+
+  isDeleting.value = true
+  formError.value = ''
+
+  try {
+    await $fetch(`/api/admin/news/${editNews.value.id}`, { method: 'DELETE' })
+    router.push('/noticias')
+  } catch (error: unknown) {
+    const apiError = typeof error === 'object' && error !== null && 'data' in error
+      ? (error as { data?: { statusMessage?: string; message?: string } })
+      : null
+    formError.value = apiError?.data?.statusMessage
+      || apiError?.data?.message
+      || (error instanceof Error ? error.message : 'Error al eliminar la noticia')
+  } finally {
+    isDeleting.value = false
+  }
 }
 
 watch(editNews, (value) => {
