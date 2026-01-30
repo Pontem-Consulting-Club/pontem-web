@@ -31,8 +31,7 @@ const cancelCreate = () => {
   draftProject.value = null
 }
 
-const handleCreated = async () => {
-  await refresh()
+const handleCreated = () => {
   cancelCreate()
 }
 </script>
@@ -43,7 +42,8 @@ const handleCreated = async () => {
 
     <UContainer class="py-16">
       <div v-if="isAuthenticated" class="flex justify-end mb-6">
-        <UButton icon="i-lucide-plus" variant="soft" color="primary" size="md" :disabled="isCreating" @click="startCreate">
+        <UButton icon="i-lucide-plus" variant="soft" color="primary" size="md" :disabled="isCreating"
+          @click="startCreate">
           Agregar
         </UButton>
       </div>
