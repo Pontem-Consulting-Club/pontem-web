@@ -35,7 +35,7 @@ useHead({
   title: 'Noticias y Blog - Pontem'
 })
 
-const { data: news, status } = await useFetch<NewsRecord[]>('/api/news/news', {
+const { data: news, status } = await useFetch<NewsRecord[]>('/api/news', {
   default: () => []
 })
 
