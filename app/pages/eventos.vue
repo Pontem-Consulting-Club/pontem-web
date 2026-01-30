@@ -32,8 +32,7 @@ const cancelCreate = () => {
   draftEvent.value = null
 }
 
-const handleCreated = async () => {
-  await refresh()
+const handleCreated = () => {
   cancelCreate()
 }
 

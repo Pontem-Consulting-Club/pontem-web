@@ -15,6 +15,7 @@ export default defineNuxtConfig({
     redirectOptions: {
       login: '/login',
       callback: '/',
+      include: [''],
     }
   },
   vite: {

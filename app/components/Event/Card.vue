@@ -12,6 +12,7 @@ const _props = withDefaults(defineProps<Props>(), {
   isNew: false
 })
 
+const event = toRef(_props, 'event')
 const emit = defineEmits<{
   (e: 'updated' | 'created' | 'cancel-create'): void
 }>()
@@ -21,19 +22,18 @@ const { formatDate } = useDateFormatting()
 
 const isEditing = ref(_props.isNew)
 const isSaving = ref(false)
+const isDeleting = ref(false)
 const formError = ref('')
 const form = ref<Partial<EventRecord>>({})
-const inputBase = 'bg-transparent border-0 p-0 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0'
-const textareaBase = `${inputBase} resize-none`
 
-const { url: imageUrl } = useStorageImage(_props.event?.image_url ?? null)
+const { url: imageUrl } = useStorageImage(computed(() => event.value.image_url ?? null))
 
-const eventDate = computed(() => new Date(_props.event.date))
+const eventDate = computed(() => new Date(event.value.date))
 const dayNumber = computed(() => eventDate.value.getDate())
 const monthYear = computed(() => eventDate.value.toLocaleDateString('es-ES', { month: 'short', year: 'numeric' }))
 
-watch(() => _props.event, (value) => {
-  if (!isEditing.value) {
+watch(event, (value) => {
+  if (_props.isNew || !isEditing.value) {
     form.value = { ...value }
   }
 }, { immediate: true, deep: true })
@@ -66,10 +66,25 @@ const buildPayload = () => ({
   link: normalizeValue(form.value.link as string | null)
 })
 
+const buildFormData = (payload: ReturnType<typeof buildPayload>, file?: File | null) => {
+  const formData = new FormData()
+
+  Object.entries(payload).forEach(([key, value]) => {
+    formData.append(key, value ?? '')
+  })
+
+  if (file) {
+    formData.append('image', file)
+  }
+
+  return formData
+}
+
 const startEdit = () => {
   if (_props.isNew) return
   if (!isAuthenticated.value) return
-  form.value = { ..._props.event }
+  if (_props.variant === 'compact') return
+  form.value = { ...event.value }
   formError.value = ''
   isEditing.value = true
 }
@@ -79,12 +94,12 @@ const cancelEdit = () => {
     emit('cancel-create')
     return
   }
-  form.value = { ..._props.event }
+  form.value = { ...event.value }
   formError.value = ''
   isEditing.value = false
 }
 
-const saveEdit = async () => {
+const saveEdit = async (file?: File | null) => {
   const validationError = validateForm()
   if (validationError) {
     formError.value = validationError
@@ -96,11 +111,13 @@ const saveEdit = async () => {
 
   try {
     const payload = buildPayload()
+    const formData = buildFormData(payload, file)
     if (_props.isNew) {
-      await $fetch('/api/admin/events', { method: 'POST', body: payload })
+      await $fetch('/api/admin/events', { method: 'POST', body: formData })
       emit('created')
+      emit('updated')
     } else {
-      await $fetch(`/api/admin/events/${_props.event.id}`, { method: 'PUT', body: payload })
+      await $fetch(`/api/admin/events/${event.value.id}`, { method: 'PUT', body: formData })
     }
     isEditing.value = false
     emit('updated')
@@ -115,95 +132,88 @@ const saveEdit = async () => {
     isSaving.value = false
   }
 }
+
+const handleDelete = async () => {
+  if (_props.isNew) return
+  const confirmed = typeof window !== 'undefined'
+    ? window.confirm('¿Eliminar este evento? Esta acción no se puede deshacer.')
+    : false
+
+  if (!confirmed) return
+
+  isDeleting.value = true
+  formError.value = ''
+
+  try {
+    await $fetch(`/api/admin/events/${event.value.id}`, { method: 'DELETE' })
+    isEditing.value = false
+    emit('updated')
+  } catch (error: unknown) {
+    const apiError = typeof error === 'object' && error !== null && 'data' in error
+      ? (error as { data?: { statusMessage?: string; message?: string } })
+      : null
+    formError.value = apiError?.data?.statusMessage
+      || apiError?.data?.message
+      || (error instanceof Error ? error.message : 'Error al eliminar el evento')
+  } finally {
+    isDeleting.value = false
+  }
+}
 </script>
 
 <template>
-  <UCard v-if="variant === 'full'" class="rounded-3xl bg-white/90 shadow-sm hover:shadow-lg transition-shadow relative">
+  <EventEditForm v-if="isEditing && variant !== 'compact'" v-model:form="form" :is-new="_props.isNew"
+    :is-saving="isSaving" :is-deleting="isDeleting" :form-error="formError" @submit="saveEdit" @cancel="cancelEdit"
+    @delete="handleDelete" />
+
+  <UCard v-else-if="variant === 'full'"
+    class="rounded-3xl bg-white/90 shadow-sm hover:shadow-lg transition-shadow relative">
     <UButton v-if="isAuthenticated" icon="i-lucide-pencil" size="xs" color="primary" variant="ghost"
       class="absolute top-3 right-3 z-10" @click="startEdit" />
 
-    <form class="contents" @submit.prevent="isEditing ? saveEdit() : undefined">
-      <div class="flex flex-col md:flex-row gap-6">
-        <div class="md:w-32 shrink-0">
-          <div class="bg-primary-50 rounded-lg p-4 text-center">
-            <template v-if="isEditing">
-              <UInput v-model="form.date" type="date" :ui="{ base: `${inputBase} text-sm text-primary-600` }" />
-            </template>
-            <template v-else>
-              <span class="block text-3xl font-bold text-primary-600">
-                {{ dayNumber }}
-              </span>
-              <span class="block text-sm text-primary-600">
-                {{ monthYear }}
-              </span>
-            </template>
-          </div>
-        </div>
-        <div class="flex-1">
-          <div class="text-xl font-semibold mb-2">
-            <UInput v-if="isEditing" v-model="form.title" :ui="{ base: `${inputBase} text-xl font-semibold` }" />
-            <template v-else>
-              {{ event.title }}
-            </template>
-          </div>
-          <div class="mb-3 text-gray-600">
-            <UInput v-if="isEditing" v-model="form.subtitle" placeholder="Subtítulo"
-              :ui="{ base: `${inputBase} text-gray-600` }" />
-            <p v-else-if="event.subtitle">
-              {{ event.subtitle }}
-            </p>
-          </div>
-          <div class="mb-4 text-gray-600">
-            <UTextarea v-if="isEditing" v-model="form.description" :rows="3" placeholder="Descripción"
-              :ui="{ base: `${textareaBase} text-gray-600` }" />
-            <p v-else-if="event.description">
-              {{ event.description }}
-            </p>
-          </div>
-          <div class="flex flex-wrap gap-4 text-sm">
-            <template v-if="isEditing">
-              <UInput v-model="form.location" placeholder="Ubicación" class="max-w-[220px]"
-                :ui="{ base: `${inputBase} text-sm` }" />
-              <UInput v-model="form.link" type="url" placeholder="Enlace" class="max-w-[260px]"
-                :ui="{ base: `${inputBase} text-sm` }" />
-            </template>
-            <template v-else>
-              <span v-if="event.location" class="flex items-center gap-2">
-                <UIcon name="i-lucide-map-pin" class="w-4 h-4" />
-                {{ event.location }}
-              </span>
-              <a v-if="event.link" :href="event.link" target="_blank"
-                class="flex items-center gap-2 text-primary-600 hover:underline">
-                <UIcon name="i-lucide-external-link" class="w-4 h-4" />
-                Ver más
-              </a>
-            </template>
-          </div>
-        </div>
-        <div class="md:w-48 shrink-0 relative">
-          <NuxtImg :src="imageUrl ?? '/LogoColorSolo.png'" alt="Imagen del evento"
-            class="object-cover rounded-lg h-32 w-full" sizes="300px" />
-          <div v-if="isEditing" class="absolute inset-x-2 bottom-2">
-            <UInput v-model="form.image_url" type="url" placeholder="Imagen (URL)" :ui="{ base: `${inputBase}` }" />
-          </div>
+    <div class="flex flex-col md:flex-row gap-6">
+      <div class="md:w-32 shrink-0">
+        <div class="bg-primary-50 rounded-lg p-4 text-center">
+          <span class="block text-3xl font-bold text-primary-600">
+            {{ dayNumber }}
+          </span>
+          <span class="block text-sm text-primary-600">
+            {{ monthYear }}
+          </span>
         </div>
       </div>
-
-      <UAlert v-if="formError && isEditing" color="error" icon="i-lucide-alert-circle" :description="formError"
-        class="mt-4" />
-
-      <div v-if="isEditing" class="flex justify-end gap-2 mt-4">
-        <UButton type="button" color="neutral" variant="outline" size="sm" :disabled="isSaving" @click="cancelEdit">
-          Cancelar
-        </UButton>
-        <UButton type="submit" color="primary" size="sm" :loading="isSaving">
-          Guardar
-        </UButton>
+      <div class="flex-1">
+        <div class="text-xl font-semibold mb-2">
+          {{ event.title }}
+        </div>
+        <div v-if="event.subtitle" class="mb-3 text-gray-600">
+          {{ event.subtitle }}
+        </div>
+        <div v-if="event.description" class="mb-4 text-gray-600">
+          {{ event.description }}
+        </div>
+        <div class="flex flex-wrap gap-4 text-sm">
+          <span v-if="event.location" class="flex items-center gap-2">
+            <UIcon name="i-lucide-map-pin" class="w-4 h-4" />
+            {{ event.location }}
+          </span>
+          <a v-if="event.link" :href="event.link" target="_blank"
+            class="flex items-center gap-2 text-primary-600 hover:underline">
+            <UIcon name="i-lucide-external-link" class="w-4 h-4" />
+            Ver más
+          </a>
+        </div>
       </div>
-    </form>
+      <div class="md:w-48 shrink-0 relative">
+        <NuxtImg :src="imageUrl ?? '/LogoColorSolo.png'" alt="Imagen del evento"
+          class="object-cover rounded-lg h-32 w-full" sizes="300px" />
+      </div>
+    </div>
   </UCard>
 
-  <UCard v-else-if="variant === 'past'" class="rounded-2xl opacity-75 bg-white/90 shadow-sm">
+  <UCard v-else-if="variant === 'past'" class="rounded-2xl opacity-75 bg-white/90 shadow-sm relative">
+    <UButton v-if="isAuthenticated" icon="i-lucide-pencil" size="xs" color="primary" variant="ghost"
+      class="absolute top-3 right-3 z-10" @click="startEdit" />
     <div class="flex flex-col md:flex-row gap-4 items-start md:items-center">
       <span class="text-sm md:w-32">
         {{ formatDate(event.date) }}

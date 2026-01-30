@@ -31,7 +31,7 @@
 <script setup lang="ts">
 import type { NewsRecord } from '~/types/content'
 
-const { data: news, status } = await useFetch<NewsRecord[]>('/api/news/news', {
+const { data: news, status } = await useFetch<NewsRecord[]>('/api/news', {
   default: () => []
 })
 
