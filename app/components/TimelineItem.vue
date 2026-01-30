@@ -16,7 +16,7 @@ defineProps<Props>()
   ]">
     <div :class="['hidden md:block w-1/2', index % 2 === 0 ? 'pr-12 text-right' : 'pl-12 text-left']">
       <UCard class="bg-white/75" variant="soft">
-        <h3 class="text-xl font-bold text-pontemred-500 mb-2">
+        <h3 class="text-xl font-bold text-primary mb-2">
           {{ year }}
         </h3>
         <h4 class="text-lg font-semibold mb-2">

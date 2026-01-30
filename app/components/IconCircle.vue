@@ -6,7 +6,7 @@ interface Props {
 }
 
 const _props = withDefaults(defineProps<Props>(), {
-  iconColor: 'text-pontemred-500',
+  iconColor: 'text-primary',
   size: 'md'
 })
 

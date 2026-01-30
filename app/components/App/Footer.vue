@@ -40,8 +40,8 @@
         <p>
           Desarrollado por
           <a href="https://www.linkedin.com/in/santiago-ernst/" target="_blank" rel="noopener noreferrer"
-            class="text-aqua-500 hover:text-white transition-colors">
-            Santiago Ernst
+            class="text-secondary hover:text-white transition-colors">
+            Santiago Ernst y Carlos Cruz
           </a>
         </p>
       </div>
@@ -59,19 +59,19 @@ const socialLinks = [
     label: 'Email',
     href: 'mailto:clubconsultoria.uc@gmail.com',
     icon: 'i-lucide-mail',
-    hoverClass: 'hover:bg-gradient-to-b hover:from-electric-500 hover:to-sky-500 hover:text-white'
+    hoverClass: 'hover:text-white'
   },
   {
     label: 'LinkedIn',
     href: 'https://www.linkedin.com/company/pontemcc/mycompany/',
     icon: 'i-simple-icons-linkedin',
-    hoverClass: 'hover:bg-linkedin-500 hover:text-white'
+    hoverClass: 'hover:text-white'
   },
   {
     label: 'Instagram',
     href: 'https://www.instagram.com/pontemconsultingclub/',
     icon: 'i-simple-icons-instagram',
-    hoverClass: 'hover:bg-gradient-to-r hover:from-instagram-amber-500 hover:via-instagram-pink-500 hover:to-instagram-violet-500 hover:text-white'
+    hoverClass: 'hover:text-white'
   }
 ]
 </script>

@@ -2,7 +2,7 @@
   <div class="relative">
     <UCard class="w-48 text-center bg-white" variant="soft">
       <div class="flex items-center justify-center w-10 h-10 bg-pontemteal-200 rounded-full mx-auto mb-3">
-        <span class="text-pontemred-500 font-bold">{{ number }}</span>
+        <span class="text-primary font-bold">{{ number }}</span>
       </div>
       <h3 class="font-semibold mb-1">{{ title }}</h3>
       <p class="text-sm">{{ description }}</p>

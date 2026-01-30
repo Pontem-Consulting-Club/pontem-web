@@ -3,19 +3,26 @@ import type { ProjectRecord } from '~/types/content'
 
 interface Props {
   project: ProjectRecord
+  isNew?: boolean
 }
 
-const { project } = defineProps<Props>()
+const _props = withDefaults(defineProps<Props>(), {
+  isNew: false
+})
+
+const { project } = _props
 const emit = defineEmits<{
-  (e: 'updated'): void
+  (e: 'updated' | 'created' | 'cancel-create'): void
 }>()
 
 const { isAuthenticated } = useAuth()
 
-const isEditing = ref(false)
+const isEditing = ref(_props.isNew)
 const isSaving = ref(false)
 const formError = ref('')
 const form = ref<Partial<ProjectRecord>>({})
+const inputBase = 'bg-transparent border-0 p-0 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0'
+const textareaBase = `${inputBase} resize-none`
 
 const { url: imageUrl } = useStorageImage(project.image_url)
 
@@ -49,6 +56,7 @@ const buildPayload = () => ({
 })
 
 const startEdit = () => {
+  if (_props.isNew) return
   if (!isAuthenticated.value) return
   form.value = { ...project }
   formError.value = ''
@@ -56,6 +64,10 @@ const startEdit = () => {
 }
 
 const cancelEdit = () => {
+  if (_props.isNew) {
+    emit('cancel-create')
+    return
+  }
   form.value = { ...project }
   formError.value = ''
   isEditing.value = false
@@ -73,7 +85,12 @@ const saveEdit = async () => {
 
   try {
     const payload = buildPayload()
-    await $fetch(`/api/admin/projects/${project.id}`, { method: 'PUT', body: payload })
+    if (_props.isNew) {
+      await $fetch('/api/admin/projects', { method: 'POST', body: payload })
+      emit('created')
+    } else {
+      await $fetch(`/api/admin/projects/${project.id}`, { method: 'PUT', body: payload })
+    }
     isEditing.value = false
     emit('updated')
   } catch (error: unknown) {
@@ -90,73 +107,68 @@ const saveEdit = async () => {
 </script>
 
 <template>
-  <div class="space-y-3">
-    <UCard variant="soft" class="rounded-xl bg-white/75 relative">
-      <UButton v-if="isAuthenticated" icon="i-lucide-pencil" size="xs" color="neutral" variant="ghost"
-        class="absolute top-3 right-3 z-10" @click="startEdit" />
+  <UCard variant="soft" class="rounded-xl bg-white/75 relative">
+    <UButton v-if="isAuthenticated" icon="i-lucide-pencil" size="xs" color="primary" variant="ghost"
+      class="absolute top-3 right-3 z-10" @click="startEdit" />
+
+    <form class="contents" @submit.prevent="isEditing ? saveEdit() : undefined">
       <div class="flex flex-col md:flex-row p-6 gap-4">
         <div class="flex flex-col justify-between flex-1">
-          <h3 class="text-xl text-primary font-semibold mb-2">
-            {{ project.title }}
-          </h3>
-          <p v-if="project.subtitle" class="text-gray font-semibold mb-3">
-            {{ project.subtitle }}
-          </p>
-          <p v-if="project.description" class="mr-4 text-justify">
-            {{ project.description }}
-          </p>
-          <UButton v-if="project.link" :href="project.link" target="_blank" variant="link" block class="p-4">
-            {{ project.link_text || 'Ver más' }}
-          </UButton>
-        </div>
-        <NuxtImg :src="imageUrl ?? '/LogoColorSolo.png'" alt="Imagen del proyecto" class="object-cover rounded-xl"
-          width="500" />
-      </div>
-    </UCard>
+          <div class="text-xl text-primary font-semibold mb-2">
+            <UInput v-if="isEditing" v-model="form.title"
+              :ui="{ base: `${inputBase} text-xl text-primary font-semibold` }" />
+            <template v-else>
+              {{ project.title }}
+            </template>
+          </div>
 
-    <Transition enter-active-class="transition duration-200 ease-out"
-      enter-from-class="transform opacity-0 -translate-y-2" enter-to-class="transform opacity-100 translate-y-0"
-      leave-active-class="transition duration-150 ease-in" leave-from-class="transform opacity-100 translate-y-0"
-      leave-to-class="transform opacity-0 -translate-y-2">
-      <UCard v-if="isEditing" variant="soft" class="border border-gray-200">
-        <div class="flex items-center justify-between mb-4">
-          <h4 class="font-semibold text-gray-900">Editar proyecto</h4>
-          <UButton icon="i-lucide-x" color="neutral" variant="ghost" size="xs" :disabled="isSaving"
-            @click="cancelEdit" />
-        </div>
+          <div v-if="isEditing || project.subtitle" class="text-gray-600 font-semibold mb-3">
+            <UInput v-if="isEditing" v-model="form.subtitle" placeholder="Subtítulo"
+              :ui="{ base: `${inputBase} text-gray-600 font-semibold` }" />
+            <template v-else>
+              {{ project.subtitle }}
+            </template>
+          </div>
 
-        <UAlert v-if="formError" color="error" icon="i-lucide-alert-circle" :description="formError" class="mb-4" />
+          <div v-if="isEditing || project.description" class="mr-4 text-justify text-gray-600">
+            <UTextarea v-if="isEditing" v-model="form.description" :rows="3" placeholder="Descripción"
+              :ui="{ base: `${textareaBase} text-justify text-gray-600` }" />
+            <template v-else>
+              {{ project.description }}
+            </template>
+          </div>
 
-        <form class="space-y-3" @submit.prevent="saveEdit">
-          <UFormField label="Título" required>
-            <UInput v-model="form.title" />
-          </UFormField>
-          <UFormField label="Subtítulo">
-            <UInput v-model="form.subtitle" />
-          </UFormField>
-          <UFormField label="Descripción">
-            <UTextarea v-model="form.description" :rows="3" />
-          </UFormField>
-          <UFormField label="Texto del enlace">
-            <UInput v-model="form.link_text" />
-          </UFormField>
-          <UFormField label="Enlace">
-            <UInput v-model="form.link" type="url" />
-          </UFormField>
-          <UFormField label="Imagen (URL)">
-            <UInput v-model="form.image_url" type="url" />
-          </UFormField>
-
-          <div class="flex justify-end gap-2 pt-2">
-            <UButton type="button" color="neutral" variant="outline" size="sm" :disabled="isSaving" @click="cancelEdit">
-              Cancelar
-            </UButton>
-            <UButton type="submit" color="primary" size="sm" :loading="isSaving">
-              Guardar
+          <div class="mt-3">
+            <div v-if="isEditing" class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <UInput v-model="form.link_text" placeholder="Texto del enlace" :ui="{ base: `${inputBase}` }" />
+              <UInput v-model="form.link" type="url" placeholder="Enlace" :ui="{ base: `${inputBase}` }" />
+            </div>
+            <UButton v-else-if="project.link" :href="project.link" target="_blank" variant="link" block class="p-4">
+              {{ project.link_text || 'Ver más' }}
             </UButton>
           </div>
-        </form>
-      </UCard>
-    </Transition>
-  </div>
+        </div>
+
+        <div class="relative">
+          <NuxtImg :src="imageUrl ?? '/LogoColorSolo.png'" alt="Imagen del proyecto" class="object-cover rounded-xl"
+            width="500" />
+          <div v-if="isEditing" class="absolute inset-x-2 bottom-2">
+            <UInput v-model="form.image_url" type="url" placeholder="Imagen (URL)" :ui="{ base: `${inputBase}` }" />
+          </div>
+        </div>
+      </div>
+
+      <UAlert v-if="formError && isEditing" color="error" icon="i-lucide-alert-circle" :description="formError"
+        class="mx-6 mb-4" />
+
+      <div v-if="isEditing" class="flex justify-end gap-2 px-6 pb-6">
+        <UButton type="button" color="neutral" variant="outline" size="sm" :disabled="isSaving" @click="cancelEdit">
+          Cancelar
+        </UButton>
+        <UButton type="submit" color="primary" size="sm" :loading="isSaving">
+          Guardar
+        </UButton>
+      </div>
+    </form>
+  </UCard>
 </template>
