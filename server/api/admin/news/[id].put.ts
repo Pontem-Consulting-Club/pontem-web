@@ -65,6 +65,25 @@ export default defineEventHandler(async (event) => {
   const supabase = await serverSupabaseClient<Database>(event)
 
   let imagePath = normalizeValue(body.image_url ?? null)
+  let previousImagePath: string | null = null
+
+  if (imagePart) {
+    const { data: existingNews, error: existingError } = await supabase
+      .from('News')
+      .select('image_url')
+      .eq('id', id)
+      .single()
+
+    if (existingError) {
+      throw createError({
+        statusCode: 500,
+        statusMessage: 'Error loading news image',
+        message: existingError.message
+      })
+    }
+
+    previousImagePath = existingNews?.image_url ?? null
+  }
   if (imagePart) {
     const extension = imagePart.filename?.split('.').pop() || 'jpg'
     const fileId = typeof crypto !== 'undefined' && 'randomUUID' in crypto
@@ -88,6 +107,21 @@ export default defineEventHandler(async (event) => {
         statusMessage: 'Error uploading image',
         message: uploadError.message
       })
+    }
+
+    if (previousImagePath && previousImagePath !== imagePath) {
+      const { error: deleteError } = await supabase
+        .storage
+        .from('images')
+        .remove([previousImagePath])
+
+      if (deleteError) {
+        throw createError({
+          statusCode: 500,
+          statusMessage: 'Error deleting previous image',
+          message: deleteError.message
+        })
+      }
     }
   }
 
