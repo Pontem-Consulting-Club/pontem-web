@@ -1,25 +1,25 @@
 <template>
-    <article class="bg-white rounded-lg p-6 shadow-sm">
-            <div class="flex items-center justify-between mb-6"> 
-            <UButton to="/noticias" variant="ghost" icon="i-lucide-arrow-left">
+    <article class="bg-white rounded-lg px-12 py-6 shadow-sm">
+        <div class="flex items-center justify-between mb-6">
+            <UButton to="/noticias" variant="soft" size="md" icon="i-lucide-arrow-left">
                 Volver a noticias
             </UButton>
-            <UButton v-if="isAuthenticated" icon="i-lucide-pencil" size="sm" color="primary" variant="soft"
+            <UButton v-if="isAuthenticated" icon="i-lucide-pencil" size="md" color="primary" variant="soft"
                 :to="`/noticias/${idParam}?edit=1`">
                 Editar
             </UButton>
         </div>
         <NuxtImg v-if="articleImageUrl" :src="articleImageUrl" alt="Cover Image"
-            class="rounded-xl h-64 w-full object-cover mb-6" sizes="800px" />
+            class="rounded-xl h-72 w-full object-cover mb-6" sizes="800px" />
 
-        <header class="mb-8">
+        <header class=" flex flex-col mb-8">
             <div v-if="headerType" class="mb-4">
                 <TypeBadge :type="headerType" size="base" />
             </div>
-            <h1 class="text-3xl md:text-4xl font-bold mb-4 text-primary">
+            <h1 class="text-3xl md:text-3xl font-bold mb-4 text-primary">
                 {{ newsItem.title }}
             </h1>
-            <p v-if="headerSubtitle" class="text-xl mb-6">
+            <p v-if="headerSubtitle" class=" font-semibold text-lg mb-6">
                 {{ headerSubtitle }}
             </p>
             <div class="flex items-center gap-4">
@@ -30,7 +30,7 @@
         </header>
 
         <!-- eslint-disable vue/no-v-html -->
-        <div v-if="rawContent" class="prose prose-lg max-w-none" v-html="rawContent" />
+        <div v-if="rawContent" class="prose prose-md max-w-none text-justify pb-3" v-html="rawContent" />
         <!-- eslint-enable vue/no-v-html -->
     </article>
 </template>
