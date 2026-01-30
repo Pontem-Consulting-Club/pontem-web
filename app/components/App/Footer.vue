@@ -52,7 +52,7 @@
 <script setup lang="ts">
 const { navigation } = useNavigation()
 
-const navigationWithAdmin = [...navigation, { label: 'Admin', to: '/admin/login' }]
+const navigationWithAdmin = [...navigation, { label: 'Admin', to: '/login' }]
 
 const socialLinks = [
   {

@@ -9,6 +9,6 @@ export default defineNuxtRouteMiddleware(async () => {
   const { data, error } = await supabase.auth.getSession()
 
   if (error || !data.session) {
-    return navigateTo('/admin/login')
+    return navigateTo('/login')
   }
 })

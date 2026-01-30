@@ -34,7 +34,7 @@ export const useAuth = () => {
 
   const logout = async () => {
     await supabase.auth.signOut()
-    await navigateTo('/admin/login')
+    await navigateTo('/login')
   }
 
   const refreshSession = async () => {
