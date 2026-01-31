@@ -59,7 +59,7 @@ const pastEvents = computed(() => {
 
     <UContainer class="py-16">
       <div v-if="isAuthenticated" class="flex justify-end mb-6">
-        <UButton icon="i-lucide-plus" color="primary" size="sm" :disabled="isCreating" @click="startCreate">
+        <UButton icon="i-lucide-plus" variant="soft" color="primary" size="md" :disabled="isCreating" @click="startCreate">
           Agregar
         </UButton>
       </div>
