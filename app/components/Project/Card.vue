@@ -27,9 +27,9 @@
         </div>
       </div>
 
-      <div class="relative">
+      <div class="relative my-auto">
         <NuxtImg :src="imageUrl ?? '/LogoColorSolo.png'" alt="Imagen del proyecto" class="object-cover rounded-xl"
-          width="500" />
+          width="500"/>
       </div>
     </div>
   </UCard>

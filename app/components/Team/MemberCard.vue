@@ -25,12 +25,12 @@ const handleImageError = () => {
 </script>
 
 <template>
-  <UCard class="text-center hover:shadow-lg transition-shadow bg-white">
+  <UCard variant="soft" class="text-center hover:shadow-lg transition-shadow bg-white">
     <div class="flex justify-center mb-4">
       <img :src="imageSrc" :alt="name" class="h-20 w-20 rounded-full object-cover border border-gray-200"
         @error="handleImageError">
     </div>
-    <h3 class="text-lg font-semibold">
+    <h3 class="text-lg font-semibold text-primary mb-1">
       {{ name }}
     </h3>
     <p class="">
