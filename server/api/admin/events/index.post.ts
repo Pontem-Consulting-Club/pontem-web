@@ -1,6 +1,8 @@
 import { serverSupabaseClient } from '#supabase/server'
-import type { Database, EventRow } from '~/types/database.types'
+import type { Database } from '~/types/database.types'
 import { requireUser } from '~~/server/utils/requireUser'
+
+type EventRow = Database['public']['Tables']['Events']['Row']
 
 type EventPayload = Pick<EventRow, 'title' | 'subtitle' | 'description' | 'date' | 'image_url' | 'location' | 'link'>
 
@@ -82,9 +84,9 @@ export default defineEventHandler(async (event) => {
   }
 
   const payload: EventPayload = {
-    title: body.title,
-    date: body.date,
-    subtitle: normalizeValue(body.subtitle ?? null),
+    title: body.title as string,
+    date: body.date as string,
+    subtitle: normalizeValue(body.subtitle ?? null) ?? '',
     description: normalizeValue(body.description ?? null),
     image_url: imagePath,
     location: normalizeValue(body.location ?? null),

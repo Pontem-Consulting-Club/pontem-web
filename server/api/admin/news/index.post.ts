@@ -1,6 +1,8 @@
 import { serverSupabaseClient } from '#supabase/server'
-import type { Database, NewsRow } from '~/types/database.types'
+import type { Database } from '~/types/database.types'
 import { requireUser } from '~~/server/utils/requireUser'
+
+type NewsRow = Database['public']['Tables']['News']['Row']
 
 type NewsPayload = Pick<NewsRow, 'title' | 'subtitle' | 'type' | 'image_url' | 'author' | 'published_date' | 'content' | 'link'>
 

@@ -1,6 +1,8 @@
 import { serverSupabaseClient } from '#supabase/server'
-import type { Database, ProjectRow } from '~/types/database.types'
+import type { Database } from '~/types/database.types'
 import { requireUser } from '~~/server/utils/requireUser'
+
+type ProjectRow = Database['public']['Tables']['Projects']['Row']
 
 type ProjectPayload = Pick<ProjectRow, 'title' | 'subtitle' | 'description' | 'image_url' | 'link' | 'link_text'>
 
