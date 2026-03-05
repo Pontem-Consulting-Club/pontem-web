@@ -1,6 +1,6 @@
 <template>
   <section class="relative py-16 md:py-24 rounded-[48px] mx-2 md:mx-6">
-    <UContainer class="text-center">
+    <UContainer>
       <div class="text-center mb-12">
         <h3 class="text-3xl md:text-4xl font-bold mb-4">
           Noticias y Blog
@@ -15,7 +15,7 @@
       <EmptyState v-else-if="latestNews.length === 0" message="No hay noticias disponibles" />
 
       <div v-else class="grid md:grid-cols-3 gap-6">
-        <NewsCard v-for="newsItem in latestNews" :key="newsItem.id" :news-item="newsItem" variant="list" />
+        <NewsCard v-for="newsItem in latestNews" :key="newsItem.id" :news-item="newsItem"/>
       </div>
 
       <div class="text-center mt-10">

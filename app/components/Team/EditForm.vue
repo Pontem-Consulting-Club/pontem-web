@@ -1,48 +1,41 @@
 <template>
-    <UCard variant="soft" class="bg-white rounded-lg px-6 pb-6 shadow-sm">
-        <div class="flex items-center mb-6">
-            <UButton variant="soft" icon="i-lucide-arrow-left" @click="emit('cancel')">
-                Volver
-            </UButton>
-        </div>
+    <!-- Mirrors TeamMemberCard: centered portrait layout with circular image -->
+    <UCard variant="soft" class="text-center bg-white">
+        <UForm class="flex flex-col items-center gap-4" @submit.prevent="handleSubmit">
+            <!-- Circular upload mirrors the h-20 w-20 rounded-full display image -->
+            <UFileUpload :model-value="pendingFile" accept="image/*" variant="area" size="md" :preview="false"
+                :interactive="false" :disabled="isSaving || !!isDeleting"
+                :ui="{ base: 'h-full', wrapper: 'h-full', files: 'hidden', label: 'hidden', description: 'hidden' }"
+                @update:model-value="setPendingFile">
+                <template #default="{ open }">
+                    <button type="button"
+                        class="relative flex h-20 w-20 items-center justify-center bg-gray-200 overflow-hidden rounded-full border border-gray-200 text-white/80 transition hover:text-white"
+                        :style="uploadBackgroundStyle" @click="open()">
+                        <span v-if="uploadBackgroundStyle" class="absolute inset-0 bg-black/30 rounded-full" />
+                        <UIcon name="i-lucide-upload" class="relative z-10 h-5 w-5" />
+                    </button>
+                </template>
+            </UFileUpload>
 
-        <UForm class="flex flex-col gap-5" @submit.prevent="handleSubmit">
-            <UFormField>
-                <UFileUpload :model-value="pendingFile" accept="image/*" variant="area" size="md" :preview="false"
-                    :interactive="false" :disabled="isSaving || !!isDeleting" class="min-h-48"
-                    :ui="{ base: 'h-full', wrapper: 'h-full', files: 'hidden', label: 'hidden', description: 'hidden' }"
-                    @update:model-value="setPendingFile">
-                    <template #default="{ open }">
-                        <button type="button"
-                            class="relative flex h-full min-h-48 w-full items-center justify-center bg-gray-200 overflow-hidden rounded-lg text-white/80 transition hover:text-white"
-                            :style="uploadBackgroundStyle" @click="open()">
-                            <span v-if="uploadBackgroundStyle" class="absolute inset-0 bg-black/30" />
-                            <span class="relative z-10 flex flex-col items-center gap-2 text-sm font-medium">
-                                <UIcon name="i-lucide-upload" class="h-5 w-5" />
-                                <span>{{ imagePreviewUrl ? 'Cambiar imagen' : 'Subir imagen' }}</span>
-                            </span>
-                        </button>
-                    </template>
-                </UFileUpload>
-            </UFormField>
+            <!-- Name mirrors h3.text-lg.font-semibold.text-primary -->
+            <UInput v-model="form.name" placeholder="Nombre" class="w-full" variant="none"
+                :ui="{ base: 'text-center text-lg font-semibold text-primary placeholder:text-primary/50' }" />
 
-            <UFormField>
-                <UInput v-model="form.name" placeholder="Nombre" class="w-full h-fit" variant="none"
-                    :ui="{ base: 'text-primary text-xl text-wrap font-bold placeholder:text-primary/50' }" />
-            </UFormField>
-
-            <UFormField>
-                <UTextarea v-model="form.role" :rows="4" placeholder="Rol" class="w-full" variant="none" autoresize
-                    :ui="{ base: 'text-gray-600 placeholder:text-gray-400' }" />
-            </UFormField>
+            <!-- Role mirrors the plain p tag below the name -->
+            <UTextarea v-model="form.role" :rows="2" placeholder="Rol" class="w-full" variant="none" autoresize
+                :ui="{ base: 'text-center text-gray-600 placeholder:text-gray-400' }" />
 
             <UAlert v-if="displayError" color="error" icon="i-lucide-alert-circle" :description="displayError"
-                class="mb-4" />
+                class="w-full" />
 
-            <div class="flex justify-between">
+            <div class="flex justify-between w-full">
                 <UButton v-if="!isNew" type="button" color="error" variant="soft" size="md" icon="i-lucide-trash-2"
                     :loading="!!isDeleting" :disabled="isSaving || !!isDeleting" @click="emit('delete')">
                     Eliminar
+                </UButton>
+                <UButton variant="soft" icon="i-lucide-x" size="sm" :disabled="isSaving || !!isDeleting"
+                    @click="emit('cancel')">
+                    Cancelar
                 </UButton>
                 <UButton type="submit" color="primary" size="md" variant="soft" :loading="isSaving"
                     :disabled="!!isDeleting">

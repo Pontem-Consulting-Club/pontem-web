@@ -1,60 +1,54 @@
 <template>
-    <UCard variant="soft" class="bg-white rounded-lg px-6 pb-6 shadow-sm">
-        <div class="flex items-center mb-6">
+    <UCard variant="soft" class="rounded-xl bg-white/75">
+        <div class="flex items-center mb-4">
             <UButton variant="soft" icon="i-lucide-arrow-left" @click="emit('cancel')">
                 Volver
             </UButton>
         </div>
-        <UForm class="flex flex-col gap-5" @submit.prevent="handleSubmit">
-            <UFormField>
-                <UFileUpload :model-value="pendingFile" accept="image/*" variant="area" size="md" :preview="false"
-                    :interactive="false" :disabled="isSaving || !!isDeleting" class="min-h-48"
-                    :ui="{ base: 'h-full', wrapper: 'h-full', files: 'hidden', label: 'hidden', description: 'hidden' }"
-                    @update:model-value="setPendingFile">
-                    <template #default="{ open }">
-                        <button type="button"
-                            class="relative flex h-full min-h-75 w-full items-center justify-center bg-gray-200 overflow-hidden rounded-lg text-white/80 transition hover:text-white"
-                            :style="uploadBackgroundStyle" @click="open()">
-                            <span v-if="uploadBackgroundStyle" class="absolute inset-0 bg-black/30" />
-                            <span class="relative z-10 flex flex-col items-center gap-2 text-sm font-medium">
-                                <UIcon name="i-lucide-upload" class="h-5 w-5" />
-                                <span>{{ imagePreviewUrl ? 'Cambiar imagen' : 'Subir imagen' }}</span>
-                            </span>
-                        </button>
-                    </template>
-                </UFileUpload>
-            </UFormField>
+        <UForm @submit.prevent="handleSubmit">
+            <!-- Mirrors the display card's flex flex-col md:flex-row layout -->
+            <div class="flex flex-col md:flex-row gap-4">
+                <!-- Left column: text fields matching display order and styles -->
+                <div class="flex flex-col flex-1 gap-3">
+                    <UInput v-model="form.title" placeholder="Título" variant="none"
+                        :ui="{ base: 'text-xl text-primary font-semibold placeholder:text-primary/50' }" />
+                    <UInput v-model="form.subtitle" placeholder="Subtítulo" variant="none"
+                        :ui="{ base: [baseUIClasses, 'font-semibold'] }" />
+                    <UTextarea v-model="form.description" :maxrows="0" placeholder="Descripción" variant="none" autoresize
+                        :ui="{ base: [baseUIClasses, 'text-justify'] }" />
+                    <div class="flex gap-2 mt-1">
+                        <UInput v-model="form.link_text" placeholder="Texto del enlace" variant="none"
+                            :ui="{ base: baseUIClasses }" />
+                        <UInput v-model="form.link" type="url" placeholder="Enlace" variant="none"
+                            :ui="{ base: baseUIClasses }" />
+                    </div>
+                </div>
 
-            <UFormField>
-                <UInput v-model="form.title" placeholder="Título" class="w-full h-fit" variant="none"
-                    :ui="{ base: 'text-primary text-2xl text-wrap font-bold placeholder:text-primary/50' }" />
-            </UFormField>
-
-            <UFormField>
-                <UInput v-model="form.subtitle" placeholder="Subtítulo" class="w-full h-fit" variant="none"
-                    :ui="{ base: [baseUIClasses, 'text-lg font-bold'] }" />
-            </UFormField>
-
-            <UFormField>
-                <UTextarea v-model="form.description" :rows="8" placeholder="Descripción" class="w-full" variant="none"
-                    autoresize :ui="{ base: [baseUIClasses, 'text-md text-justify'] }" />
-            </UFormField>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <UFormField>
-                    <UInput v-model="form.link_text" placeholder="Texto del enlace" class="w-full" variant="none"
-                        :ui="{ base: baseUIClasses }" />
-                </UFormField>
-                <UFormField>
-                    <UInput v-model="form.link" type="url" placeholder="Enlace" class="w-full" variant="none"
-                        :ui="{ base: baseUIClasses }" />
-                </UFormField>
+                <!-- Right column: image upload mirrors the display image position -->
+                <div class="relative m-auto w-130 max-w-full">
+                    <UFileUpload :model-value="pendingFile" accept="image/*" variant="area" size="md" :preview="false"
+                        :interactive="false" :disabled="isSaving || !!isDeleting"
+                        :ui="{ base: 'h-full', wrapper: 'h-full', files: 'hidden', label: 'hidden', description: 'hidden' }"
+                        @update:model-value="setPendingFile">
+                        <template #default="{ open }">
+                            <button type="button"
+                                class="relative flex min-h-48 w-full min-w-48 items-center justify-center bg-gray-200 overflow-hidden rounded-xl text-white/80 transition hover:text-white"
+                                :style="uploadBackgroundStyle" @click="open()">
+                                <span v-if="uploadBackgroundStyle" class="absolute inset-0 bg-black/30" />
+                                <span class="relative z-10 flex flex-col items-center gap-2 text-sm font-medium">
+                                    <UIcon name="i-lucide-upload" class="h-5 w-5" />
+                                    <span>{{ imagePreviewUrl ? 'Cambiar imagen' : 'Subir imagen' }}</span>
+                                </span>
+                            </button>
+                        </template>
+                    </UFileUpload>
+                </div>
             </div>
 
             <UAlert v-if="displayError" color="error" icon="i-lucide-alert-circle" :description="displayError"
-                class="mb-4" />
+                class="mt-4" />
 
-            <div class="flex justify-between">
+            <div class="flex justify-between mt-4">
                 <UButton v-if="!isNew" type="button" color="error" variant="soft" size="md" icon="i-lucide-trash-2"
                     :loading="!!isDeleting" :disabled="isSaving || !!isDeleting" @click="emit('delete')">
                     Eliminar

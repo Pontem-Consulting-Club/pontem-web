@@ -1,3 +1,43 @@
+<template>
+  <div>
+    <PageHeader title="Consultoría Social" background-image="/BienvenidaConsultores.jpg" />
+
+    <UContainer class="py-16">
+      <div class="text-center mb-12">
+        <SectionHeader title="Conoce nuestros Proyectos" centered />
+        <div class="flex flex-col text-lg max-w-3xl mx-auto gap-4 mt-6">
+          <p class="font-semibold">
+            Trabajamos con organizaciones, fundaciones y empresas con fines sociales, brindando servicios en áreas como
+            estrategia, finanzas y operaciones.
+          </p>
+          <p>
+            Nuestros consultores desarrollan habilidades clave mientras ayudan a fortalecer organizaciones que trabajan
+            por el bien de la sociedad.
+          </p>
+        </div>
+      </div>
+
+      <LoadingSpinner v-if="status === 'pending'" />
+      <div v-if="isAuthenticated" class="flex justify-end mb-6">
+        <UButton icon="i-lucide-plus" variant="soft" color="primary" size="md" :disabled="isCreating"
+          @click="startCreate">
+          Agregar
+        </UButton>
+      </div>
+      <div v-if="isCreating && draftProject" class="flex flex-col gap-10 mb-10">
+        <ProjectCard :project="draftProject" :is-new="true" @created="handleCreated" @cancel-create="cancelCreate"
+          @updated="refresh" />
+      </div>
+
+      <EmptyState v-else-if="projects && projects.length === 0" message="No hay proyectos disponibles" />
+
+      <div v-else class="flex flex-col gap-10">
+        <ProjectCard v-for="project in projects" :key="project.id" :project="project" @updated="refresh" />
+      </div>
+    </UContainer>
+  </div>
+</template>
+
 <script setup lang="ts">
 import type { ProjectRecord } from '~/types/content'
 
@@ -35,36 +75,3 @@ const handleCreated = () => {
   cancelCreate()
 }
 </script>
-
-<template>
-  <div>
-    <PageHeader title="Consultoría Social" background-image="/BienvenidaConsultores.jpg" />
-
-    <UContainer class="py-16">
-      <div v-if="isAuthenticated" class="flex justify-end mb-6">
-        <UButton icon="i-lucide-plus" variant="soft" color="primary" size="md" :disabled="isCreating"
-          @click="startCreate">
-          Agregar
-        </UButton>
-      </div>
-      <div class="text-center mb-12">
-        <SectionHeader title="Nuestros Proyectos" centered />
-        <SectionDescription
-          text="Trabajamos con organizaciones sin fines de lucro para generar impacto social positivo." />
-      </div>
-
-      <LoadingSpinner v-if="status === 'pending'" />
-
-      <div v-if="isCreating && draftProject" class="flex flex-col gap-10 mb-10">
-        <ProjectCard :project="draftProject" :is-new="true" @created="handleCreated" @cancel-create="cancelCreate"
-          @updated="refresh" />
-      </div>
-
-      <EmptyState v-else-if="projects && projects.length === 0" message="No hay proyectos disponibles" />
-
-      <div v-else class="flex flex-col gap-10">
-        <ProjectCard v-for="project in projects" :key="project.id" :project="project" @updated="refresh" />
-      </div>
-    </UContainer>
-  </div>
-</template>

@@ -6,31 +6,29 @@
     <UButton v-if="isAuthenticated" icon="i-lucide-pencil" size="xs" color="primary" variant="ghost"
       class="absolute top-3 right-3 z-10" @click="startEdit" />
 
-    <div class="flex flex-col md:flex-row p-6 gap-4">
+    <div class="flex flex-col md:flex-row p-3 md:p-6 gap-10">
       <div class="flex flex-col justify-between flex-1">
-        <div class="text-xl text-primary font-semibold mb-2">
-          {{ project.title }}
+
+        <div>
+          <div class="text-xl text-primary font-semibold mb-2">
+            {{ project.title }}
+          </div>
+          <div v-if="project.subtitle" class="text-gray-600 font-semibold mb-3">
+            {{ project.subtitle }}
+          </div>
         </div>
 
-        <div v-if="project.subtitle" class="text-gray-600 font-semibold mb-3">
-          {{ project.subtitle }}
-        </div>
-
-        <div v-if="project.description" class="mr-4 text-justify text-gray-600">
+        <div v-if="project.description" class="text-justify text-gray-600">
           {{ project.description }}
         </div>
 
-        <div class="mt-3">
-          <UButton v-if="project.link" :href="project.link" target="_blank" variant="link" block class="p-4">
-            {{ project.link_text || 'Ver más' }}
-          </UButton>
-        </div>
+        <UButton v-if="project.link" class="max-w-fit px-5 mt-5" :href="project.link" target="_blank" variant="soft">
+          {{ project.link_text || 'Ver más' }}
+        </UButton>
       </div>
 
-      <div class="relative my-auto">
-        <NuxtImg :src="imageUrl ?? '/LogoColorSolo.png'" alt="Imagen del proyecto" class="object-cover rounded-xl"
-          width="500"/>
-      </div>
+      <NuxtImg :src="imageUrl ?? '/LogoColorSolo.png'" alt="Imagen del proyecto" class="object-cover rounded-xl"
+        width="500" />
     </div>
   </UCard>
 </template>
@@ -184,5 +182,3 @@ const handleDelete = async () => {
   }
 }
 </script>
-
-

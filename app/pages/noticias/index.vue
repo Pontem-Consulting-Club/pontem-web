@@ -18,7 +18,7 @@
       </div>
 
       <div v-else class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <NewsCard v-for="newsItem in paginatedNews" :key="newsItem.id" :news-item="newsItem" variant="card" />
+        <NewsCard v-for="newsItem in paginatedNews" :key="newsItem.id" :news-item="newsItem"/>
       </div>
 
       <!-- Pagination -->
