@@ -3,20 +3,6 @@
     <PageHeader title="Consultoría Social" background-image="/BienvenidaConsultores.jpg" />
 
     <UContainer class="py-16">
-      <div class="text-center mb-12">
-        <SectionHeader title="Conoce nuestros Proyectos" centered />
-        <div class="flex flex-col text-lg max-w-3xl mx-auto gap-4 mt-6">
-          <p class="font-semibold">
-            Trabajamos con organizaciones, fundaciones y empresas con fines sociales, brindando servicios en áreas como
-            estrategia, finanzas y operaciones.
-          </p>
-          <p>
-            Nuestros consultores desarrollan habilidades clave mientras ayudan a fortalecer organizaciones que trabajan
-            por el bien de la sociedad.
-          </p>
-        </div>
-      </div>
-
       <LoadingSpinner v-if="status === 'pending'" />
       <div v-if="isAuthenticated" class="flex justify-end mb-6">
         <UButton icon="i-lucide-plus" variant="soft" color="primary" size="md" :disabled="isCreating"
