@@ -25,27 +25,10 @@ const scrollTimeline = (direction: 'left' | 'right') => {
 
 <template>
   <section>
-    <SectionHeader title="Nuestra Historia" centered class="mb-16" />
+    <SectionHeader title="Nuestra Historia" centered class="mb-14" />
 
     <div class="relative">
-      <div class="flex justify-end gap-2 mb-6">
-        <UButton
-          icon="i-lucide-chevron-left"
-          color="neutral"
-          variant="soft"
-          size="sm"
-          aria-label="Ver hitos anteriores"
-          @click="scrollTimeline('left')"
-        />
-        <UButton
-          icon="i-lucide-chevron-right"
-          color="neutral"
-          variant="soft"
-          size="sm"
-          aria-label="Ver hitos siguientes"
-          @click="scrollTimeline('right')"
-        />
-      </div>
+      
 
       <div
         ref="timelineTrack"
