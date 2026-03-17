@@ -18,8 +18,7 @@
             </div>
           </div>
           <p class="text-gray-600 leading-relaxed text-base">
-            Formar líderes con mentalidad estratégica y vocación de impacto, conectando a estudiantes universitarios
-            con el mundo de la consultoría a través de experiencias prácticas y proyectos con propósito social.
+            Ofrecer a los estudiantes la oportunidad de aplicar sus conocimientos en proyectos reales de consultoría, colaborando con empresas y organizaciones sociales para generar un impacto positivo.
           </p>
         </div>
       </div>
@@ -39,8 +38,7 @@
             </div>
           </div>
           <p class="text-gray-600 leading-relaxed text-base">
-            Ser el club de consultoría estudiantil de referencia en Chile, reconocido por la excelencia de sus
-            miembros, la profundidad de su impacto social y su capacidad de transformar ideas en soluciones reales.
+            Ser el club de consultoría líder en la formación de futuros consultores, ofreciendo oportunidades de aprendizaje y desarrollo en la resolución de problemas estratégicos para empresas y organizaciones.
           </p>
         </div>
       </div>
