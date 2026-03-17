@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import about from '~/assets/data/about.json'
-import { TEAM_ROLES } from '~/constants/teamRoles'
+import { TEAM_ROLES, TEAM_ROLE_LABELS } from '~/constants/teamRoles'
 import type { TeamRecord } from '~/types/content'
 
 useHead({
@@ -37,21 +37,21 @@ const handleCreated = () => {
 }
 
 const roleIcons: Record<string, string> = {
-  'Dirección': 'i-lucide-crown',
-  'Consultoría Social': 'i-lucide-heart-handshake',
-  'Tecnología e Innovación': 'i-lucide-cpu',
-  'Relaciones Externas': 'i-lucide-globe',
-  'Comunicaciones y Marketing': 'i-lucide-megaphone',
-  'Gestión de Personas': 'i-lucide-users',
-  'Finanzas': 'i-lucide-bar-chart-2',
-  'Proyectos Empresariales': 'i-lucide-briefcase-business',
+  'directores': 'i-lucide-crown',
+  'comunicaciones & marketing': 'i-lucide-megaphone',
+  'consultoría social': 'i-lucide-heart-handshake',
+  'finanzas': 'i-lucide-bar-chart-2',
+  'gestión de personas': 'i-lucide-users',
+  'learning & development': 'i-lucide-graduation-cap',
+  'relaciones externas': 'i-lucide-globe',
+  'tecnologías de la información': 'i-lucide-cpu',
 }
 
 const teamByRole = computed(() => {
   const members = team.value ?? []
   const grouped = TEAM_ROLES.map((role) => ({
     key: role,
-    label: role,
+    label: TEAM_ROLE_LABELS[role],
     icon: roleIcons[role] ?? 'i-lucide-users',
     members: members.filter(member => member.role === role)
   }))

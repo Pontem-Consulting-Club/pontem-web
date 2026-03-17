@@ -1,12 +1,12 @@
 export const TEAM_ROLES = [
-  'Dirección',
-  'Consultoría Social',
-  'Tecnología e Innovación',
-  'Relaciones Externas',
-  'Comunicaciones y Marketing',
-  'Gestión de Personas',
-  'Finanzas',
-  'Proyectos Empresariales'
+  'directores',
+  'comunicaciones & marketing',
+  'consultoría social',
+  'finanzas',
+  'gestión de personas',
+  'learning & development',
+  'relaciones externas',
+  'tecnologías de la información'
 ] as const
 
 export const TEAM_ROLE_SET = new Set<string>(TEAM_ROLES)

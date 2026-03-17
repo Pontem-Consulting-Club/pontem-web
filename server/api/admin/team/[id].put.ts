@@ -1,7 +1,7 @@
 import { serverSupabaseClient } from '#supabase/server'
 import type { Database } from '~/types/database.types'
 import { requireUser } from '~~/server/utils/requireUser'
-import { isValidTeamRole } from '~~/server/utils/teamRoles'
+import { isValidTeamRole, TEAM_ROLES } from '~~/server/utils/teamRoles'
 
 type TeamRow = Database['public']['Tables']['Team']['Row']
 
@@ -68,7 +68,7 @@ export default defineEventHandler(async (event) => {
     if (!isValidTeamRole(body.role.toString().trim())) {
         throw createError({
             statusCode: 400,
-            statusMessage: 'Invalid team role'
+            statusMessage: `Invalid team role. Allowed roles: ${TEAM_ROLES.join(', ')}`
         })
     }
 
