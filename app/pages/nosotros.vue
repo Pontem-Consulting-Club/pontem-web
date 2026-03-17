@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import about from '~/assets/data/about.json'
+import { TEAM_ROLES } from '~/constants/teamRoles'
 import type { TeamRecord } from '~/types/content'
 
 useHead({
@@ -35,61 +36,31 @@ const handleCreated = () => {
   cancelCreate()
 }
 
-const departmentOrder = [
-  'directores',
-  'comunicaciones & marketing',
-  'consultoría social',
-  'finanzas',
-  'gestión de personas',
-  'learning & development',
-  'relaciones externas',
-  'tecnologías de la información',
-]
-
-const departmentLabels: Record<string, string> = {
-  'directores': 'Directores',
-  'comunicaciones & marketing': 'Comunicaciones & Marketing',
-  'consultoría social': 'Consultoría Social',
-  'finanzas': 'Finanzas',
-  'gestión de personas': 'Gestión de Personas',
-  'learning & development': 'Learning & Development',
-  'relaciones externas': 'Relaciones Externas',
-  'tecnologías de la información': 'Tecnologías de la Información',
+const roleIcons: Record<string, string> = {
+  'Dirección': 'i-lucide-crown',
+  'Consultoría Social': 'i-lucide-heart-handshake',
+  'Tecnología e Innovación': 'i-lucide-cpu',
+  'Relaciones Externas': 'i-lucide-globe',
+  'Comunicaciones y Marketing': 'i-lucide-megaphone',
+  'Gestión de Personas': 'i-lucide-users',
+  'Finanzas': 'i-lucide-bar-chart-2',
+  'Proyectos Empresariales': 'i-lucide-briefcase-business',
 }
 
-const departmentIcons: Record<string, string> = {
-  'directores': 'i-lucide-crown',
-  'comunicaciones & marketing': 'i-lucide-megaphone',
-  'consultoría social': 'i-lucide-heart-handshake',
-  'finanzas': 'i-lucide-bar-chart-2',
-  'gestión de personas': 'i-lucide-users',
-  'learning & development': 'i-lucide-graduation-cap',
-  'relaciones externas': 'i-lucide-globe',
-  'tecnologías de la información': 'i-lucide-cpu',
-}
+const teamByRole = computed(() => {
+  const members = team.value ?? []
+  const grouped = TEAM_ROLES.map((role) => ({
+    key: role,
+    label: role,
+    icon: roleIcons[role] ?? 'i-lucide-users',
+    members: members.filter(member => member.role === role)
+  }))
 
-const teamByDepartment = computed(() => {
-  if (!team.value) return []
-  const groups: Record<string, TeamRecord[]> = {}
- 
-  for (const member of team.value) {
-    //Normalize department from role field — expected format: "Título | Departamento"
-    const parts = member.role?.split('|')
-    const raw = parts[1]
-    const dept = raw ? raw.trim().toLowerCase() : 'directores'
- 
-    if (!groups[dept]) groups[dept] = []
-    groups[dept].push(member)
+  if (isAuthenticated.value) {
+    return grouped
   }
- 
-  return departmentOrder
-    .filter(dept => groups[dept] && groups[dept].length > 0)
-    .map(dept => ({
-      key: dept,
-      label: departmentLabels[dept] ?? dept,
-      icon: departmentIcons[dept] ?? 'i-lucide-users',
-      members: groups[dept]!,
-    }))
+
+  return grouped.filter(group => group.members.length > 0)
 })
 
 </script>
@@ -122,10 +93,10 @@ const teamByDepartment = computed(() => {
           <TeamCard :member="draftMember" :is-new="true" @created="handleCreated" @cancel-create="cancelCreate" @updated="refresh" />
         </div>
  
-        <EmptyState v-else-if="!team || team.length === 0" message="No hay integrantes disponibles" />
+        <EmptyState v-else-if="teamByRole.length === 0" message="No hay integrantes disponibles" />
  
-        <div v-if="team && team.length > 0" class="space-y-16">
-          <div v-for="dept in teamByDepartment" :key="dept.key">
+        <div v-if="teamByRole.length > 0" class="space-y-16">
+          <div v-for="dept in teamByRole" :key="dept.key">
             <!-- Department header -->
             <div class="flex items-center gap-4 mb-8">
               <div class="w-9 h-9 rounded-xl bg-pontemred-100 flex items-center justify-center shrink-0">
@@ -137,7 +108,7 @@ const teamByDepartment = computed(() => {
             </div>
  
             <!-- Members grid -->
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 min-h-8">
               <TeamCard v-for="member in dept.members" :key="member.id" :member="member" @updated="refresh" />
             </div>
           </div>

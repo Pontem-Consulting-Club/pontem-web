@@ -1,6 +1,7 @@
 import { serverSupabaseClient } from '#supabase/server'
 import type { Database } from '~/types/database.types'
 import { requireUser } from '~~/server/utils/requireUser'
+import { isValidTeamRole } from '~~/server/utils/teamRoles'
 
 type TeamRow = Database['public']['Tables']['Team']['Row']
 
@@ -54,6 +55,13 @@ export default defineEventHandler(async (event) => {
         })
     }
 
+    if (!isValidTeamRole(body.role.toString().trim())) {
+        throw createError({
+            statusCode: 400,
+            statusMessage: 'Invalid team role'
+        })
+    }
+
     const supabase = await serverSupabaseClient<Database>(event)
 
     let imagePath = normalizeValue(body.image_url ?? null)
@@ -84,8 +92,8 @@ export default defineEventHandler(async (event) => {
     }
 
     const payload: TeamPayload = {
-        name: body.name,
-        role: body.role,
+        name: body.name.toString().trim(),
+        role: body.role.toString().trim(),
         image_url: imagePath
     }
 
