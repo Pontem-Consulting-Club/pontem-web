@@ -13,6 +13,7 @@
 
 <script setup lang="ts">
 import type { TeamRecord } from '~/types/content'
+import { TEAM_ROLES } from '~/constants/teamRoles'
 
 interface Props {
     member: TeamRecord
@@ -54,6 +55,9 @@ const validateForm = () => {
     }
     if (!form.value.role || !form.value.role.toString().trim()) {
         return 'El rol es obligatorio.'
+    }
+    if (!TEAM_ROLES.includes(form.value.role.toString().trim() as (typeof TEAM_ROLES)[number])) {
+        return 'Selecciona un rol válido.'
     }
     return ''
 }
