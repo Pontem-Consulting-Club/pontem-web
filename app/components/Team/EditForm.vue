@@ -21,9 +21,9 @@
             <UInput v-model="form.name" placeholder="Nombre" class="w-full" variant="none"
                 :ui="{ base: 'text-center text-lg font-semibold text-primary placeholder:text-primary/50' }" />
 
-            <!-- Role mirrors the plain p tag below the name -->
-            <UTextarea v-model="form.role" :rows="2" placeholder="Rol" class="w-full" variant="none" autoresize
-                :ui="{ base: 'text-center text-gray-600 placeholder:text-gray-400' }" />
+            <!-- Role: restricted to the 8 allowed positions -->
+            <USelect v-model="form.role" :options="TEAM_ROLES" placeholder="Seleccionar rol" class="w-full"
+                :ui="{ base: 'text-center text-gray-600' }" />
 
             <UAlert v-if="displayError" color="error" icon="i-lucide-alert-circle" :description="displayError"
                 class="w-full" />
@@ -48,6 +48,7 @@
 
 <script setup lang="ts">
 import type { TeamRecord } from '~/types/content'
+import { TEAM_ROLES } from '~/constants/teamRoles'
 
 const form = defineModel<Partial<TeamRecord>>('form', { required: true })
 

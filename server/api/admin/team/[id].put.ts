@@ -1,6 +1,7 @@
 import { serverSupabaseClient } from '#supabase/server'
 import type { Database } from '~/types/database.types'
 import { requireUser } from '~~/server/utils/requireUser'
+import { TEAM_ROLES } from '~~/server/utils/teamRoles'
 
 type TeamRow = Database['public']['Tables']['Team']['Row']
 
@@ -61,6 +62,13 @@ export default defineEventHandler(async (event) => {
         throw createError({
             statusCode: 400,
             statusMessage: 'Name and role are required'
+        })
+    }
+
+    if (!(TEAM_ROLES as readonly string[]).includes(body.role)) {
+        throw createError({
+            statusCode: 400,
+            statusMessage: `Invalid role. Must be one of: ${TEAM_ROLES.join(', ')}`
         })
     }
 
