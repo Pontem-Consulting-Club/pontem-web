@@ -115,25 +115,25 @@ export type Database = {
       }
       Team: {
         Row: {
+          coordination: Database["public"]["Enums"]["ClubCoordination"]
           created_at: string
           id: number
           image_url: string | null
           name: string
-          role: string
         }
         Insert: {
+          coordination: Database["public"]["Enums"]["ClubCoordination"]
           created_at?: string
           id?: number
           image_url?: string | null
           name: string
-          role: string
         }
         Update: {
+          coordination?: Database["public"]["Enums"]["ClubCoordination"]
           created_at?: string
           id?: number
           image_url?: string | null
           name?: string
-          role?: string
         }
         Relationships: []
       }
@@ -163,7 +163,15 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      ClubCoordination:
+        | "DIRECTORS"
+        | "COMMS_MKT"
+        | "SOC_CONSULT"
+        | "PEOPLE_MGMT"
+        | "LEARNING_DEV"
+        | "EXTERNAL_REL"
+        | "IT"
+        | "FINANCE"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -290,6 +298,17 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      ClubCoordination: [
+        "DIRECTORS",
+        "COMMS_MKT",
+        "SOC_CONSULT",
+        "PEOPLE_MGMT",
+        "LEARNING_DEV",
+        "EXTERNAL_REL",
+        "IT",
+        "FINANCE",
+      ],
+    },
   },
 } as const
