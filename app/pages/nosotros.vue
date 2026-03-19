@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import about from '~/assets/data/about.json'
-import { TEAM_ROLES, TEAM_ROLE_LABELS } from '~/constants/teamRoles'
+import { TEAM_COORDINATIONS, TEAM_COORDINATION_ICONS, TEAM_COORDINATION_LABELS } from '~/constants/teamRoles'
 import type { TeamRecord } from '~/types/content'
 
 useHead({
@@ -22,7 +22,7 @@ const startCreate = () => {
   draftMember.value = {
     id: 0,
     name: '',
-    role: '',
+    coordination: TEAM_COORDINATIONS[0]!,
     image_url: null
   }
 }
@@ -36,24 +36,13 @@ const handleCreated = () => {
   cancelCreate()
 }
 
-const roleIcons: Record<string, string> = {
-  'directores': 'i-lucide-crown',
-  'comunicaciones & marketing': 'i-lucide-megaphone',
-  'consultoría social': 'i-lucide-heart-handshake',
-  'finanzas': 'i-lucide-bar-chart-2',
-  'gestión de personas': 'i-lucide-users',
-  'learning & development': 'i-lucide-graduation-cap',
-  'relaciones externas': 'i-lucide-globe',
-  'tecnologías de la información': 'i-lucide-cpu',
-}
-
 const teamByRole = computed(() => {
   const members = team.value ?? []
-  const grouped = TEAM_ROLES.map((role) => ({
-    key: role,
-    label: TEAM_ROLE_LABELS[role],
-    icon: roleIcons[role] ?? 'i-lucide-users',
-    members: members.filter(member => member.role === role)
+  const grouped = TEAM_COORDINATIONS.map((coordination) => ({
+    key: coordination,
+    label: TEAM_COORDINATION_LABELS[coordination],
+    icon: TEAM_COORDINATION_ICONS[coordination] ?? 'i-lucide-users',
+    members: members.filter(member => member.coordination === coordination)
   }))
 
   if (isAuthenticated.value) {

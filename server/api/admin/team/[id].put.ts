@@ -1,11 +1,11 @@
 import { serverSupabaseClient } from '#supabase/server'
 import type { Database } from '~/types/database.types'
 import { requireUser } from '~~/server/utils/requireUser'
-import { isValidTeamRole, TEAM_ROLES } from '~~/server/utils/teamRoles'
+import { isValidTeamCoordination, TEAM_COORDINATIONS } from '~~/server/utils/teamRoles'
 
 type TeamRow = Database['public']['Tables']['Team']['Row']
 
-type TeamPayload = Pick<TeamRow, 'name' | 'role' | 'image_url'>
+type TeamPayload = Pick<TeamRow, 'name' | 'coordination' | 'image_url'>
 
 export default defineEventHandler(async (event) => {
     await requireUser(event)
@@ -58,17 +58,17 @@ export default defineEventHandler(async (event) => {
 
     const { body, imagePart } = await parsePayload()
 
-    if (!body.name || !body.role) {
+    if (!body.name || !body.coordination) {
         throw createError({
             statusCode: 400,
-            statusMessage: 'Name and role are required'
+            statusMessage: 'Name and coordination are required'
         })
     }
 
-    if (!isValidTeamRole(body.role.toString().trim())) {
+    if (!isValidTeamCoordination(body.coordination.toString().trim())) {
         throw createError({
             statusCode: 400,
-            statusMessage: `Invalid team role. Allowed roles: ${TEAM_ROLES.join(', ')}`
+            statusMessage: `Invalid team coordination. Allowed values: ${TEAM_COORDINATIONS.join(', ')}`
         })
     }
 
@@ -103,7 +103,7 @@ export default defineEventHandler(async (event) => {
 
     const payload: TeamPayload = {
         name: body.name.toString().trim(),
-        role: body.role.toString().trim(),
+        coordination: body.coordination.toString().trim() as TeamPayload['coordination'],
         image_url: imagePath
     }
 

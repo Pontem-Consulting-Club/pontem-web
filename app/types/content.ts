@@ -1,3 +1,7 @@
+import type { Database } from './database.types'
+
+type TeamCoordination = Database['public']['Enums']['ClubCoordination']
+
 export interface EventRecord {
     id: number
     title: string
@@ -34,6 +38,6 @@ export interface NewsRecord {
 export interface TeamRecord {
     id: number
     name: string
-    role: string
+    coordination: TeamCoordination
     image_url?: string | null
 }

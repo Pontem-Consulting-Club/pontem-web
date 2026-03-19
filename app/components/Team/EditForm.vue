@@ -21,7 +21,7 @@
             <UInput v-model="form.name" placeholder="Nombre" class="w-full" variant="none"
                 :ui="{ base: 'text-center text-lg font-semibold text-primary placeholder:text-primary/50' }" />
 
-            <USelect v-model="form.role" :items="TEAM_ROLE_OPTIONS" placeholder="Selecciona un rol"
+            <USelect v-model="form.coordination" :items="TEAM_COORDINATION_OPTIONS" placeholder="Selecciona una coordinación"
                 value-key="value" class="w-full" :disabled="isSaving || !!isDeleting"
                 :ui="{ base: 'text-gray-700', content: 'text-gray-700' }" />
 
@@ -48,7 +48,7 @@
 
 <script setup lang="ts">
 import type { TeamRecord } from '~/types/content'
-import { TEAM_ROLE_OPTIONS } from '~/constants/teamRoles'
+import { TEAM_COORDINATION_OPTIONS } from '~/constants/teamRoles'
 
 const form = defineModel<Partial<TeamRecord>>('form', { required: true })
 
