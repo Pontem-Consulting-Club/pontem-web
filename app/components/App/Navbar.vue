@@ -9,15 +9,18 @@
       <!-- Desktop Navigation -->
       <div class="hidden md:flex items-center gap-8 pl-8">
         <NuxtLink v-for="item in navigation" :key="item.to" :to="item.to"
-          class="hover:text-pontemred-500 transition-colors text-sm text-center font-medium"
-          active-class="text-pontemred-500">
+          class="hover:text-primary transition text-sm text-center font-medium" active-class="text-primary">
           {{ item.label }}
         </NuxtLink>
+        <UButton v-if="isAuthenticated" icon="i-lucide-log-out" color="error" variant="outline" size="xs"
+          @click="logout">
+          Cerrar Sesión
+        </UButton>
       </div>
 
       <!-- Mobile Menu Toggle -->
       <button ref="menuButtonRef"
-        class="md:hidden p-2 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pontemred-500"
+        class="md:hidden p-2 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
         aria-label="Toggle mobile menu" :aria-expanded="isMobileMenuOpen" @click="toggleMobileMenu">
         <svg :class="['w-6 h-6 transform transition-transform duration-300', isMobileMenuOpen ? 'rotate-90' : '']"
           xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -36,9 +39,13 @@
         class="md:hidden absolute right-0 top-full w-fit bg-white/90 backdrop-blur-md shadow-lg z-60 rounded-bl-lg overflow-hidden">
         <nav class="py-2 flex flex-col">
           <NuxtLink v-for="item in navigation" :key="item.to" :to="item.to"
-            class="px-5 py-2 gap-5 transition-colors text-left font-medium" active-class="text-pontemred-500">
+            class="px-5 py-2 gap-5 transition-colors text-left font-medium" active-class="text-primary">
             {{ item.label }}
           </NuxtLink>
+          <UButton v-if="isAuthenticated" icon="i-lucide-log-out" color="error" variant="outline" size="xs" class="m-2"
+            @click="handleLogout">
+            Cerrar Sesión
+          </UButton>
         </nav>
       </div>
 
@@ -57,6 +64,7 @@
 <script setup lang="ts">
 const isMobileMenuOpen = ref(false)
 const { navigation } = useNavigation()
+const { logout, isAuthenticated } = useAuth()
 
 const menuRef = ref<HTMLElement | null>(null)
 const menuButtonRef = ref<HTMLElement | null>(null)
@@ -67,6 +75,11 @@ const toggleMobileMenu = () => {
 
 const closeMobileMenu = () => {
   isMobileMenuOpen.value = false
+}
+
+const handleLogout = () => {
+  logout()
+  closeMobileMenu()
 }
 
 const onDocumentClick = (e: MouseEvent) => {

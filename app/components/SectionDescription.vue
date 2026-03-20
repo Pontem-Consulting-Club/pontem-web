@@ -10,7 +10,7 @@ withDefaults(defineProps<Props>(), {
 </script>
 
 <template>
-  <p class="text-lg max-w-3xl" :class="centered ? 'mx-auto' : ''">
+  <p class="text-lg max-w-3xl font-semibold" :class="centered ? 'mx-auto' : ''">
     {{ text }}
   </p>
 </template>

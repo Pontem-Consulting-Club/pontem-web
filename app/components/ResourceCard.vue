@@ -7,7 +7,7 @@ interface Props {
 }
 
 withDefaults(defineProps<Props>(), {
-  iconColor: 'text-pontemred-600'
+  iconColor: 'text-primary'
 })
 </script>
 

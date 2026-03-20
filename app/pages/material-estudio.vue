@@ -5,10 +5,7 @@
     <UContainer class="py-16">
       <!-- Stages Section -->
       <section class="text-center mb-16">
-        <SectionHeader title="Postulación a Consultoras estratégicas" centered />
-        <SectionDescription
-          text="La postulación a consultoras estratégicas es un proceso extenso (puede durar varios meses) y altamente competitivo. Por ello, una buena preparación es clave para avanzar con éxito. Este proceso generalmente se divide en las siguientes etapas principales:"
-          class="mb-12" />
+        <SectionHeader class="mb-8" title="Postulación a Consultoras estratégicas" centered />
 
         <div class="flex flex-wrap justify-center gap-4">
           <StageCard v-for="(stage, index) in stages" :key="stage.title" :number="index + 1" :title="stage.title"

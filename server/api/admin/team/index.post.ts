@@ -2,9 +2,9 @@ import { serverSupabaseClient } from '#supabase/server'
 import type { Database } from '~/types/database.types'
 import { requireUser } from '~~/server/utils/requireUser'
 
-type ProjectRow = Database['public']['Tables']['Projects']['Row']
+type TeamRow = Database['public']['Tables']['Team']['Row']
 
-type ProjectPayload = Pick<ProjectRow, 'title' | 'subtitle' | 'description' | 'image_url' | 'link' | 'link_text'>
+type TeamPayload = Pick<TeamRow, 'name' | 'role' | 'image_url'>
 
 export default defineEventHandler(async (event) => {
     await requireUser(event)
@@ -47,10 +47,10 @@ export default defineEventHandler(async (event) => {
 
     const { body, imagePart } = await parsePayload()
 
-    if (!body.title) {
+    if (!body.name || !body.role) {
         throw createError({
             statusCode: 400,
-            statusMessage: 'Title is required'
+            statusMessage: 'Name and role are required'
         })
     }
 
@@ -63,7 +63,7 @@ export default defineEventHandler(async (event) => {
             ? crypto.randomUUID()
             : `${Date.now()}`
         const filename = `${fileId}.${extension}`
-        imagePath = `projects/${filename}`
+        imagePath = `team/${filename}`
 
         const { error: uploadError } = await supabase
             .storage
@@ -83,24 +83,21 @@ export default defineEventHandler(async (event) => {
         }
     }
 
-    const payload: ProjectPayload = {
-        title: body.title,
-        subtitle: normalizeValue(body.subtitle ?? null),
-        description: normalizeValue(body.description ?? null),
-        image_url: imagePath,
-        link: normalizeValue(body.link ?? null),
-        link_text: normalizeValue(body.link_text ?? null)
+    const payload: TeamPayload = {
+        name: body.name,
+        role: body.role,
+        image_url: imagePath
     }
 
-    const { error } = await supabase.from('Projects').insert(payload)
+    const { error } = await supabase.from('Team').insert(payload)
 
     if (error) {
         throw createError({
             statusCode: 500,
-            statusMessage: 'Error creating project',
+            statusMessage: 'Error creating team member',
             message: error.message
         })
     }
 
-    return { message: 'Project created successfully' }
+    return { message: 'Team member created successfully' }
 })

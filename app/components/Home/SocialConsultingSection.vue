@@ -1,6 +1,4 @@
-<script setup lang="ts">
-</script>
-
+import { HomeFeatureCard } from '../../../.nuxt/components';
 <template>
   <section class="relative py-16 md:py-24 rounded-[48px] mx-2 md:mx-6">
     <UContainer class="text-center">
@@ -13,15 +11,15 @@
       </p>
 
       <div class="grid md:grid-cols-3 gap-8 mt-12 px-4">
-        <FeatureCard icon="i-lucide-users" title="Trabajo en Equipo"
+        <HomeFeatureCard icon="i-lucide-users" title="Trabajo en Equipo"
           description="Colaboramos en equipos multidisciplinarios para resolver problemas complejos."
-          icon-color="text-pontemred-500" />
+          icon-color="text-primary" />
 
-        <FeatureCard icon="i-lucide-lightbulb" title="Innovación"
+        <HomeFeatureCard icon="i-lucide-lightbulb" title="Innovación"
           description="Desarrollamos soluciones creativas e innovadoras para cada proyecto."
-          icon-color="text-pontemteal-500" />
+          icon-color="text-secondary" />
 
-        <FeatureCard icon="i-lucide-heart" title="Impacto Social"
+        <HomeFeatureCard icon="i-lucide-heart" title="Impacto Social"
           description="Generamos cambios positivos en la comunidad a través de nuestro trabajo."
           icon-color="text-pontempurple-500" />
       </div>

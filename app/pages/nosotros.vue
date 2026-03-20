@@ -1,12 +1,39 @@
 <script setup lang="ts">
 import about from '~/assets/data/about.json'
+import type { TeamRecord } from '~/types/content'
 
 useHead({
   title: about.title
 })
 
 const history = about.history
-const team = about.team
+
+const { data: team, status, refresh } = await useFetch<TeamRecord[]>('/api/team', {
+  default: () => []
+})
+
+const { isAuthenticated } = useAuth()
+const isCreating = ref(false)
+const draftMember = ref<TeamRecord | null>(null)
+
+const startCreate = () => {
+  isCreating.value = true
+  draftMember.value = {
+    id: 0,
+    name: '',
+    role: '',
+    image_url: null
+  }
+}
+
+const cancelCreate = () => {
+  isCreating.value = false
+  draftMember.value = null
+}
+
+const handleCreated = () => {
+  cancelCreate()
+}
 </script>
 
 <template>
@@ -32,8 +59,23 @@ const team = about.team
       <section>
         <SectionHeader title="Nuestro Equipo" centered class="mb-12" />
 
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <TeamMemberCard v-for="member in team" :key="member.name" :name="member.name" :role="member.role" />
+        <div v-if="isAuthenticated" class="flex justify-end mb-6">
+          <UButton icon="i-lucide-plus" variant="soft" color="primary" size="md" :disabled="isCreating" @click="startCreate">
+            Agregar
+          </UButton>
+        </div>
+
+        <LoadingSpinner v-if="status === 'pending'" />
+
+        <div v-if="isCreating && draftMember" class="mb-6">
+          <TeamCard :member="draftMember" :is-new="true" @created="handleCreated" @cancel-create="cancelCreate"
+            @updated="refresh" />
+        </div>
+
+        <EmptyState v-else-if="!team || team.length === 0" message="No hay integrantes disponibles" />
+
+        <div v-if="team && team.length > 0" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <TeamCard v-for="member in team" :key="member.id" :member="member" @updated="refresh" />
         </div>
       </section>
     </UContainer>

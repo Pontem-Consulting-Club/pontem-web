@@ -10,7 +10,7 @@ withDefaults(defineProps<Props>(), {
 </script>
 
 <template>
-  <h2 class="text-3xl font-bold mb-4" :class="{ 'text-center': centered }">
+  <h2 class="text-3xl font-bold mb-4 text-primary" :class="{ 'text-center': centered }">
     {{ title }}
   </h2>
 </template>

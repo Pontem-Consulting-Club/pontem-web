@@ -1,4 +1,7 @@
-export function useStorageImage(path: string | null | undefined, bucket = 'images') {
+import { unref } from 'vue'
+import type { MaybeRef } from 'vue'
+
+export function useStorageImage(path: MaybeRef<string | null | undefined>, bucket = 'images') {
     const url = ref<string | null>(null)
     const loading = ref(false)
     const error = ref<string | null>(null)
@@ -17,21 +20,22 @@ export function useStorageImage(path: string | null | undefined, bucket = 'image
     }
 
     const load = async () => {
-        if (!path) {
+        const currentPath = unref(path)?.toString().trim()
+        if (!currentPath) {
             url.value = null
             return
         }
 
         // if it's already an absolute or root-relative URL, use it as-is
-        if (path.startsWith('http') || path.startsWith('/')) {
-            url.value = path
+        if (currentPath.startsWith('http') || currentPath.startsWith('/')) {
+            url.value = currentPath
             return
         }
 
         loading.value = true
         error.value = null
         try {
-            const { data, error: err } = await supabase.storage.from(bucket).download(path)
+            const { data, error: err } = await supabase.storage.from(bucket).download(currentPath)
             if (err) throw err
             revoke()
             objectUrl = URL.createObjectURL(data)
@@ -47,7 +51,7 @@ export function useStorageImage(path: string | null | undefined, bucket = 'image
 
     onMounted(load)
     onBeforeUnmount(revoke)
-    watch(() => path, (newPath, oldPath) => {
+    watch(() => unref(path), (newPath, oldPath) => {
         if (newPath !== oldPath) {
             revoke()
             load()

@@ -16,9 +16,6 @@ const sizeClasses = {
 
 <template>
   <div class="flex justify-center">
-    <UIcon 
-      name="i-lucide-loader-2" 
-      :class="[sizeClasses[size], 'animate-spin text-pontem-500']" 
-    />
+    <UIcon name="i-lucide-loader-2" :class="[sizeClasses[size], 'animate-spin text-primary']" />
   </div>
 </template>

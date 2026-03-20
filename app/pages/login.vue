@@ -52,7 +52,7 @@ const isLoading = ref(false)
 // Redirect if already authenticated
 onMounted(() => {
   if (isAuthenticated.value) {
-    router.push('/admin')
+    router.push('/login')
   }
 })
 
@@ -70,7 +70,7 @@ const handleSubmit = async () => {
     const result = await login(email.value, password.value)
 
     if (result.success) {
-      router.push('/admin')
+      router.push('/')
     } else {
       error.value = result.error || 'Error al iniciar sesión'
     }

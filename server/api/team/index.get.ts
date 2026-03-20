@@ -4,14 +4,14 @@ import type { Database } from '~/types/database.types'
 export default defineEventHandler(async (event) => {
     const supabase = await serverSupabaseClient<Database>(event)
     const { data, error } = await supabase
-        .from('News')
+        .from('Team')
         .select('*')
-        .order('published_date', { ascending: false })
+        .order('id', { ascending: true })
 
     if (error) {
         throw createError({
             statusCode: 500,
-            statusMessage: 'Error fetching news',
+            statusMessage: 'Error fetching team members',
             message: error.message
         })
     }

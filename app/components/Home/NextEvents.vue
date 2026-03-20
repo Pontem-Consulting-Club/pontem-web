@@ -15,7 +15,8 @@
       <EmptyState v-else-if="upcomingEvents.length === 0" message="No hay eventos próximos programados" />
 
       <div v-else class="grid md:grid-cols-3 gap-6">
-        <EventCard v-for="event in upcomingEvents" :key="event.id" :event="event" variant="compact" />
+        <EventCard v-for="event in upcomingEvents" :key="event.id" :event="event" variant="compact"
+          @updated="refresh" />
       </div>
 
       <div class="text-center mt-10">
@@ -31,7 +32,7 @@
 <script setup lang="ts">
 import type { EventRecord } from '~/types/content'
 
-const { data: events, status } = await useFetch<EventRecord[]>('/api/events/scheduled', {
+const { data: events, status, refresh } = await useFetch<EventRecord[]>('/api/events/scheduled', {
   default: () => []
 })
 

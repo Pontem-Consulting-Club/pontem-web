@@ -30,3 +30,10 @@ export interface NewsRecord {
     content?: string | null
     link?: string | null
 }
+
+export interface TeamRecord {
+    id: number
+    name: string
+    role: string
+    image_url?: string | null
+}
