@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import { TEAM_COORDINATION_LABELS } from '~/constants/teamRoles'
+
 interface Props {
   name: string
-  role: string
+  coordination: keyof typeof TEAM_COORDINATION_LABELS
   imageUrl?: string | null
   icon?: string
 }
@@ -22,6 +24,8 @@ watchEffect(() => {
 const handleImageError = () => {
   imageSrc.value = placeholderLogo
 }
+
+const coordinationLabel = computed(() => TEAM_COORDINATION_LABELS[props.coordination] ?? props.coordination)
 </script>
 
 <template>
@@ -34,7 +38,7 @@ const handleImageError = () => {
       {{ name }}
     </h3>
     <p class="">
-      {{ role }}
+      {{ coordinationLabel }}
     </p>
   </UCard>
 </template>

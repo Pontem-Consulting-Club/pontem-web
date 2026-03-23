@@ -7,13 +7,13 @@
         <UButton v-if="isAuthenticated" icon="i-lucide-pencil" size="xs" color="primary" variant="ghost"
             class="absolute top-2 right-2 z-10" @click="startEdit" />
 
-        <TeamMemberCard :name="member.name" :role="member.role" :image-url="member.image_url" />
+        <TeamMemberCard :name="member.name" :coordination="member.coordination" :image-url="member.image_url" />
     </div>
 </template>
 
 <script setup lang="ts">
 import type { TeamRecord } from '~/types/content'
-import { TEAM_ROLES } from '~/constants/teamRoles'
+import { isValidTeamCoordination } from '~/constants/teamRoles'
 
 interface Props {
     member: TeamRecord
@@ -53,18 +53,18 @@ const validateForm = () => {
     if (!form.value.name || !form.value.name.toString().trim()) {
         return 'El nombre es obligatorio.'
     }
-    if (!form.value.role || !form.value.role.toString().trim()) {
-        return 'El rol es obligatorio.'
+    if (!form.value.coordination || !form.value.coordination.toString().trim()) {
+        return 'La coordinación es obligatoria.'
     }
-    if (!TEAM_ROLES.includes(form.value.role.toString().trim() as (typeof TEAM_ROLES)[number])) {
-        return 'Selecciona un rol válido.'
+    if (!isValidTeamCoordination(form.value.coordination.toString().trim())) {
+        return 'Selecciona una coordinación válida.'
     }
     return ''
 }
 
 const buildPayload = () => ({
     name: form.value.name?.toString().trim() || '',
-    role: form.value.role?.toString().trim() || '',
+    coordination: form.value.coordination?.toString().trim() || '',
     image_url: normalizeValue(form.value.image_url as string | null)
 })
 
