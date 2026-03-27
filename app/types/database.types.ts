@@ -118,22 +118,37 @@ export type Database = {
           coordination: Database["public"]["Enums"]["ClubCoordination"]
           created_at: string
           id: number
-          image_url: string | null
           name: string
         }
         Insert: {
           coordination: Database["public"]["Enums"]["ClubCoordination"]
           created_at?: string
           id?: number
-          image_url?: string | null
           name: string
         }
         Update: {
           coordination?: Database["public"]["Enums"]["ClubCoordination"]
           created_at?: string
           id?: number
-          image_url?: string | null
           name?: string
+        }
+        Relationships: []
+      }
+      TeamCoordination: {
+        Row: {
+          coordination: Database["public"]["Enums"]["ClubCoordination"]
+          image_url: string | null
+          created_at: string
+        }
+        Insert: {
+          coordination: Database["public"]["Enums"]["ClubCoordination"]
+          image_url?: string | null
+          created_at?: string
+        }
+        Update: {
+          coordination?: Database["public"]["Enums"]["ClubCoordination"]
+          image_url?: string | null
+          created_at?: string
         }
         Relationships: []
       }

@@ -7,7 +7,7 @@
         <UButton v-if="isAuthenticated" icon="i-lucide-pencil" size="xs" color="primary" variant="ghost"
             class="absolute top-2 right-2 z-10" @click="startEdit" />
 
-        <TeamMemberCard :name="member.name" :coordination="member.coordination" :image-url="member.image_url" />
+<TeamMemberCard :name="member.name" :coordination="member.coordination" :image-url="coordinationImageUrl" />
     </div>
 </template>
 
@@ -18,10 +18,12 @@ import { isValidTeamCoordination } from '~/constants/teamRoles'
 interface Props {
     member: TeamRecord
     isNew?: boolean
+    coordinationImageUrl?: string | null
 }
 
 const _props = withDefaults(defineProps<Props>(), {
-    isNew: false
+    isNew: false,
+    coordinationImageUrl: null,
 })
 
 const member = toRef(_props, 'member')
@@ -43,12 +45,6 @@ watch(member, (value) => {
     }
 }, { immediate: true, deep: true })
 
-const normalizeValue = (value?: string | number | null) => {
-    if (value === undefined || value === null) return null
-    const trimmed = value.toString().trim()
-    return trimmed === '' ? null : trimmed
-}
-
 const validateForm = () => {
     if (!form.value.name || !form.value.name.toString().trim()) {
         return 'El nombre es obligatorio.'
@@ -65,22 +61,7 @@ const validateForm = () => {
 const buildPayload = () => ({
     name: form.value.name?.toString().trim() || '',
     coordination: form.value.coordination?.toString().trim() || '',
-    image_url: normalizeValue(form.value.image_url as string | null)
 })
-
-const buildFormData = (payload: ReturnType<typeof buildPayload>, file?: File | null) => {
-    const formData = new FormData()
-
-    Object.entries(payload).forEach(([key, value]) => {
-        formData.append(key, value ?? '')
-    })
-
-    if (file) {
-        formData.append('image', file)
-    }
-
-    return formData
-}
 
 const startEdit = () => {
     if (_props.isNew) return
@@ -100,7 +81,7 @@ const cancelEdit = () => {
     isEditing.value = false
 }
 
-const saveEdit = async (file?: File | null) => {
+const saveEdit = async () => {
     const validationError = validateForm()
     if (validationError) {
         formError.value = validationError
@@ -112,13 +93,12 @@ const saveEdit = async (file?: File | null) => {
 
     try {
         const payload = buildPayload()
-        const formData = buildFormData(payload, file)
         if (_props.isNew) {
-            await $fetch('/api/admin/team', { method: 'POST', body: formData })
+            await $fetch('/api/admin/team', { method: 'POST', body: payload })
             emit('created')
             emit('updated')
         } else {
-            await $fetch(`/api/admin/team/${member.value.id}`, { method: 'PUT', body: formData })
+            await $fetch(`/api/admin/team/${member.value.id}`, { method: 'PUT', body: payload })
         }
         isEditing.value = false
         emit('updated')

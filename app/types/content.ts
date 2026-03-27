@@ -39,5 +39,10 @@ export interface TeamRecord {
     id: number
     name: string
     coordination: TeamCoordination
-    image_url?: string | null
+}
+
+export interface TeamCoordinationRecord {
+    coordination: TeamCoordination
+    image_url: string | null
+    created_at: string
 }

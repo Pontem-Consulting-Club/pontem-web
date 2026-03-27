@@ -3,35 +3,18 @@ import type { Database } from '~/types/database.types'
 
 export default defineEventHandler(async (event) => {
     const supabase = await serverSupabaseClient<Database>(event)
-
     const { data, error } = await supabase
-        .from('Team')
-        .select('*')
-        .order('id', { ascending: true })
-
-    if (error) {
-        throw createError({
-            statusCode: 500,
-            statusMessage: 'Error fetching team members',
-            message: error.message
-        })
-    }
-
-    const { data: coordData, error: coordError } = await supabase
         .from('TeamCoordination')
         .select('*')
         .order('coordination', { ascending: true })
 
-    if (coordError) {
+    if (error) {
         throw createError({
             statusCode: 500,
             statusMessage: 'Error fetching team coordinations',
-            message: coordError.message
+            message: error.message
         })
     }
 
-    return {
-        members: data,
-        coordinations: coordData
-    }
+    return data
 })
