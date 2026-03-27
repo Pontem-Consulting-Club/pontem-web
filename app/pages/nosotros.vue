@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import about from '~/assets/data/about.json'
 import { TEAM_COORDINATIONS, TEAM_COORDINATION_ICONS, TEAM_COORDINATION_LABELS } from '~/constants/teamRoles'
-import type { TeamRecord } from '~/types/content'
+import type { TeamRecord, TeamCoordinationRecord } from '~/types/content'
 
 useHead({
   title: about.title
@@ -9,11 +9,32 @@ useHead({
 
 const history = about.history
 
-const { data: team, status, refresh } = await useFetch<TeamRecord[]>('/api/team', {
-  default: () => []
+const { data: teamData, status, refresh } = await useFetch<{ members: TeamRecord[], coordinations: TeamCoordinationRecord[] }>('/api/team', {
+  default: () => ({ members: [], coordinations: [] })
+})
+
+const coordinationMap = computed(() => {
+  const map: Record<string, TeamCoordinationRecord> = {}
+  for (const coord of teamData.value.coordinations) {
+    map[coord.coordination] = coord
+  }
+  return map
 })
 
 const { isAuthenticated } = useAuth()
+
+const imageInputRefs = ref<Record<string, HTMLInputElement | null>>({})
+const setImageInputRef = (key: string, el: unknown) => {
+  imageInputRefs.value[key] = el instanceof HTMLInputElement ? el : null
+}
+
+const updateCoordinationImage = async (coordination: string, file: File) => {
+  const formData = new FormData()
+  formData.append('image', file)
+  await $fetch(`/api/admin/team/coordinations/${coordination}`, { method: 'PUT', body: formData })
+  refresh()
+}
+
 const isCreating = ref(false)
 const draftMember = ref<TeamRecord | null>(null)
 
@@ -22,8 +43,7 @@ const startCreate = () => {
   draftMember.value = {
     id: 0,
     name: '',
-    coordination: TEAM_COORDINATIONS[0]!,
-    image_url: null
+    coordination: TEAM_COORDINATIONS[0]!
   }
 }
 
@@ -37,11 +57,12 @@ const handleCreated = () => {
 }
 
 const teamByRole = computed(() => {
-  const members = team.value ?? []
+  const members = teamData.value.members ?? []
   const grouped = TEAM_COORDINATIONS.map((coordination) => ({
     key: coordination,
     label: TEAM_COORDINATION_LABELS[coordination],
     icon: TEAM_COORDINATION_ICONS[coordination] ?? 'i-lucide-users',
+    imageUrl: coordinationMap.value[coordination]?.image_url ?? null,
     members: members.filter(member => member.coordination === coordination)
   }))
 
@@ -93,12 +114,14 @@ const teamByRole = computed(() => {
               </div>
               <h3 class="text-xl font-bold text-gray-900">{{ dept.label }}</h3>
               <div class="flex-1 h-px bg-gray-100" />
+              <input v-if="isAuthenticated" :ref="el => setImageInputRef(dept.key, el)" type="file" accept="image/*" class="hidden" @change="(e) => { const f = (e.target as HTMLInputElement).files?.[0]; if (f) { updateCoordinationImage(dept.key, f); (e.target as HTMLInputElement).value = '' } }" />
+              <UButton v-if="isAuthenticated" icon="i-lucide-image" size="xs" color="primary" variant="ghost" @click="imageInputRefs[dept.key]?.click()" />
               <span class="text-sm text-gray-400 font-medium">{{ dept.members.length }} {{ dept.members.length === 1 ? 'integrante' : 'integrantes' }}</span>
             </div>
  
             <!-- Members grid -->
             <div class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 min-h-8">
-              <TeamCard v-for="member in dept.members" :key="member.id" :member="member" @updated="refresh" />
+              <TeamCard v-for="member in dept.members" :key="member.id" :member="member" :coordination-image-url="dept.imageUrl" @updated="refresh" />
             </div>
           </div>
         </div>
