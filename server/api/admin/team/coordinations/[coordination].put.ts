@@ -18,9 +18,20 @@ export default defineEventHandler(async (event) => {
         })
     }
 
-    const parsePayload = async () => {
-        const contentType = getHeader(event, 'content-type') ?? ''
+    const contentType = getHeader(event, 'content-type') ?? ''
 
+    if (contentType.includes('application/json')) {
+        const body = await readBody<{ image_url: string | null }>(event)
+        const supabase = await serverSupabaseClient<Database>(event)
+        const { error } = await supabase
+            .from('TeamCoordination')
+            .update({ image_url: body.image_url })
+            .eq('coordination', coordinationParam)
+        if (error) throw createError({ statusCode: 500, statusMessage: 'Error updating coordination', message: error.message })
+        return { message: 'Team coordination updated successfully' }
+    }
+
+    const parsePayload = async () => {
         if (contentType.includes('multipart/form-data')) {
             const parts = await readMultipartFormData(event)
             let imagePart: { data: Buffer; filename?: string; type?: string } | null = null
