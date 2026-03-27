@@ -23,18 +23,6 @@ const coordinationMap = computed(() => {
 
 const { isAuthenticated } = useAuth()
 
-const imageInputRefs = ref<Record<string, HTMLInputElement | null>>({})
-const setImageInputRef = (key: string, el: unknown) => {
-  imageInputRefs.value[key] = el instanceof HTMLInputElement ? el : null
-}
-
-const updateCoordinationImage = async (coordination: string, file: File) => {
-  const formData = new FormData()
-  formData.append('image', file)
-  await $fetch(`/api/admin/team/coordinations/${coordination}`, { method: 'PUT', body: formData })
-  refresh()
-}
-
 const isCreating = ref(false)
 const draftMember = ref<TeamRecord | null>(null)
 
@@ -73,13 +61,6 @@ const teamByRole = computed(() => {
   return grouped.filter(group => group.members.length > 0)
 })
 
-const coordinationImageUrls = computed(() => {
-  const map: Record<string, string | null> = {}
-  for (const dept of teamByRole.value) {
-    map[dept.key] = dept.imageUrl
-  }
-  return map
-})
 
 </script>
  
@@ -116,18 +97,12 @@ const coordinationImageUrls = computed(() => {
         <div v-if="teamByRole.length > 0" class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div v-for="dept in teamByRole" :key="dept.key" class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
 
-            <!-- Imagen superior -->
-            <div class="relative h-48 bg-gray-100">
-              <img v-if="dept.imageUrl" :src="dept.imageUrl" class="w-full h-full object-cover" />
-              <div v-else class="w-full h-full bg-gradient-to-r from-pontemred-100 to-pontemteal-100 flex items-center justify-center">
-                <UIcon :name="dept.icon" class="w-12 h-12 text-pontemred-300" />
-              </div>
-              <div class="absolute inset-0 bg-gradient-to-r from-pontemred-500/40 to-pontemteal-500/40" />
-
-              <!-- Botón editar imagen (solo admin) -->
-              <input v-if="isAuthenticated" :ref="el => setImageInputRef(dept.key, el)" type="file" accept="image/*" class="hidden" @change="(e) => { const f = (e.target as HTMLInputElement).files?.[0]; if (f) { updateCoordinationImage(dept.key, f); (e.target as HTMLInputElement).value = '' } }" />
-              <UButton v-if="isAuthenticated" icon="i-lucide-image" size="xs" color="neutral" variant="ghost" class="absolute top-2 right-2 z-10" @click="imageInputRefs[dept.key]?.click()" />
-            </div>
+            <TeamCoordinationImage
+              :image-path="dept.imageUrl"
+              :icon="dept.icon"
+              :coordination="dept.key"
+              @updated="refresh"
+            />
 
             <!-- Contenido inferior -->
             <div class="p-5">
