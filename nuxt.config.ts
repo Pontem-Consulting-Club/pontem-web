@@ -13,6 +13,7 @@ export default defineNuxtConfig({
   ],
 
   supabase: {
+    key: process.env.SUPABASE_PUBLISHABLE_KEY, // Esta llave se llama así en la integración de Supabase para Vercel
     redirectOptions: {
       login: '/login',
       callback: '/',
