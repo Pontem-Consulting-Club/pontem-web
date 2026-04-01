@@ -11,6 +11,7 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     '@nuxt/image',
   ],
+
   supabase: {
     redirectOptions: {
       login: '/login',
@@ -18,6 +19,7 @@ export default defineNuxtConfig({
       include: [''],
     }
   },
+
   vite: {
     plugins: [
       tailwindcss(),
