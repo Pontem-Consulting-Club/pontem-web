@@ -43,8 +43,7 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-    (event: 'submit'): void
-    (event: 'cancel' | 'delete'): void
+    (event: 'submit' | 'cancel' | 'delete'): void
 }>()
 
 const displayError = computed(() => props.formError)

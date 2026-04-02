@@ -15,27 +15,27 @@ cd pontem-nuxt
 npm install
 ```
 
-2. Create a `.env` file with the following variables:
+1. Create a `.env` file with the following variables:
 
-```
+```env
 SUPABASE_URL="https://your-project.supabase.co"
 SUPABASE_ANON_KEY="your-supabase-anon-key"
 SUPABASE_SERVICE_ROLE_KEY="your-supabase-service-role-key"
 ```
 
-3. Run development server:
+1. Run development server:
 
 ```bash
 npm run dev
 ```
 
-4. Build for production:
+1. Build for production:
 
 ```bash
 npm run build
 ```
 
-5. Preview production build:
+1. Preview production build:
 
 ```bash
 npm run preview
@@ -77,23 +77,23 @@ The original React frontend and Express backend are kept for reference.
 
 Directory: `pontem-frontend/`
 
-#### To run
+#### To run the front
 
 1. Install dependencies:
 
-```
+```bash
 npm install --legacy-peer-deps
 ```
 
-2. Start the application:
+1. Start the application:
 
-```
+```bash
 npm start
 ```
 
-#### .env Example:
+#### .env Example
 
-```
+```env
 REACT_APP_API_URL=http://localhost:8000
 REACT_APP_SUPABASE_URL=your-supabase-url
 REACT_APP_SUPABASE_ANON_KEY=your-supabase-anon-key
@@ -107,19 +107,19 @@ Directory: `pontem-backend/`
 
 1. Install dependencies:
 
-```
+```bash
 npm install
 ```
 
-2. Start the server:
+1. Start the server:
 
-```
+```bash
 node src/index.js
 ```
 
-#### .env Example:
+#### back .env Example
 
-```
+```env
 DATABASE_URL="postgresql://username:password@host:port/database"
 JWT_SECRET="mysecretjwt"
 PORT=8000
