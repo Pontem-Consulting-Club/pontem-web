@@ -1,128 +1,105 @@
-# Aplicación Web Pontem 💻
+# Aplicación Web Pontem
 
-## Nuxt 4 Application (New) 🚀
+Aplicación web de Pontem construida con Nuxt 4, Nuxt UI, Tailwind CSS y el backend de Nitro. La autenticación, la base de datos y el almacenamiento se gestionan con Supabase.
 
-This is the new Nuxt 4 + Nuxt UI + TailwindCSS version of the Pontem website. The backend has been migrated to Nuxt's Nitro server.
+## Requisitos
 
-### Directory: `pontem-nuxt/`
+- Node.js 20 o superior.
+- pnpm.
+- Docker Desktop o Docker Engine para ejecutar Supabase localmente.
+- Supabase CLI.
+- Un archivo `.env` en la raíz del proyecto.
 
-### Setup
+## Configuración local
 
-1. Install dependencies:
+1. Instala las dependencias:
 
 ```bash
-cd pontem-nuxt
-npm install
+pnpm install
 ```
 
-1. Create a `.env` file with the following variables:
+1. Inicia el servicio local de Supabase:
+
+```bash
+pnpm supabase login
+pnpm supabase start
+```
+
+1. Crea el archivo `.env` con las variables del entorno que usa Nuxt y Supabase:
 
 ```env
-SUPABASE_URL="https://your-project.supabase.co"
-SUPABASE_ANON_KEY="your-supabase-anon-key"
-SUPABASE_SERVICE_ROLE_KEY="your-supabase-service-role-key"
+SUPABASE_URL=http://127.0.0.1:54321
+SUPABASE_PUBLISHABLE_KEY=your-publishable-key
+SUPABASE_SECRET_KEY=your-secret-key
 ```
 
-1. Run development server:
+Si trabajas con un proyecto alojado en Supabase en lugar del servicio local, usa la URL y las claves de ese proyecto. Nuxt carga este archivo automáticamente en desarrollo y durante el build.
+
+1. Ejecuta el servidor de desarrollo:
 
 ```bash
-npm run dev
+pnpm dev
 ```
 
-1. Build for production:
+1. Genera la versión de producción:
 
 ```bash
-npm run build
+pnpm build
 ```
 
-1. Preview production build:
+1. Previsualiza la compilación de producción:
 
 ```bash
-npm run preview
+pnpm preview
 ```
 
-### Features
+## Supabase en local
 
-- **Nuxt 4** - Latest version of Nuxt framework
-- **Nuxt UI** - Beautiful, accessible UI components
-- **TailwindCSS** - Utility-first CSS framework
-- **Nitro Backend** - Server API routes integrated into Nuxt
-- **Supabase Auth & Database** - Managed authentication and Postgres access via `@nuxtjs/supabase`
-- **Supabase Storage** - Image storage integration
+- La configuración local vive en `supabase/config.toml`.
+- Las migraciones están en `supabase/migrations/`.
+- Si necesitas recrear la base local desde cero, ejecuta `supabase db reset`.
+- La pila local expone la API en `http://127.0.0.1:54321`, la base de datos en `54322` y Supabase Studio en `54323`.
+- Usa `supabase status` para revisar los valores locales de URL y claves después de iniciar la pila.
 
-### API Routes
+## Funcionalidades
 
-All API routes are available under `/api/`:
+- **Nuxt 4** - Framework principal de la aplicación.
+- **Nuxt UI** - Componentes accesibles y listos para producción.
+- **Tailwind CSS** - Estilos utilitarios.
+- **Nitro** - Rutas de API integradas en el servidor de Nuxt.
+- **Supabase Auth y Base de Datos** - Acceso tipado a autenticación y Postgres.
+- **Supabase Storage** - Soporte para almacenamiento de imágenes.
 
-- `GET /api/events/scheduled` - Get all events
-- `GET /api/events` - Mirror endpoint for all events
-- `GET /api/news/news` - Get all news
-- `GET /api/news/:id` - Get news by ID
-- `GET /api/projects/social-consulting` - Get all projects
-- `GET /api/projects` - Mirror endpoint for all projects
-- `GET /api/admin/events` - Admin: Get events (requires auth)
-- `POST /api/admin/events` - Admin: Create event (requires auth)
-- `PUT /api/admin/events/:id` - Admin: Update event (requires auth)
-- `DELETE /api/admin/events/:id` - Admin: Delete event (requires auth)
-- Similar routes for projects and news
-- `GET /api/health` - Health check endpoint
+## API
 
----
+Todas las rutas están bajo `/api/`.
 
-## Legacy Applications (Reference)
+### Públicas
 
-The original React frontend and Express backend are kept for reference.
+- `GET /api/health` - Estado de salud de la aplicación.
+- `GET /api/events` - Lista de eventos.
+- `GET /api/events/scheduled` - Eventos programados.
+- `GET /api/news` - Lista de noticias.
+- `GET /api/news/:id` - Detalle de una noticia.
+- `GET /api/projects` - Lista de proyectos.
+- `GET /api/projects/social-consulting` - Proyectos de consultoría social.
+- `GET /api/team` - Lista del equipo.
+- `GET /api/team/coordinations` - Coordinaciones del equipo.
 
-### Front End (Legacy) 🌎
+### Administrativas
 
-Directory: `pontem-frontend/`
+Las siguientes rutas requieren autenticación:
 
-#### To run the front
-
-1. Install dependencies:
-
-```bash
-npm install --legacy-peer-deps
-```
-
-1. Start the application:
-
-```bash
-npm start
-```
-
-#### .env Example
-
-```env
-REACT_APP_API_URL=http://localhost:8000
-REACT_APP_SUPABASE_URL=your-supabase-url
-REACT_APP_SUPABASE_ANON_KEY=your-supabase-anon-key
-```
-
-### Back End (Legacy) 🌐
-
-Directory: `pontem-backend/`
-
-#### To run
-
-1. Install dependencies:
-
-```bash
-npm install
-```
-
-1. Start the server:
-
-```bash
-node src/index.js
-```
-
-#### back .env Example
-
-```env
-DATABASE_URL="postgresql://username:password@host:port/database"
-JWT_SECRET="mysecretjwt"
-PORT=8000
-SUPABASE_URL=your-supabase-url
-SUPABASE_ANON_KEY=your-supabase-anon-key
-```
+- `POST /api/admin/events` - Crear evento.
+- `PUT /api/admin/events/:id` - Actualizar evento.
+- `DELETE /api/admin/events/:id` - Eliminar evento.
+- `POST /api/admin/news` - Crear noticia.
+- `PUT /api/admin/news/:id` - Actualizar noticia.
+- `DELETE /api/admin/news/:id` - Eliminar noticia.
+- `POST /api/admin/projects` - Crear proyecto.
+- `PUT /api/admin/projects/:id` - Actualizar proyecto.
+- `DELETE /api/admin/projects/:id` - Eliminar proyecto.
+- `POST /api/admin/team` - Crear miembro del equipo.
+- `PUT /api/admin/team/:id` - Actualizar miembro del equipo.
+- `DELETE /api/admin/team/:id` - Eliminar miembro del equipo.
+- `PUT /api/admin/team/coordinations/:coordination` - Actualizar una coordinación.
