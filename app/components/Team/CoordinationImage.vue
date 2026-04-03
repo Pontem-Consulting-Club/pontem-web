@@ -1,5 +1,5 @@
 <template>
-  <div class="relative h-48 bg-gray-100">
+  <div class="relative h-full bg-gray-100">
     <!-- Imagen o placeholder -->
     <img v-if="imageUrl" :src="imageUrl" class="w-full h-full object-cover" >
     <div v-else class="w-full h-full bg-gradient-to-r from-pontemred-100 to-pontemteal-100 flex items-center justify-center">
