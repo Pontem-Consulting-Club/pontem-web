@@ -95,30 +95,40 @@ const teamByRole = computed(() => {
         <EmptyState v-else-if="teamByRole.length === 0" message="No hay integrantes disponibles" />
 
         <div v-if="teamByRole.length > 0" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div v-for="dept in teamByRole" :key="dept.key" class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100">
+          <div v-for="dept in teamByRole" :key="dept.key"
+            class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 flex h-56">
 
-            <TeamCoordinationImage
-              :image-path="dept.imageUrl"
-              :icon="dept.icon"
-              :coordination="dept.key"
-              @updated="refresh"
-            />
+            <!-- Imagen: 75% -->
+            <div class="w-3/4 shrink-0">
+              <TeamCoordinationImage
+                :image-path="dept.imageUrl"
+                :icon="dept.icon"
+                :coordination="dept.key"
+                @updated="refresh"
+              />
+            </div>
 
-            <!-- Contenido inferior -->
-            <div class="p-5">
-              <!-- Header coordinación -->
-              <div class="flex items-center gap-2 mb-4">
-                <UIcon :name="dept.icon" class="w-4 h-4 text-pontemred-500 shrink-0" />
-                <h3 class="font-bold text-gray-900 text-lg">{{ dept.label }}</h3>
-                <span class="ml-auto text-xs text-gray-400 font-medium">{{ dept.members.length }} {{ dept.members.length === 1 ? 'integrante' : 'integrantes' }}</span>
+            <!-- Panel derecho: 25% -->
+            <div class="w-1/4 flex flex-col p-4 overflow-hidden">
+              <!-- Header -->
+              <div class="flex items-center gap-1.5 mb-3 shrink-0">
+                <UIcon :name="dept.icon" class="w-3.5 h-3.5 text-pontemred-500 shrink-0" />
+                <h3 class="font-bold text-gray-900 text-sm leading-tight">{{ dept.label }}</h3>
               </div>
 
-              <!-- Grid miembros usando TeamCard -->
-              <div class="grid grid-cols-2 gap-2">
-                <TeamCard v-for="member in dept.members" :key="member.id" :member="member" @updated="refresh" />
+              <!-- Nombres -->
+              <div class="flex flex-col gap-1 overflow-hidden">
+                <p v-for="member in dept.members" :key="member.id"
+                  class="text-xs text-gray-400 leading-snug truncate">
+                  {{ member.name }}
+                </p>
+                <p v-if="dept.members.length === 0" class="text-xs text-gray-400 italic">Sin integrantes aún</p>
               </div>
 
-              <p v-if="dept.members.length === 0" class="text-sm text-gray-400 italic">Sin integrantes aún</p>
+              <!-- Contador abajo -->
+              <p class="mt-auto text-xs text-gray-300 shrink-0 pt-2">
+                {{ dept.members.length }} {{ dept.members.length === 1 ? 'integrante' : 'integrantes' }}
+              </p>
             </div>
           </div>
         </div>
