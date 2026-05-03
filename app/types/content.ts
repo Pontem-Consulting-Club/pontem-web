@@ -21,6 +21,8 @@ export interface ProjectRecord {
     image_url?: string | null
     link?: string | null
     link_text?: string | null
+    is_active?: boolean
+    semester?: string | null
 }
 
 export interface NewsRecord {
