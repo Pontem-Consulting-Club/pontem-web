@@ -5,15 +5,9 @@
       <NuxtImg src="/BienvenidaConsultores.jpg" alt="Consultoría Social" class="absolute inset-0 w-full h-full object-cover" />
       <div class="absolute inset-0 bg-black/50" />
       <div class="relative z-10 flex flex-col items-center px-6">
-        <span class="inline-block text-xs font-semibold tracking-widest uppercase text-pontemteal-400 border border-pontemteal-400/40 rounded-full px-4 py-1 mb-4">
-          Pontem Consulting Club
-        </span>
-        <h1 class="text-5xl font-bold text-white mb-4 leading-tight">
+        <h1 class="text-5xl font-bold text-white leading-tight">
           Consultoría Social
         </h1>
-        <p class="text-white/75 text-lg max-w-xl leading-relaxed">
-          Ayudamos a organizaciones sin fines de lucro a crecer con estrategia, datos y propósito.
-        </p>
       </div>
     </div>
 
@@ -38,7 +32,7 @@
             <div class="flex items-center gap-3">
               <h2 class="text-2xl font-bold text-gray-900">Proyectos activos</h2>
               <span class="text-xs font-semibold bg-pontemteal-50 text-pontemteal-700 border border-pontemteal-200 rounded-full px-3 py-1">
-                2025 — S1
+                2026 — S1
               </span>
             </div>
             <div v-if="isAuthenticated" class="flex gap-2">
@@ -109,7 +103,7 @@ const startCreate = () => {
   isCreating.value = true
   draftProject.value = {
     id: 0, title: '', subtitle: null, description: null,
-    image_url: null, link: null, link_text: null, is_active: true, semester: '2025 — S1'
+    image_url: null, link: null, link_text: null, is_active: true, semester: '2026 — S1'
   }
 }
 
