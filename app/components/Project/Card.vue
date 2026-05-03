@@ -2,33 +2,29 @@
   <ProjectEditForm v-if="isEditing" v-model:form="form" :is-new="_props.isNew" :is-saving="isSaving"
     :is-deleting="isDeleting" :form-error="formError" @submit="saveEdit" @cancel="cancelEdit" @delete="handleDelete" />
 
-  <UCard v-else variant="soft" class="rounded-xl bg-white/75 relative">
+  <UCard v-else variant="soft" class="rounded-xl bg-white relative flex flex-col overflow-hidden p-0">
     <UButton v-if="isAuthenticated" icon="i-lucide-pencil" size="xs" color="primary" variant="ghost"
       class="absolute top-3 right-3 z-10" @click="startEdit" />
 
-    <div class="flex flex-col md:flex-row p-3 md:p-6 gap-10">
-      <div class="flex flex-col justify-between flex-1">
+    <NuxtImg
+      :src="imageUrl ?? '/LogoColorSolo.png'"
+      alt="Imagen del proyecto"
+      class="w-full h-44 object-cover flex-shrink-0"
+    />
 
-        <div>
-          <div class="text-xl text-primary font-semibold mb-2">
-            {{ project.title }}
-          </div>
-          <div v-if="project.subtitle" class="text-gray-600 font-semibold mb-3">
-            {{ project.subtitle }}
-          </div>
-        </div>
-
-        <div v-if="project.description" class="text-justify text-gray-600">
-          {{ project.description }}
-        </div>
-
-        <UButton v-if="project.link" class="max-w-fit px-5 mt-5" :href="project.link" target="_blank" variant="soft">
-          {{ project.link_text || 'Ver más' }}
-        </UButton>
+    <div class="flex flex-col flex-1 p-5 gap-1">
+      <div class="text-base text-primary font-bold leading-snug">
+        {{ project.title }}
       </div>
-
-      <NuxtImg :src="imageUrl ?? '/LogoColorSolo.png'" alt="Imagen del proyecto" class="object-cover rounded-xl"
-        width="500" />
+      <div v-if="project.subtitle" class="text-xs text-gray-400 font-medium mb-1">
+        {{ project.subtitle }}
+      </div>
+      <div v-if="project.description" class="text-sm text-gray-500 leading-relaxed flex-1">
+        {{ project.description }}
+      </div>
+      <UButton v-if="project.link" class="max-w-fit mt-4" :href="project.link" target="_blank" variant="soft" size="sm">
+        {{ project.link_text || 'Ver más' }}
+      </UButton>
     </div>
   </UCard>
 </template>

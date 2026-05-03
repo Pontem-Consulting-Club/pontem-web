@@ -3,18 +3,34 @@ import type { Database } from '~/types/database.types'
 
 export default defineEventHandler(async (event) => {
     const supabase = await serverSupabaseClient<Database>(event)
-    const { data, error } = await supabase
+
+    const { data: active, error: activeError } = await supabase
         .from('Projects')
         .select('*')
+        .eq('is_active', true)
         .order('id', { ascending: true })
 
-    if (error) {
+    if (activeError) {
         throw createError({
             statusCode: 500,
-            statusMessage: 'Error fetching consulting projects',
-            message: error.message
+            statusMessage: 'Error fetching active projects',
+            message: activeError.message
         })
     }
 
-    return data
+    const { data: past, error: pastError } = await supabase
+        .from('Projects')
+        .select('*')
+        .eq('is_active', false)
+        .order('id', { ascending: false })
+
+    if (pastError) {
+        throw createError({
+            statusCode: 500,
+            statusMessage: 'Error fetching past projects',
+            message: pastError.message
+        })
+    }
+
+    return { active, past }
 })
