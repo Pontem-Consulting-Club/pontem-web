@@ -88,8 +88,10 @@ export type Database = {
           description: string | null
           id: number
           image_url: string | null
+          is_active: boolean
           link: string | null
           link_text: string | null
+          semester: string | null
           subtitle: string | null
           title: string | null
         }
@@ -97,8 +99,10 @@ export type Database = {
           description?: string | null
           id?: number
           image_url?: string | null
+          is_active?: boolean
           link?: string | null
           link_text?: string | null
+          semester?: string | null
           subtitle?: string | null
           title?: string | null
         }
@@ -106,8 +110,10 @@ export type Database = {
           description?: string | null
           id?: number
           image_url?: string | null
+          is_active?: boolean
           link?: string | null
           link_text?: string | null
+          semester?: string | null
           subtitle?: string | null
           title?: string | null
         }
