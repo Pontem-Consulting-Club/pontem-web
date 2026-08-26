@@ -1,6 +1,6 @@
 <template>
   <div>
-    <HomeHero :slides="heroSlides" />
+    <HomeHero />
     <HomeSocialConsultingSection />
     <HomeLogosSlider :logos="logosForSlider" />
     <HomeNewsSection />
@@ -10,7 +10,6 @@
 </template>
 
 <script setup lang="ts">
-import heroSlides from '~/assets/data/heroSlides.json'
 import logosForSlider from '~/assets/data/logos.json'
 
 useHead({

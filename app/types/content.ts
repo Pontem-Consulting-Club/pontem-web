@@ -48,3 +48,13 @@ export interface TeamCoordinationRecord {
     image_url: string | null
     created_at: string
 }
+
+export interface HeroSlideRecord {
+    id: number
+    title: string
+    subtitle?: string | null
+    button_text?: string | null
+    image_url?: string | null
+    link?: string | null
+    position: number
+}

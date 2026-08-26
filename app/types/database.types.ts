@@ -47,6 +47,36 @@ export type Database = {
         }
         Relationships: []
       }
+      HeroSlides: {
+        Row: {
+          button_text: string | null
+          id: number
+          image_url: string | null
+          link: string | null
+          position: number
+          subtitle: string | null
+          title: string
+        }
+        Insert: {
+          button_text?: string | null
+          id?: number
+          image_url?: string | null
+          link?: string | null
+          position?: number
+          subtitle?: string | null
+          title: string
+        }
+        Update: {
+          button_text?: string | null
+          id?: number
+          image_url?: string | null
+          link?: string | null
+          position?: number
+          subtitle?: string | null
+          title?: string
+        }
+        Relationships: []
+      }
       News: {
         Row: {
           author: string | null
