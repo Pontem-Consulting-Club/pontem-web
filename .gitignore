@@ -23,3 +23,6 @@ logs
 .env
 .env.*
 !.env.example
+
+# Contexto local para agentes (Claude Code)
+.claude-context
