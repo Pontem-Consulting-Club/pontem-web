@@ -118,6 +118,11 @@ public = true
 file_size_limit = "50MiB"
 allowed_mime_types = ["image/*"]
 
+# El bucket `documents` (PDFs de casos de estudio) NO se declara aca a proposito: lo crea la
+# migracion 20260901120000_case_studies.sql, para que `supabase db push` tambien lo replique en
+# el proyecto de la nube. Declararlo en ambos lados hace que `supabase db reset` pregunte si
+# sobreescribir sus propiedades en cada corrida.
+
 # Allow connections via S3 compatible clients
 [storage.s3_protocol]
 enabled = true

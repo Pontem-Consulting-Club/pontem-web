@@ -58,3 +58,40 @@ export interface HeroSlideRecord {
     link?: string | null
     position: number
 }
+
+type CaseCategory = Database['public']['Enums']['CaseCategory']
+type CaseDifficulty = Database['public']['Enums']['CaseDifficulty']
+type CaseResourceKind = Database['public']['Enums']['CaseResourceKind']
+
+export interface CaseStudyRecord {
+    id: number
+    title: string
+    company?: string | null
+    company_logo_url?: string | null
+    category: CaseCategory
+    difficulty?: CaseDifficulty | null
+    duration_minutes?: number | null
+    case_type?: string | null
+    summary?: string | null
+    problem_statement?: string | null
+    document_url?: string | null
+    document_name?: string | null
+    document_size_bytes?: number | null
+    published_date?: string | null
+    created_at?: string
+}
+
+export interface CaseStudyResourceRecord {
+    id: number
+    case_study_id: number
+    kind: CaseResourceKind
+    title: string
+    link?: string | null
+    document_url?: string | null
+    position: number
+    created_at?: string
+}
+
+export interface CaseStudyDetail extends CaseStudyRecord {
+    resources: CaseStudyResourceRecord[]
+}

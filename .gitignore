@@ -26,3 +26,5 @@ logs
 
 # Contexto local para agentes (Claude Code)
 .claude-context
+
+docs-local/
