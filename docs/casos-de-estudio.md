@@ -211,6 +211,18 @@ mano. Solo corre en local (`config.toml` → `[db.seed]`); nunca se sube a produ
 Para probar la edición hace falta un usuario: crearlo en Studio (`http://127.0.0.1:54323`) en
 Authentication → Users, y entrar por `/login`.
 
+### Si `pnpm supabase` no encuentra el binario
+
+Síntoma: `pnpm install` avisa `Failed to create bin at node_modules/.bin/supabase` y después
+`pnpm supabase start` falla.
+
+El postinstall de `supabase` es el que descarga la CLI, y pnpm no corre scripts de instalación si
+el paquete no está autorizado en `pnpm-workspace.yaml`. pnpm 11 renombró esa clave de
+`onlyBuiltDependencies` a `allowBuilds`, así que el archivo declara **las dos** y hay que mantenerlas
+sincronizadas al agregar una dependencia con scripts. Si el archivo quedó con valores de plantilla
+(`set this to true or false`, que es lo que escribe pnpm 11 cuando encuentra paquetes sin decidir),
+reemplazarlos por `true` y reinstalar.
+
 ### Si el storage responde 502
 
 Cuando los contenedores se reinician, Kong puede quedar apuntando a la IP anterior del contenedor de
