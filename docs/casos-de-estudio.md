@@ -75,17 +75,19 @@ Mismo patrón que el resto del esquema: `SELECT USING (true)` para todos y acces
 
 ## Storage
 
-| Bucket | Público | Contenido | Se crea desde |
+| Bucket | Público | Contenido | Migración que lo crea |
 |---|---|---|---|
-| `images` | sí | Logos de empresas en `cases/` | `supabase/config.toml` (solo local; en prod se creó a mano) |
-| `documents` | sí | PDFs en `casos/` y `casos/recursos/` | **La migración** `20260901120000_case_studies.sql` |
+| `images` | sí | Logos de empresas en `cases/` | `20260903140000_images_storage_bucket.sql` |
+| `documents` | sí | PDFs en `casos/` y `casos/recursos/` | `20260901120000_case_studies.sql` |
 
-`documents` se crea por SQL a propósito, no en `config.toml`: así `supabase db push` lo replica en
-el proyecto de la nube sin que nadie tenga que crearlo desde el dashboard. El insert es idempotente
-(`ON CONFLICT DO NOTHING`) y las políticas de `storage.objects` son las mismas de `images`.
+Los dos buckets se crean por SQL y no en `supabase/config.toml`, para que el workflow de migraciones
+los replique en canary y producción sin que nadie los cree a mano desde el dashboard. Los inserts son
+idempotentes (`ON CONFLICT DO NOTHING`); las políticas de `storage.objects` de `documents` son copia
+de las de `images`.
 
-> No declarar el bucket en los dos lados a la vez: si está en `config.toml` **y** en la migración,
-> `supabase db reset` pregunta en cada corrida si sobreescribir sus propiedades.
+> No declarar un bucket en los dos lados a la vez: si está en `config.toml` **y** en una migración,
+> `supabase db reset` se queda esperando una respuesta ("Do you want to overwrite its properties?")
+> en cada corrida.
 
 Los PDFs son de **descarga pública**. El botón "Acceso Socios" que aparece en los mockups no se
 implementó como restricción: hoy el modelo de auth no tiene roles, así que cualquier usuario
@@ -205,8 +207,15 @@ pnpm supabase db reset   # aplica migraciones + seed
 pnpm dev
 ```
 
-`supabase/seed.sql` carga 3 casos y 5 recursos de ejemplo para poder ver la UI sin cargar datos a
-mano. Solo corre en local (`config.toml` → `[db.seed]`); nunca se sube a producción.
+`supabase/seed.sql` es el seed compartido del proyecto: además del resto del contenido de prueba,
+carga 4 casos de estudio con sus recursos para poder ver la UI sin cargar datos a mano. Lo consume
+`supabase db reset` (`config.toml` → `[db.seed]`) y **no** es una migración, así que el workflow
+nunca lo lleva a producción.
+
+Trae una guarda: aborta si la tabla `Team` ya tiene filas, para que nadie vacíe una base con
+contenido por accidente. Si de verdad hay que re-sembrar, correr antes
+`set pontem.allow_reseed = 'on';`. Al agregar una tabla nueva hay que sumarla al `truncate` del
+comienzo del archivo.
 
 Para probar la edición hace falta un usuario: crearlo en Studio (`http://127.0.0.1:54323`) en
 Authentication → Users, y entrar por `/login`.
@@ -234,28 +243,34 @@ docker restart supabase_kong_pontem-web
 
 ---
 
-## Pasar el esquema a producción
+## Cómo llegan las migraciones a canary y producción
 
-Igual que cualquier otro cambio de schema del proyecto (ver la sección 4 del documento de traspaso
-TI). Es **manual** y no lo dispara ningún deploy:
+Ya **no** es un paso manual: lo hace el workflow `.github/workflows/supabase-migrations.yml`, que
+corre `supabase db push` en cada push que toque `supabase/migrations/**` o `supabase/config.toml`.
 
-```bash
-supabase link --project-ref equfcqojbefvynuppxoq   # una vez por máquina
-supabase db push
-```
+| Rama | Proyecto Supabase |
+|---|---|
+| `develop` | Pontem Web - Canary (`gwlfogchwhaimsxjvikj`) |
+| `main` | Pontem Web - Prod (`equfcqojbefvynuppxoq`) |
 
-Después de aplicarlo, regenerar los tipos:
+Canary ya no comparte base con producción: tiene su propio proyecto. Esto reemplaza lo que dice la
+sección 4 del documento de traspaso TI, escrita cuando el push era manual y los dos ambientes
+compartían la base.
+
+Qué implica para esta sección:
+
+- Al mergear a `develop`, las tablas de casos de estudio se crean solas en canary. Al mergear a
+  `main`, en producción.
+- El workflow se dispara **solo** si el push toca `supabase/`. Un cambio que use una columna nueva
+  sin tocar migraciones no dispara nada.
+- El deploy del código (Vercel) y el de migraciones (Actions) siguen siendo procesos separados y no
+  hay gate que los ordene: si el deploy del código gana la carrera, la sección va a fallar hasta que
+  termine el workflow.
+- El seed **no** viaja por este camino. Canary arranca sin casos de estudio hasta que se carguen a
+  mano o se aplique `seed.sql` contra ese proyecto a propósito.
+
+Después de cambiar el esquema en local, regenerar los tipos (sigue siendo manual, no hay script):
 
 ```bash
 pnpm supabase gen types typescript --local > app/types/database.types.ts
 ```
-
-Consideraciones:
-
-- **Canary comparte la base con producción.** Un `db push` impacta los dos ambientes.
-- El deploy del código (Vercel, automático al mergear) y el push de migraciones (manual) están
-  desacoplados. Esta sección **no funciona sin las tablas**, así que conviene correr `db push`
-  antes de mergear a `main`.
-- Si `db push` rechaza el insert en `storage.buckets` por permisos, crear el bucket `documents`
-  desde el dashboard (público, 50 MiB, mime types `application/pdf` y los de Excel) y volver a
-  pushear: el insert es idempotente y no va a chocar.
