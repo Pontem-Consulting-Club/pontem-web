@@ -1,62 +1,39 @@
 import { unref } from 'vue'
 import type { MaybeRef } from 'vue'
 
+/**
+ * URL publica de una imagen guardada en Supabase Storage.
+ *
+ * El bucket `images` es publico, asi que basta con construir la URL y dejar que
+ * la sirva el CDN de Supabase. Antes esto descargaba el archivo con
+ * `storage.download()` y lo envolvia en un `URL.createObjectURL`, lo que
+ * significaba: una peticion autenticada por imagen, nada de cache de navegador
+ * ni de CDN, y la imagen sin aparecer hasta que terminaba la descarga. Para
+ * fotos de perfil y de eventos eso es todo coste y ningun beneficio.
+ *
+ * Sigue siendo un composable (y no una funcion suelta) para no tener que tocar
+ * los componentes que ya lo usan.
+ */
 export function useStorageImage(path: MaybeRef<string | null | undefined>, bucket = 'images') {
-    const url = ref<string | null>(null)
-    const loading = ref(false)
-    const error = ref<string | null>(null)
     const supabase = useSupabaseClient()
-    let objectUrl: string | null = null
 
-    const revoke = () => {
-        if (objectUrl) {
-            try {
-                URL.revokeObjectURL(objectUrl)
-            } catch {
-                // ignore
-            }
-            objectUrl = null
-        }
-    }
-
-    const load = async () => {
+    const url = computed(() => {
         const currentPath = unref(path)?.toString().trim()
-        if (!currentPath) {
-            url.value = null
-            return
-        }
+        if (!currentPath) return null
 
-        // if it's already an absolute or root-relative URL, use it as-is
+        // Rutas absolutas o de /public se usan tal cual: el seed apunta ahi.
         if (currentPath.startsWith('http') || currentPath.startsWith('/')) {
-            url.value = currentPath
-            return
+            return currentPath
         }
 
-        loading.value = true
-        error.value = null
-        try {
-            const { data, error: err } = await supabase.storage.from(bucket).download(currentPath)
-            if (err) throw err
-            revoke()
-            objectUrl = URL.createObjectURL(data)
-            url.value = objectUrl
-        } catch (e: unknown) {
-            const message = e instanceof Error ? e.message : String(e)
-            error.value = message
-            url.value = null
-        } finally {
-            loading.value = false
-        }
-    }
-
-    onMounted(load)
-    onBeforeUnmount(revoke)
-    watch(() => unref(path), (newPath, oldPath) => {
-        if (newPath !== oldPath) {
-            revoke()
-            load()
-        }
+        return supabase.storage.from(bucket).getPublicUrl(currentPath).data.publicUrl
     })
 
-    return { url, loading, error, reload: load }
+    return {
+        url,
+        // Se mantienen por compatibilidad con quien ya los desestructuraba.
+        loading: computed(() => false),
+        error: computed(() => null),
+        reload: () => { /* ya no hay nada que recargar: la URL es derivada */ }
+    }
 }

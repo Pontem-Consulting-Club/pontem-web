@@ -12,10 +12,19 @@
           class="hover:text-primary transition text-sm text-center font-medium" active-class="text-primary">
           {{ item.label }}
         </NuxtLink>
-        <UButton v-if="isAuthenticated" icon="i-lucide-log-out" color="error" variant="outline" size="xs"
-          @click="logout">
-          Cerrar Sesión
-        </UButton>
+        <template v-if="isAuthenticated">
+          <NuxtLink v-if="isAdmin" to="/admin/usuarios"
+            class="hover:text-primary transition text-sm text-center font-medium" active-class="text-primary">
+            Personas
+          </NuxtLink>
+          <NuxtLink to="/perfil" class="hover:text-primary transition text-sm text-center font-medium"
+            active-class="text-primary">
+            Mi Perfil
+          </NuxtLink>
+          <UButton icon="i-lucide-log-out" color="error" variant="outline" size="xs" @click="logout">
+            Cerrar Sesión
+          </UButton>
+        </template>
       </div>
 
       <!-- Mobile Menu Toggle -->
@@ -42,10 +51,20 @@
             class="px-5 py-2 gap-5 transition-colors text-left font-medium" active-class="text-primary">
             {{ item.label }}
           </NuxtLink>
-          <UButton v-if="isAuthenticated" icon="i-lucide-log-out" color="error" variant="outline" size="xs" class="m-2"
-            @click="handleLogout">
-            Cerrar Sesión
-          </UButton>
+          <template v-if="isAuthenticated">
+            <NuxtLink v-if="isAdmin" to="/admin/usuarios" class="px-5 py-2 gap-5 transition-colors text-left font-medium"
+              active-class="text-primary">
+              Personas
+            </NuxtLink>
+            <NuxtLink to="/perfil" class="px-5 py-2 gap-5 transition-colors text-left font-medium"
+              active-class="text-primary">
+              Mi Perfil
+            </NuxtLink>
+            <UButton icon="i-lucide-log-out" color="error" variant="outline" size="xs" class="m-2"
+              @click="handleLogout">
+              Cerrar Sesión
+            </UButton>
+          </template>
         </nav>
       </div>
 
@@ -65,6 +84,7 @@
 const isMobileMenuOpen = ref(false)
 const { navigation } = useNavigation()
 const { logout, isAuthenticated } = useAuth()
+const { isAdmin } = useProfile()
 
 const menuRef = ref<HTMLElement | null>(null)
 const menuButtonRef = ref<HTMLElement | null>(null)
