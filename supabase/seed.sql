@@ -20,9 +20,19 @@ begin
   end if;
 end $$;
 
-truncate table public."Team", public."TeamCoordination", public."Projects",
+-- event_registrations va en la misma lista porque referencia a "Events":
+-- truncate falla si se deja fuera una tabla que apunta a otra del grupo.
+truncate table public.event_registrations,
+               public."TeamCoordination", public."Projects",
                public."News", public."Events", public."HeroSlides"
   restart identity;
+
+-- "Team" se limpia con delete y no con truncate: public.profiles.team_id lo
+-- referencia y truncate falla ante cualquier foreign key, tenga datos o no. El
+-- delete respeta el ON DELETE SET NULL, asi que los perfiles sobreviven con
+-- team_id en null en vez de desaparecer.
+delete from public."Team";
+alter sequence public.team_id_seq restart with 1;
 
 -- ---------------------------------------------------------------- coordinaciones
 insert into public."TeamCoordination" (coordination, image_url) values
@@ -175,3 +185,84 @@ insert into public."HeroSlides" (title, subtitle, button_text, image_url, link, 
   ('Formacion continua',
    'Talleres, casos en vivo y mentorias con consultoras y bancos de inversion',
    'Ver actividades', '/LugarEstudio.jpg', '/actividades', 4);
+
+-- ------------------------------------------------------------------- cuentas
+-- FR-30: una cuenta por rol, para que los permisos se ejerciten en canary y en
+-- local en vez de descubrirse en produccion. Todas usan la clave `pontem123`.
+--
+-- Estas cuentas SOLO existen aqui. El seed no es una migracion: `supabase db
+-- push` no lo ejecuta, asi que nunca llegan a produccion.
+
+delete from auth.users where email like '%@pontem.test';
+
+do $$
+declare
+    cuenta record;
+    nuevo_id uuid;
+begin
+    for cuenta in
+        select * from (values
+            ('admin@pontem.test',   'Admin de Prueba',    'admin'),
+            ('editor@pontem.test',  'Editora de Prueba',  'editor'),
+            ('miembro@pontem.test', 'Miembro de Prueba',  'member')
+        ) as t(email, display_name, role)
+    loop
+        nuevo_id := gen_random_uuid();
+
+        -- Las columnas de token van en cadena vacia y NO en null: GoTrue las lee
+        -- como string y con null revienta con "Database error querying schema",
+        -- que no dice nada sobre la causa real.
+        insert into auth.users (
+            instance_id, id, aud, role, email, encrypted_password,
+            email_confirmed_at, created_at, updated_at,
+            raw_app_meta_data, raw_user_meta_data,
+            confirmation_token, recovery_token,
+            email_change, email_change_token_new, email_change_token_current,
+            phone_change, phone_change_token, reauthentication_token
+        ) values (
+            '00000000-0000-0000-0000-000000000000',
+            nuevo_id, 'authenticated', 'authenticated',
+            cuenta.email,
+            extensions.crypt('pontem123', extensions.gen_salt('bf')),
+            now(), now(), now(),
+            '{"provider":"email","providers":["email"]}'::jsonb,
+            jsonb_build_object('display_name', cuenta.display_name),
+            '', '', '', '', '', '', '', ''
+        );
+
+        insert into auth.identities (
+            id, user_id, identity_data, provider, provider_id,
+            last_sign_in_at, created_at, updated_at
+        ) values (
+            gen_random_uuid(), nuevo_id,
+            jsonb_build_object('sub', nuevo_id::text, 'email', cuenta.email),
+            'email', nuevo_id::text,
+            now(), now(), now()
+        );
+
+        -- El trigger ya creo el perfil como member/invited. Aqui le ponemos el
+        -- rol que toca y lo dejamos activo para poder entrar y probar.
+        update public.profiles
+           set role = cuenta.role::public.user_role,
+               state = 'active',
+               coordination = case cuenta.role
+                   when 'admin'  then 'IT'::public."ClubCoordination"
+                   when 'editor' then 'COMMS_MKT'::public."ClubCoordination"
+                   else 'LEARNING_DEV'::public."ClubCoordination"
+               end,
+               generation = 2024,
+               bio = 'Cuenta de prueba. No corresponde a ninguna persona real.'
+         where id = nuevo_id;
+    end loop;
+end $$;
+
+-- ------------------------------------------------------- modos de inscripcion
+-- FR-32: dejamos un evento de cada tipo para poder ver los tres estados sin
+-- tener que configurarlos a mano en cada entorno.
+update public."Events"
+   set registration_mode = 'open', capacity = 40
+ where id = (select id from public."Events" where date > now() order by date limit 1);
+
+update public."Events"
+   set registration_mode = 'members_only'
+ where id = (select id from public."Events" where date > now() order by date offset 1 limit 1);
