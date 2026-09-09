@@ -1,13 +1,13 @@
 import { serverSupabaseClient } from '#supabase/server'
 import type { Database } from '~/types/database.types'
-import { requireUser } from '~~/server/utils/requireUser'
+import { requireCan } from '~~/server/utils/requireCan'
 
 type NewsRow = Database['public']['Tables']['News']['Row']
 
 type NewsPayload = Pick<NewsRow, 'title' | 'subtitle' | 'type' | 'image_url' | 'author' | 'published_date' | 'content' | 'link'>
 
 export default defineEventHandler(async (event) => {
-  await requireUser(event)
+  await requireCan(event, 'content.edit')
 
   const normalizeValue = (value?: string | null) => {
     if (value === undefined || value === null) return null

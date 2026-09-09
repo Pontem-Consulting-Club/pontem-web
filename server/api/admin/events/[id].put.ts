@@ -1,13 +1,15 @@
 import { serverSupabaseClient } from '#supabase/server'
 import type { Database } from '~/types/database.types'
-import { requireUser } from '~~/server/utils/requireUser'
+import { requireCan } from '~~/server/utils/requireCan'
+import { parseEventRegistrationFields } from '~~/server/utils/eventRegistrationFields'
 
 type EventRow = Database['public']['Tables']['Events']['Row']
 
-type EventPayload = Pick<EventRow, 'title' | 'subtitle' | 'description' | 'date' | 'image_url' | 'location' | 'link'>
+type EventPayload = Pick<EventRow, 'title' | 'subtitle' | 'description' | 'date' | 'image_url' | 'location' | 'link'
+  | 'registration_mode' | 'capacity' | 'registration_open'>
 
 export default defineEventHandler(async (event) => {
-  await requireUser(event)
+  await requireCan(event, 'content.edit')
 
   const idParam = getRouterParam(event, 'id')
   const id = Number(idParam)
@@ -100,7 +102,8 @@ export default defineEventHandler(async (event) => {
     description: normalizeValue(body.description ?? null),
     image_url: imagePath,
     location: normalizeValue(body.location ?? null),
-    link: normalizeValue(body.link ?? null)
+    link: normalizeValue(body.link ?? null),
+    ...parseEventRegistrationFields(body)
   }
   const { error } = await supabase
     .from('Events')

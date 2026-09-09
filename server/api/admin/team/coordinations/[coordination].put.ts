@@ -1,13 +1,13 @@
 import { serverSupabaseClient } from '#supabase/server'
 import type { Database } from '~/types/database.types'
-import { requireUser } from '~~/server/utils/requireUser'
+import { requireCan } from '~~/server/utils/requireCan'
 import { isValidTeamCoordination, TEAM_COORDINATIONS } from '~~/server/utils/teamRoles'
 
 type TeamCoordinationRow = Database['public']['Tables']['TeamCoordination']['Row']
 type TeamCoordinationPayload = Pick<TeamCoordinationRow, 'image_url'>
 
 export default defineEventHandler(async (event) => {
-    await requireUser(event)
+    await requireCan(event, 'content.edit')
 
     const coordinationParam = getRouterParam(event, 'coordination')
 

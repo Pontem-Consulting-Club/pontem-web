@@ -1,6 +1,6 @@
 import { serverSupabaseClient } from '#supabase/server'
 import type { Database } from '~/types/database.types'
-import { requireUser } from '~~/server/utils/requireUser'
+import { requireCan } from '~~/server/utils/requireCan'
 import { isValidTeamCoordination, TEAM_COORDINATIONS } from '~~/server/utils/teamRoles'
 
 type TeamRow = Database['public']['Tables']['Team']['Row']
@@ -8,7 +8,7 @@ type TeamRow = Database['public']['Tables']['Team']['Row']
 type TeamPayload = Pick<TeamRow, 'name' | 'coordination'>
 
 export default defineEventHandler(async (event) => {
-    await requireUser(event)
+    await requireCan(event, 'content.edit')
 
     const body = await readBody<Record<string, string | null | undefined>>(event)
 
