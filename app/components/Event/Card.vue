@@ -19,6 +19,10 @@ const emit = defineEmits<{
 
 const { isAuthenticated } = useAuth()
 const { formatDate } = useDateFormatting()
+const { can } = useProfile()
+
+// EDI-2: la lista de inscritos es para quien organiza, no para cualquiera.
+const canReadRegistrations = computed(() => can('registrations.read'))
 
 const isEditing = ref(_props.isNew)
 const isSaving = ref(false)
@@ -63,14 +67,18 @@ const buildPayload = () => ({
   description: normalizeValue(form.value.description as string | null),
   image_url: normalizeValue(form.value.image_url as string | null),
   location: normalizeValue(form.value.location as string | null),
-  link: normalizeValue(form.value.link as string | null)
+  link: normalizeValue(form.value.link as string | null),
+  registration_mode: form.value.registration_mode ?? 'none',
+  capacity: form.value.capacity ?? null,
+  registration_open: form.value.registration_open ?? true
 })
 
 const buildFormData = (payload: ReturnType<typeof buildPayload>, file?: File | null) => {
   const formData = new FormData()
 
   Object.entries(payload).forEach(([key, value]) => {
-    formData.append(key, value ?? '')
+    // El booleano y el cupo viajan como texto: el servidor los reinterpreta.
+    formData.append(key, value === null || value === undefined ? '' : String(value))
   })
 
   if (file) {
@@ -203,6 +211,13 @@ const handleDelete = async () => {
             Ver más
           </a>
         </div>
+
+        <EventRegistration v-if="!_props.isNew" :event-id="event.id"
+          :mode="event.registration_mode ?? 'none'" :registration-open="event.registration_open ?? true"
+          :capacity="event.capacity ?? null" :date="event.date" />
+
+        <EventRegistrationList v-if="!_props.isNew && canReadRegistrations
+          && (event.registration_mode ?? 'none') !== 'none'" :event-id="event.id" />
       </div>
       <div class="md:w-48 shrink-0 relative">
         <NuxtImg :src="imageUrl ?? '/LogoColorSolo.png'" alt="Imagen del evento"

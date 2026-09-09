@@ -49,6 +49,29 @@
                 </div>
             </div>
 
+            <!-- FR-32: el modo decide si hay inscripcion y para quien. -->
+            <div class="mt-6 flex flex-col gap-4 rounded-lg bg-gray-50 p-4">
+                <div class="flex items-center gap-2 text-sm font-medium text-gray-700">
+                    <UIcon name="i-lucide-clipboard-list" class="h-4 w-4" />
+                    Inscripción
+                </div>
+                <div class="grid gap-4 sm:grid-cols-3">
+                    <UFormField label="Modo" size="sm">
+                        <USelectMenu v-model="registrationModeModel" :items="registrationModeOptions" value-key="value"
+                            label-key="label" class="w-full" />
+                    </UFormField>
+                    <UFormField label="Cupo" size="sm" description="Vacío = sin límite">
+                        <UInput v-model="capacityModel" type="number" min="1" placeholder="Sin límite" class="w-full"
+                            :disabled="form.registration_mode === 'none'" />
+                    </UFormField>
+                    <UFormField label="Estado" size="sm">
+                        <UCheckbox v-model="registrationOpenModel" label="Inscripción abierta"
+                            :disabled="form.registration_mode === 'none'" />
+                    </UFormField>
+                </div>
+                <p class="text-xs text-gray-500">{{ registrationHint }}</p>
+            </div>
+
             <UAlert v-if="displayError" color="error" icon="i-lucide-alert-circle" :description="displayError"
                 class="mt-4" />
 
@@ -72,6 +95,38 @@ import type { EventRecord } from '~/types/content'
 const baseUIClasses = 'text-gray-600 placeholder:text-gray-400'
 
 const form = defineModel<Partial<EventRecord>>('form', { required: true })
+
+const registrationModeOptions = [
+    { label: 'Sin inscripción', value: 'none' },
+    { label: 'Solo miembros', value: 'members_only' },
+    { label: 'Abierto a invitados', value: 'open' }
+]
+
+const registrationHints: Record<string, string> = {
+    none: 'El evento se anuncia, pero nadie se inscribe.',
+    members_only: 'Solo cuentas con sesión iniciada pueden inscribirse.',
+    open: 'Se inscriben miembros y también invitados sin cuenta, con nombre y correo.'
+}
+
+const registrationModeModel = computed({
+    get: () => form.value.registration_mode ?? 'none',
+    set: (value) => { form.value.registration_mode = value }
+})
+
+const registrationOpenModel = computed({
+    get: () => form.value.registration_open ?? true,
+    set: (value) => { form.value.registration_open = value }
+})
+
+const capacityModel = computed({
+    get: () => form.value.capacity ?? null,
+    set: (value) => {
+        const parsed = value === null || value === '' ? null : Number(value)
+        form.value.capacity = parsed === null || Number.isNaN(parsed) ? null : parsed
+    }
+})
+
+const registrationHint = computed(() => registrationHints[registrationModeModel.value] ?? '')
 
 const props = defineProps<{
     isNew: boolean
