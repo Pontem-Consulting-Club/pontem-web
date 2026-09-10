@@ -7,13 +7,128 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instantiate createClient with right options
-  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
-  __InternalSupabase: {
-    PostgrestVersion: "12.2.3 (519615d)"
+  graphql_public: {
+    Tables: {
+      [_ in never]: never
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      graphql: {
+        Args: {
+          extensions?: Json
+          operationName?: string
+          query?: string
+          variables?: Json
+        }
+        Returns: Json
+      }
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
   }
   public: {
     Tables: {
+      CaseStudies: {
+        Row: {
+          case_type: string | null
+          category: Database["public"]["Enums"]["CaseCategory"]
+          company: string | null
+          company_logo_url: string | null
+          created_at: string
+          difficulty: Database["public"]["Enums"]["CaseDifficulty"] | null
+          document_name: string | null
+          document_size_bytes: number | null
+          document_url: string | null
+          duration_minutes: number | null
+          id: number
+          problem_statement: string | null
+          published_date: string | null
+          summary: string | null
+          title: string
+        }
+        Insert: {
+          case_type?: string | null
+          category: Database["public"]["Enums"]["CaseCategory"]
+          company?: string | null
+          company_logo_url?: string | null
+          created_at?: string
+          difficulty?: Database["public"]["Enums"]["CaseDifficulty"] | null
+          document_name?: string | null
+          document_size_bytes?: number | null
+          document_url?: string | null
+          duration_minutes?: number | null
+          id?: number
+          problem_statement?: string | null
+          published_date?: string | null
+          summary?: string | null
+          title: string
+        }
+        Update: {
+          case_type?: string | null
+          category?: Database["public"]["Enums"]["CaseCategory"]
+          company?: string | null
+          company_logo_url?: string | null
+          created_at?: string
+          difficulty?: Database["public"]["Enums"]["CaseDifficulty"] | null
+          document_name?: string | null
+          document_size_bytes?: number | null
+          document_url?: string | null
+          duration_minutes?: number | null
+          id?: number
+          problem_statement?: string | null
+          published_date?: string | null
+          summary?: string | null
+          title?: string
+        }
+        Relationships: []
+      }
+      CaseStudyResources: {
+        Row: {
+          case_study_id: number
+          created_at: string
+          document_url: string | null
+          id: number
+          kind: Database["public"]["Enums"]["CaseResourceKind"]
+          link: string | null
+          position: number
+          title: string
+        }
+        Insert: {
+          case_study_id: number
+          created_at?: string
+          document_url?: string | null
+          id?: number
+          kind: Database["public"]["Enums"]["CaseResourceKind"]
+          link?: string | null
+          position?: number
+          title: string
+        }
+        Update: {
+          case_study_id?: number
+          created_at?: string
+          document_url?: string | null
+          id?: number
+          kind?: Database["public"]["Enums"]["CaseResourceKind"]
+          link?: string | null
+          position?: number
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "CaseStudyResources_case_study_id_fkey"
+            columns: ["case_study_id"]
+            isOneToOne: false
+            referencedRelation: "CaseStudies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       Events: {
         Row: {
           date: string | null
@@ -118,8 +233,10 @@ export type Database = {
           description: string | null
           id: number
           image_url: string | null
+          is_active: boolean
           link: string | null
           link_text: string | null
+          semester: string | null
           subtitle: string | null
           title: string | null
         }
@@ -127,8 +244,10 @@ export type Database = {
           description?: string | null
           id?: number
           image_url?: string | null
+          is_active?: boolean
           link?: string | null
           link_text?: string | null
+          semester?: string | null
           subtitle?: string | null
           title?: string | null
         }
@@ -136,8 +255,10 @@ export type Database = {
           description?: string | null
           id?: number
           image_url?: string | null
+          is_active?: boolean
           link?: string | null
           link_text?: string | null
+          semester?: string | null
           subtitle?: string | null
           title?: string | null
         }
@@ -167,18 +288,18 @@ export type Database = {
       TeamCoordination: {
         Row: {
           coordination: Database["public"]["Enums"]["ClubCoordination"]
+          created_at: string | null
           image_url: string | null
-          created_at: string
         }
         Insert: {
           coordination: Database["public"]["Enums"]["ClubCoordination"]
+          created_at?: string | null
           image_url?: string | null
-          created_at?: string
         }
         Update: {
           coordination?: Database["public"]["Enums"]["ClubCoordination"]
+          created_at?: string | null
           image_url?: string | null
-          created_at?: string
         }
         Relationships: []
       }
@@ -208,6 +329,14 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
+      CaseCategory:
+        | "ESTRATEGIA"
+        | "OPERACIONES"
+        | "FINANZAS"
+        | "MARKETING"
+        | "IMPACTO_SOCIAL"
+      CaseDifficulty: "FACIL" | "MEDIO" | "DIFICIL" | "EXPERTO"
+      CaseResourceKind: "APUNTE" | "DATASET" | "MASTERCLASS"
       ClubCoordination:
         | "DIRECTORS"
         | "COMMS_MKT"
@@ -342,8 +471,20 @@ export type CompositeTypes<
     : never
 
 export const Constants = {
+  graphql_public: {
+    Enums: {},
+  },
   public: {
     Enums: {
+      CaseCategory: [
+        "ESTRATEGIA",
+        "OPERACIONES",
+        "FINANZAS",
+        "MARKETING",
+        "IMPACTO_SOCIAL",
+      ],
+      CaseDifficulty: ["FACIL", "MEDIO", "DIFICIL", "EXPERTO"],
+      CaseResourceKind: ["APUNTE", "DATASET", "MASTERCLASS"],
       ClubCoordination: [
         "DIRECTORS",
         "COMMS_MKT",
@@ -357,3 +498,4 @@ export const Constants = {
     },
   },
 } as const
+
