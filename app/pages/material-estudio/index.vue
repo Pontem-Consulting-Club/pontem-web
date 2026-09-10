@@ -11,7 +11,7 @@ useHead({
 const stages = studyMaterials.stages
 const caseBooks = studyMaterials.caseBooks
 
-const { isAuthenticated } = useAuth()
+const { isEditor } = useProfile()
 
 const { data: caseStudies, status } = await useFetch<CaseStudyRecord[]>('/api/case-studies', {
   default: () => []
@@ -81,7 +81,7 @@ const openDrive = () => {
           <UInput v-model="search" icon="i-lucide-search" size="lg" class="w-full md:w-96"
             placeholder="Buscar por empresa, área o palabra clave..."
             :ui="{ base: 'text-gray-900 placeholder:text-gray-400' }" />
-          <UButton v-if="isAuthenticated" to="/material-estudio/casos/nuevo" icon="i-lucide-plus" variant="soft"
+          <UButton v-if="isEditor" to="/material-estudio/casos/nuevo" icon="i-lucide-plus" variant="soft"
             size="lg" class="shrink-0">
             Agregar
           </UButton>

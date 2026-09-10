@@ -9,7 +9,7 @@ const idParam = route.params.id as string
 const numericId = Number(idParam)
 const isValidId = !Number.isNaN(numericId)
 
-const { isAuthenticated } = useAuth()
+const { isEditor, ready: profileReady } = useProfile()
 const { getCategoryBadge, getCategoryText, getDifficultyText } = useCaseStudyColors()
 const { formatDate } = useDateFormatting()
 
@@ -43,8 +43,11 @@ watch(caseStudy, (value) => {
   formError.value = ''
 }, { immediate: true })
 
+// Se espera el perfil antes de decidir: en el servidor, sin esperarlo, el rol
+// todavia no se conoce y se sacaria del modo edicion incluso a quien edita.
+await profileReady
 watchEffect(() => {
-  if (isEditMode.value && !isAuthenticated.value) {
+  if (isEditMode.value && !isEditor.value) {
     router.replace(`/material-estudio/casos/${idParam}`)
   }
 })
@@ -88,7 +91,7 @@ const handleDelete = async () => {
     <NotFoundState v-else-if="error || !caseStudy" icon="i-lucide-file-x" title="Caso de estudio no encontrado"
       button-text="Volver a Material de Estudio" button-link="/material-estudio" />
 
-    <CaseStudyEditForm v-else-if="isEditMode && isAuthenticated" v-model:form="form" :is-saving="isSaving" :is-deleting="isDeleting"
+    <CaseStudyEditForm v-else-if="isEditMode && isEditor" v-model:form="form" :is-saving="isSaving" :is-deleting="isDeleting"
       :form-error="formError" @submit="handleSubmit" @cancel="handleCancel" @delete="handleDelete" />
 
     <div v-else class="grid grid-cols-1 lg:grid-cols-12 gap-8">
@@ -106,7 +109,7 @@ const handleDelete = async () => {
             <h1 class="text-3xl md:text-4xl font-bold text-gray-900 leading-tight">
               {{ caseStudy.title }}
             </h1>
-            <UButton v-if="isAuthenticated" icon="i-lucide-pencil" size="md" color="primary" variant="soft"
+            <UButton v-if="isEditor" icon="i-lucide-pencil" size="md" color="primary" variant="soft"
               class="shrink-0" :to="`/material-estudio/casos/${idParam}?edit=1`">
               Editar
             </UButton>
@@ -183,7 +186,7 @@ const handleDelete = async () => {
 
         <CaseStudyResourceList :resources="caseStudy.resources ?? []" @deleted="refresh" />
 
-        <CaseStudyResourceForm v-if="isAuthenticated" :case-study-id="caseStudy.id" @created="refresh" />
+        <CaseStudyResourceForm v-if="isEditor" :case-study-id="caseStudy.id" @created="refresh" />
       </aside>
     </div>
   </UContainer>

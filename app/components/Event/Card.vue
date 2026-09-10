@@ -17,9 +17,8 @@ const emit = defineEmits<{
   (e: 'updated' | 'created' | 'cancel-create'): void
 }>()
 
-const { isAuthenticated } = useAuth()
 const { formatDate } = useDateFormatting()
-const { can } = useProfile()
+const { can, isEditor } = useProfile()
 
 // EDI-2: la lista de inscritos es para quien organiza, no para cualquiera.
 const canReadRegistrations = computed(() => can('registrations.read'))
@@ -90,7 +89,7 @@ const buildFormData = (payload: ReturnType<typeof buildPayload>, file?: File | n
 
 const startEdit = () => {
   if (_props.isNew) return
-  if (!isAuthenticated.value) return
+  if (!isEditor.value) return
   if (_props.variant === 'compact') return
   form.value = { ...event.value }
   formError.value = ''
@@ -176,7 +175,7 @@ const handleDelete = async () => {
 
   <UCard v-else-if="variant === 'full'"
     class="rounded-3xl bg-white/90 shadow-sm hover:shadow-lg transition-shadow relative">
-    <UButton v-if="isAuthenticated" icon="i-lucide-pencil" size="xs" color="primary" variant="ghost"
+    <UButton v-if="isEditor" icon="i-lucide-pencil" size="xs" color="primary" variant="ghost"
       class="absolute top-3 right-3 z-10" @click="startEdit" />
 
     <div class="flex flex-col md:flex-row gap-6">
@@ -227,7 +226,7 @@ const handleDelete = async () => {
   </UCard>
 
   <UCard v-else-if="variant === 'past'" class="rounded-2xl opacity-75 bg-white/90 shadow-sm relative">
-    <UButton v-if="isAuthenticated" icon="i-lucide-pencil" size="xs" color="primary" variant="ghost"
+    <UButton v-if="isEditor" icon="i-lucide-pencil" size="xs" color="primary" variant="ghost"
       class="absolute top-3 right-3 z-10" @click="startEdit" />
     <div class="flex flex-col md:flex-row gap-4 items-start md:items-center">
       <span class="text-sm md:w-32">

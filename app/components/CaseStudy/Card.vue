@@ -6,7 +6,7 @@ const props = defineProps<{
   caseStudy: CaseStudyRecord
 }>()
 
-const { isAuthenticated } = useAuth()
+const { isEditor } = useProfile()
 const { getCategoryAccent, getCategoryBadge, getCategoryText, getDifficultyText } = useCaseStudyColors()
 
 const { url: logoUrl } = useStorageImage(computed(() => props.caseStudy.company_logo_url ?? null))
@@ -25,7 +25,7 @@ const duration = computed(() => {
     <!-- Barra de acento segun categoria -->
     <div class="h-1.5 w-full" :class="getCategoryAccent(caseStudy.category)" />
 
-    <UButton v-if="isAuthenticated" icon="i-lucide-pencil" size="xs" color="primary" variant="ghost"
+    <UButton v-if="isEditor" icon="i-lucide-pencil" size="xs" color="primary" variant="ghost"
       class="absolute top-4 right-3 z-10" aria-label="Editar caso" :to="`${detailLink}?edit=1`" />
 
     <div class="p-6 flex flex-col gap-4 flex-1">

@@ -21,7 +21,7 @@ const coordinationMap = computed(() => {
   return map
 })
 
-const { isAuthenticated } = useAuth()
+const { isEditor } = useProfile()
 
 const isCreating = ref(false)
 const draftMember = ref<TeamRecord | null>(null)
@@ -54,7 +54,7 @@ const teamByRole = computed(() => {
     members: members.filter(member => member.coordination === coordination)
   }))
 
-  if (isAuthenticated.value) {
+  if (isEditor.value) {
     return grouped
   }
 
@@ -80,7 +80,7 @@ const teamByRole = computed(() => {
       <section>
         <SectionHeader title="Nuestro Equipo" centered class="mb-12" />
  
-        <div v-if="isAuthenticated" class="flex justify-end mb-6">
+        <div v-if="isEditor" class="flex justify-end mb-6">
           <UButton icon="i-lucide-plus" variant="soft" color="primary" size="md" :disabled="isCreating" @click="startCreate">
             Agregar
           </UButton>

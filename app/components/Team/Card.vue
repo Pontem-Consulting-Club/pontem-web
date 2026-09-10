@@ -4,7 +4,7 @@
         @delete="handleDelete" />
 
     <div v-else class="relative">
-        <UButton v-if="isAuthenticated" icon="i-lucide-pencil" size="xs" color="primary" variant="ghost"
+        <UButton v-if="isEditor" icon="i-lucide-pencil" size="xs" color="primary" variant="ghost"
             class="absolute top-2 right-2 z-10" @click="startEdit" />
 
 <TeamMemberCard :name="member.name" :coordination="member.coordination" :image-url="coordinationImageUrl" />
@@ -31,7 +31,7 @@ const emit = defineEmits<{
     (e: 'updated' | 'created' | 'cancel-create'): void
 }>()
 
-const { isAuthenticated } = useAuth()
+const { isEditor } = useProfile()
 
 const isEditing = ref(_props.isNew)
 const isSaving = ref(false)
@@ -65,7 +65,7 @@ const buildPayload = () => ({
 
 const startEdit = () => {
     if (_props.isNew) return
-    if (!isAuthenticated.value) return
+    if (!isEditor.value) return
     form.value = { ...member.value }
     formError.value = ''
     isEditing.value = true

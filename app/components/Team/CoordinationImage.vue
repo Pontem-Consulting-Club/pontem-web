@@ -10,7 +10,7 @@
     <div class="absolute inset-0 bg-gradient-to-r from-pontemred-500/40 to-pontemteal-500/40" />
 
     <!-- Admin: sin imagen → botón "Agregar foto" centrado -->
-    <div v-if="isAuthenticated && !imagePath"
+    <div v-if="isEditor && !imagePath"
       class="absolute inset-0 flex items-center justify-center">
       <UButton icon="i-lucide-image" size="sm" color="neutral" variant="soft" @click="fileInput?.click()">
         Agregar foto
@@ -18,7 +18,7 @@
     </div>
 
     <!-- Admin: con imagen → overlay en hover con Cambiar y Eliminar -->
-    <div v-if="isAuthenticated && imagePath"
+    <div v-if="isEditor && imagePath"
       class="absolute inset-0 flex items-center justify-center gap-3 bg-black/40 opacity-0 hover:opacity-100 transition-opacity">
       <UButton icon="i-lucide-image" size="sm" color="neutral" variant="soft" @click="fileInput?.click()">
         Cambiar
@@ -29,7 +29,7 @@
     </div>
 
     <!-- Input file oculto -->
-    <input v-if="isAuthenticated" ref="fileInput" type="file" accept="image/*" class="hidden" @change="handleFileChange" >
+    <input v-if="isEditor" ref="fileInput" type="file" accept="image/*" class="hidden" @change="handleFileChange" >
   </div>
 </template>
 
@@ -43,7 +43,7 @@ interface Props {
 const props = defineProps<Props>()
 const emit = defineEmits<{ (e: 'updated'): void }>()
 
-const { isAuthenticated } = useAuth()
+const { isEditor } = useProfile()
 const fileInput = ref<HTMLInputElement | null>(null)
 const isDeleting = ref(false)
 
