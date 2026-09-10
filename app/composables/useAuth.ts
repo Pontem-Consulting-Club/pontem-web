@@ -22,6 +22,13 @@ export const useAuth = () => {
         return { success: false, error: error.message }
       }
 
+      // El modulo de Supabase actualiza useSupabaseUser() de forma asincrona
+      // (onAuthStateChange -> getClaims). Si quien llama navega apenas vuelve
+      // esta funcion, el middleware `auth` todavia ve la sesion vacia y lo manda
+      // de vuelta a /login. Se deja el usuario listo antes de devolver el control.
+      const { data } = await supabase.auth.getClaims()
+      user.value = data?.claims ?? null
+
       return { success: true }
     } catch (error) {
       const message = (error as Error).message || 'Login failed'
