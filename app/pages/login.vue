@@ -52,7 +52,7 @@ const isLoading = ref(false)
 // Redirect if already authenticated
 onMounted(() => {
   if (isAuthenticated.value) {
-    router.push('/login')
+    router.push('/')
   }
 })
 
