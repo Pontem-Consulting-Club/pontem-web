@@ -16,7 +16,7 @@ export const useProfile = () => {
     const userId = useCurrentUserId()
     const supabase = useSupabaseClient<Database>()
 
-    const { data: profile, refresh, status } = useAsyncData(
+    const request = useAsyncData(
         'current-profile',
         async () => {
             if (!userId.value) return null
@@ -32,6 +32,12 @@ export const useProfile = () => {
         },
         { watch: [userId], default: () => null }
     )
+    const { data: profile, refresh, status } = request
+
+    // Resuelve cuando el perfil termino de cargar. Una pagina que necesita los
+    // datos durante el render en servidor (como /perfil) lo espera con `await`;
+    // en el cliente, al hidratar, resuelve al instante desde el payload.
+    const ready = request.then(() => undefined)
 
     const can = (capability: Capability) =>
         canDo(profile.value as AuthzProfile | null, capability)
@@ -40,5 +46,5 @@ export const useProfile = () => {
     const isEditor = computed(() => can('content.edit'))
     const needsOnboarding = computed(() => profile.value?.state === 'invited')
 
-    return { profile, refresh, status, can, isAdmin, isEditor, needsOnboarding }
+    return { profile, refresh, status, ready, can, isAdmin, isEditor, needsOnboarding }
 }

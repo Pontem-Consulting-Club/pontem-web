@@ -152,7 +152,7 @@ useHead({
   meta: [{ name: 'robots', content: 'noindex, nofollow' }]
 })
 
-const { profile, refresh, needsOnboarding } = useProfile()
+const { profile, refresh, needsOnboarding, ready: profileReady } = useProfile()
 const { registrations, stats } = useMyRegistrations()
 const { formatDate } = useDateFormatting()
 
@@ -176,14 +176,14 @@ const isUploading = ref(false)
 const error = ref('')
 const savedMessage = ref('')
 
-watch(profile, (value) => {
+const fillForm = (value: Profile | null) => {
   if (!value) return
   form.display_name = value.display_name
   form.bio = value.bio
   form.coordination = value.coordination
   form.generation = value.generation
   form.is_public = value.is_public
-}, { immediate: true })
+}
 
 const { url: avatarUrl } = useStorageImage(computed(() => profile.value?.avatar_path ?? null))
 
@@ -251,4 +251,12 @@ const resolveErrorMessage = (e: unknown, fallback: string) => {
   const candidate = e as { statusMessage?: string; data?: { statusMessage?: string; message?: string } }
   return candidate?.data?.statusMessage || candidate?.statusMessage || candidate?.data?.message || fallback
 }
+
+// El formulario se llena despues de esperar el perfil. Con un `watch` inmediato,
+// en el servidor corria cuando el perfil todavia era null y no volvia a correr:
+// el HTML salia con el formulario vacio y la hidratacion dejaba la biografia en
+// blanco en cada carga directa de /perfil.
+await profileReady
+fillForm(profile.value)
+watch(profile, fillForm)
 </script>
