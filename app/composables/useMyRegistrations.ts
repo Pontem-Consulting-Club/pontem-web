@@ -20,12 +20,17 @@ export interface MyRegistrationStats {
 
 export const useMyRegistrations = () => {
     const userId = useCurrentUserId()
+    // En el servidor, `$fetch` a una ruta propia no lleva las cookies de la
+    // peticion original: la API no veia sesion y /perfil y /eventos se
+    // renderizaban como si la persona no tuviera inscripciones. `useRequestFetch`
+    // las reenvia; en el cliente se comporta igual que `$fetch`.
+    const requestFetch = useRequestFetch()
 
     const { data, refresh, status } = useAsyncData(
         'my-registrations',
         async () => {
             if (!userId.value) return null
-            return await $fetch<{ registrations: MyRegistration[]; stats: MyRegistrationStats }>(
+            return await requestFetch<{ registrations: MyRegistration[]; stats: MyRegistrationStats }>(
                 '/api/profile/registrations'
             )
         },
