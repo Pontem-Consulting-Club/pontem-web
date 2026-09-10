@@ -7,7 +7,7 @@
         </h2>
       </template>
 
-      <form class="space-y-6" autocomplete="on" @submit.prevent="handleSubmit">
+      <form method="post" class="space-y-6" autocomplete="on" @submit.prevent="handleSubmit">
         <UAlert v-if="error" icon="i-lucide-alert-circle" :description="error" />
 
         <UFormField label="Correo electrónico">
@@ -27,7 +27,7 @@
           </UInput>
         </UFormField>
 
-        <UButton type="submit" block size="lg" :loading="isLoading">
+        <UButton type="submit" block size="lg" :loading="isLoading" :disabled="!isHydrated">
           Entrar
         </UButton>
 
@@ -52,6 +52,17 @@ const password = ref('')
 const showPassword = ref(false)
 const error = ref('')
 const isLoading = ref(false)
+
+// Mientras Nuxt no termina de hidratar, este formulario es HTML plano y
+// `@submit.prevent` todavia no existe: un click o un Enter lo enviaria de forma
+// nativa, como GET, con el correo y la contrasena en la URL (historial del
+// navegador, logs del servidor, Referer). El boton queda deshabilitado hasta el
+// montaje, y `method="post"` asegura que, si igual se enviara, las credenciales
+// no viajen en la URL.
+const isHydrated = ref(false)
+onMounted(() => {
+  isHydrated.value = true
+})
 
 // VIS-2: al entrar, seguir a donde la persona iba en vez de dejarla en la portada.
 const route = useRoute()
