@@ -1,6 +1,6 @@
 import { serverSupabaseClient } from '#supabase/server'
 import type { Database, Tables } from '~/types/database.types'
-import { requireUser } from '~~/server/utils/requireUser'
+import { requireCan } from '~~/server/utils/requireCan'
 import { isValidCaseCategory, isValidCaseDifficulty } from '~~/server/utils/caseStudies'
 import { normalizeValue, parsePayload, removeFromBucket, uploadToBucket } from '~~/server/utils/uploads'
 
@@ -9,7 +9,7 @@ type CaseStudyRow = Tables<'CaseStudies'>
 type CaseStudyPayload = Omit<CaseStudyRow, 'id' | 'created_at'>
 
 export default defineEventHandler(async (event) => {
-    await requireUser(event)
+    await requireCan(event, 'content.edit')
 
     const idParam = getRouterParam(event, 'id')
     const id = Number(idParam)

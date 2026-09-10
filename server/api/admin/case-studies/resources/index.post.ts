@@ -1,6 +1,6 @@
 import { serverSupabaseClient } from '#supabase/server'
 import type { Database, Tables } from '~/types/database.types'
-import { requireUser } from '~~/server/utils/requireUser'
+import { requireCan } from '~~/server/utils/requireCan'
 import { isValidCaseResourceKind } from '~~/server/utils/caseStudies'
 import { normalizeValue, parsePayload, uploadToBucket } from '~~/server/utils/uploads'
 
@@ -9,7 +9,7 @@ type CaseStudyResourceRow = Tables<'CaseStudyResources'>
 type CaseStudyResourcePayload = Omit<CaseStudyResourceRow, 'id' | 'created_at'>
 
 export default defineEventHandler(async (event) => {
-    await requireUser(event)
+    await requireCan(event, 'content.edit')
 
     const { body, files } = await parsePayload(event, ['document'])
 
