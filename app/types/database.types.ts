@@ -34,6 +34,101 @@ export type Database = {
   }
   public: {
     Tables: {
+      CaseStudies: {
+        Row: {
+          case_type: string | null
+          category: Database["public"]["Enums"]["CaseCategory"]
+          company: string | null
+          company_logo_url: string | null
+          created_at: string
+          difficulty: Database["public"]["Enums"]["CaseDifficulty"] | null
+          document_name: string | null
+          document_size_bytes: number | null
+          document_url: string | null
+          duration_minutes: number | null
+          id: number
+          problem_statement: string | null
+          published_date: string | null
+          summary: string | null
+          title: string
+        }
+        Insert: {
+          case_type?: string | null
+          category: Database["public"]["Enums"]["CaseCategory"]
+          company?: string | null
+          company_logo_url?: string | null
+          created_at?: string
+          difficulty?: Database["public"]["Enums"]["CaseDifficulty"] | null
+          document_name?: string | null
+          document_size_bytes?: number | null
+          document_url?: string | null
+          duration_minutes?: number | null
+          id?: number
+          problem_statement?: string | null
+          published_date?: string | null
+          summary?: string | null
+          title: string
+        }
+        Update: {
+          case_type?: string | null
+          category?: Database["public"]["Enums"]["CaseCategory"]
+          company?: string | null
+          company_logo_url?: string | null
+          created_at?: string
+          difficulty?: Database["public"]["Enums"]["CaseDifficulty"] | null
+          document_name?: string | null
+          document_size_bytes?: number | null
+          document_url?: string | null
+          duration_minutes?: number | null
+          id?: number
+          problem_statement?: string | null
+          published_date?: string | null
+          summary?: string | null
+          title?: string
+        }
+        Relationships: []
+      }
+      CaseStudyResources: {
+        Row: {
+          case_study_id: number
+          created_at: string
+          document_url: string | null
+          id: number
+          kind: Database["public"]["Enums"]["CaseResourceKind"]
+          link: string | null
+          position: number
+          title: string
+        }
+        Insert: {
+          case_study_id: number
+          created_at?: string
+          document_url?: string | null
+          id?: number
+          kind: Database["public"]["Enums"]["CaseResourceKind"]
+          link?: string | null
+          position?: number
+          title: string
+        }
+        Update: {
+          case_study_id?: number
+          created_at?: string
+          document_url?: string | null
+          id?: number
+          kind?: Database["public"]["Enums"]["CaseResourceKind"]
+          link?: string | null
+          position?: number
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "CaseStudyResources_case_study_id_fkey"
+            columns: ["case_study_id"]
+            isOneToOne: false
+            referencedRelation: "CaseStudies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       event_registrations: {
         Row: {
           attended: boolean
@@ -465,6 +560,14 @@ export type Database = {
       unaccent_fallback: { Args: { source: string }; Returns: string }
     }
     Enums: {
+      CaseCategory:
+        | "ESTRATEGIA"
+        | "OPERACIONES"
+        | "FINANZAS"
+        | "MARKETING"
+        | "IMPACTO_SOCIAL"
+      CaseDifficulty: "FACIL" | "MEDIO" | "DIFICIL" | "EXPERTO"
+      CaseResourceKind: "APUNTE" | "DATASET" | "MASTERCLASS"
       ClubCoordination:
         | "DIRECTORS"
         | "COMMS_MKT"
@@ -608,6 +711,15 @@ export const Constants = {
   },
   public: {
     Enums: {
+      CaseCategory: [
+        "ESTRATEGIA",
+        "OPERACIONES",
+        "FINANZAS",
+        "MARKETING",
+        "IMPACTO_SOCIAL",
+      ],
+      CaseDifficulty: ["FACIL", "MEDIO", "DIFICIL", "EXPERTO"],
+      CaseResourceKind: ["APUNTE", "DATASET", "MASTERCLASS"],
       ClubCoordination: [
         "DIRECTORS",
         "COMMS_MKT",

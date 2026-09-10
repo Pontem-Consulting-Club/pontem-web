@@ -1,3 +1,17 @@
+# Dependencias autorizadas a correr sus scripts de instalación.
+# `supabase` es la crítica: su postinstall descarga el binario de la CLI, y sin él
+# fallan `pnpm supabase start` / `db reset`.
+#
+# Se declaran las dos claves a propósito: pnpm 11 renombró `onlyBuiltDependencies`
+# a `allowBuilds` e ignora la vieja, mientras que pnpm 10 ignora la nueva.
+# Manteniendo ambas, el proyecto instala igual en las dos versiones.
+allowBuilds:
+  '@parcel/watcher': true
+  esbuild: true
+  sharp: true
+  supabase: true
+  unrs-resolver: true
+  vue-demi: true
 onlyBuiltDependencies:
   - '@parcel/watcher'
   - esbuild
