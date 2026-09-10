@@ -19,9 +19,13 @@ jobs:
   push:
     runs-on: ubuntu-latest
     env:
-      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
       PROD_REF: equfcqojbefvynuppxoq
       CANARY_REF: gwlfogchwhaimsxjvikj
+      # Session pooler (puerto 5432): funciona por IPv4 desde los runners y, a
+      # diferencia del transaction pooler (6543), mantiene la sesion y soporta
+      # prepared statements, que es lo que necesita una corrida de migraciones.
+      PROD_POOLER_HOST: aws-0-sa-east-1.pooler.supabase.com
+      CANARY_POOLER_HOST: aws-0-sa-east-1.pooler.supabase.com
     steps:
       - uses: actions/checkout@v4
 
@@ -33,10 +37,12 @@ jobs:
         id: target
         run: |
           if [ "${{ github.ref_name }}" = "main" ]; then
-            echo "ref=$PROD_REF"          >> "$GITHUB_OUTPUT"
-            echo "name=Pontem Web - Prod" >> "$GITHUB_OUTPUT"
+            echo "ref=$PROD_REF"            >> "$GITHUB_OUTPUT"
+            echo "host=$PROD_POOLER_HOST"   >> "$GITHUB_OUTPUT"
+            echo "name=Pontem Web - Prod"   >> "$GITHUB_OUTPUT"
           else
             echo "ref=$CANARY_REF"          >> "$GITHUB_OUTPUT"
+            echo "host=$CANARY_POOLER_HOST" >> "$GITHUB_OUTPUT"
             echo "name=Pontem Web - Canary" >> "$GITHUB_OUTPUT"
           fi
 
@@ -44,8 +50,16 @@ jobs:
         env:
           SUPABASE_DB_PASSWORD: ${{ github.ref_name == 'main' && secrets.SUPABASE_DB_PASSWORD_PROD || secrets.SUPABASE_DB_PASSWORD_CANARY }}
           PROJECT_REF: ${{ steps.target.outputs.ref }}
+          POOLER_HOST: ${{ steps.target.outputs.host }}
         run: |
           test -n "$SUPABASE_DB_PASSWORD" || { echo "::error::Falta el secret con la password de la base de datos"; exit 1; }
-          supabase link --project-ref "$PROJECT_REF"
-          supabase migration list --linked
-          supabase db push
+          # Conexion directa a Postgres con la password de cada proyecto: no hace
+          # falta `supabase link` ni un SUPABASE_ACCESS_TOKEN personal, que expira
+          # y da acceso a todos los proyectos de esa cuenta.
+          ENCODED_PASSWORD=$(python3 -c 'import os, urllib.parse; print(urllib.parse.quote(os.environ["SUPABASE_DB_PASSWORD"], safe=""))')
+          echo "::add-mask::$ENCODED_PASSWORD"
+          DB_URL="postgresql://postgres.${PROJECT_REF}:${ENCODED_PASSWORD}@${POOLER_HOST}:5432/postgres"
+          supabase migration list --db-url "$DB_URL"
+          # --include-all: las ramas se integran tarde y pueden traer migraciones
+          # con fecha anterior a la ultima aplicada (paso con 20260901120000_case_studies).
+          supabase db push --include-all --db-url "$DB_URL"
