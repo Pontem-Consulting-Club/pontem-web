@@ -8,8 +8,13 @@ const SIN_DATOS = { registered: 0, attended: 0, cancelled: 0, upcoming: 0 }
  * Las inscripciones propias y las estadisticas que salen de ellas (MEM-5).
  *
  * Los numeros los cuenta la vista `my_registration_stats`, que se mira con los
- * permisos de quien pregunta: RLS ya limita las filas a las suyas. No hay
- * contadores guardados que puedan desincronizarse (FR-22).
+ * permisos de quien pregunta. No hay contadores guardados que puedan
+ * desincronizarse (FR-22).
+ *
+ * Ambas consultas filtran por la persona aunque RLS ya limite las filas: a
+ * editores y admins, `registrations_select_staff` les deja ver las
+ * inscripciones de todos, y sin el filtro la vista devolvia una fila por
+ * persona y `maybeSingle()` fallaba con 500.
  */
 export default defineEventHandler(async (event) => {
     const profile = await getRequestProfile(event)
@@ -32,6 +37,7 @@ export default defineEventHandler(async (event) => {
         supabase
             .from('my_registration_stats')
             .select('registered, attended, cancelled, upcoming')
+            .eq('profile_id', profile.id)
             .maybeSingle()
     ])
 
