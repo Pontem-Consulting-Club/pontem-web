@@ -247,8 +247,10 @@ select pg_temp.check('FR-14 el anonimo no lee profiles',
 update public.profiles set is_public = true
  where id = '33333333-3333-3333-3333-333333333333';
 
+-- Solo la cuenta de esta prueba: el seed o la app en local pueden dejar otros perfiles publicos.
 select pg_temp.check('MEM-3 el anonimo lee el perfil publico por la vista',
-    (select pg_temp.count_as(null, $q$select count(*) from public.public_profiles$q$)) = 1);
+    (select pg_temp.count_as(null, $q$select count(*) from public.public_profiles
+                                      where id = '33333333-3333-3333-3333-333333333333'$q$)) = 1);
 
 select pg_temp.check('FR-14 la vista no expone rol ni estado',
     not exists (select 1 from information_schema.columns
@@ -259,7 +261,8 @@ update public.profiles set state = 'inactive'
  where id = '33333333-3333-3333-3333-333333333333';
 
 select pg_temp.check('ADM-3 desactivar deja de publicar el perfil',
-    (select pg_temp.count_as(null, $q$select count(*) from public.public_profiles$q$)) = 0);
+    (select pg_temp.count_as(null, $q$select count(*) from public.public_profiles
+                                      where id = '33333333-3333-3333-3333-333333333333'$q$)) = 0);
 
 -- ============================================================
 -- 7. La tabla legacy ya no existe (FR-04)
