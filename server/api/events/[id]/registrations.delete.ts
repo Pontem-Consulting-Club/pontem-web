@@ -35,6 +35,9 @@ export default defineEventHandler(async (event) => {
         .update({ status: 'cancelled' })
         .eq('event_id', eventId)
         .eq('profile_id', profile.id)
+        // Solo inscripciones vigentes: volver a cancelar una ya cancelada respondia
+        // 200 y ocultaba que la persona ya no estaba inscrita.
+        .neq('status', 'cancelled')
         .select('id')
 
     if (error) {
