@@ -101,19 +101,11 @@ const typeModel = computed<string | undefined>({
     }
 })
 
+// Igual que en eventos: el día que se elige es el día de Chile.
 const publishedDateModel = computed<string | undefined>({
-    get: () => {
-        const value = form.value.published_date?.toString()
-        if (!value) return undefined
-        return value.split('T')[0]
-    },
+    get: () => form.value.published_date ? clubDay(form.value.published_date) : undefined,
     set: (value) => {
-        if (!value) {
-            form.value.published_date = undefined
-            return
-        }
-        const isoDate = new Date(`${value}T00:00:00Z`).toISOString()
-        form.value.published_date = isoDate
+        form.value.published_date = value ? setClubDay(value, form.value.published_date) : undefined
     }
 })
 

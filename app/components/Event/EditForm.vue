@@ -85,19 +85,12 @@ const emit = defineEmits<{
     (event: 'cancel' | 'delete'): void
 }>()
 
+// Se elige y se muestra el día de Chile. Antes se guardaba como medianoche UTC,
+// que en Chile es el día anterior, y había que elegir un día más.
 const dateModel = computed<string | undefined>({
-    get: () => {
-        const value = form.value.date?.toString()
-        if (!value) return undefined
-        return value.split('T')[0]
-    },
+    get: () => form.value.date ? clubDay(form.value.date) : undefined,
     set: (value) => {
-        if (!value) {
-            form.value.date = undefined
-            return
-        }
-        const isoDate = new Date(`${value}T00:00:00Z`).toISOString()
-        form.value.date = isoDate
+        form.value.date = value ? setClubDay(value, form.value.date) : undefined
     }
 })
 

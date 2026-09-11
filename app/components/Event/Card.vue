@@ -28,9 +28,9 @@ const form = ref<Partial<EventRecord>>({})
 
 const { url: imageUrl } = useStorageImage(computed(() => event.value.image_url ?? null))
 
-const eventDate = computed(() => new Date(event.value.date))
-const dayNumber = computed(() => eventDate.value.getDate())
-const monthYear = computed(() => eventDate.value.toLocaleDateString('es-ES', { month: 'short', year: 'numeric' }))
+// El día de Chile, igual en el servidor (UTC) y en el navegador.
+const dayNumber = computed(() => Number(clubDay(event.value.date).slice(8, 10)))
+const monthYear = computed(() => formatClubDate(event.value.date, { month: 'short', year: 'numeric' }))
 
 watch(event, (value) => {
   if (_props.isNew || !isEditing.value) {
