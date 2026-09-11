@@ -537,6 +537,18 @@ export type Database = {
         Args: { for_profile: string; source: string }
         Returns: string
       }
+      event_registration_roster: {
+        Args: { p_event_id: number }
+        Returns: {
+          attended: boolean
+          detail: string
+          id: number
+          is_guest: boolean
+          name: string
+          registered_at: string
+          status: Database["public"]["Enums"]["registration_status"]
+        }[]
+      }
       is_admin: { Args: never; Returns: boolean }
       rate_limit_allows: {
         Args: {

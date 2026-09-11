@@ -7,6 +7,10 @@ import { requireCan } from '~~/server/utils/requireCan'
  *
  * Junta miembros e invitados en una sola lista, marcando cuales son invitados
  * para que en la puerta se sepa a quien se esta esperando.
+ *
+ * Los nombres salen de `event_registration_roster()` y no de un join a
+ * profiles: las policies de profiles no dejan a un editor leer otras cuentas, y
+ * el join le devolvia "Sin nombre" en cada miembro.
  */
 export default defineEventHandler(async (event) => {
     await requireCan(event, 'registrations.read')
@@ -23,11 +27,7 @@ export default defineEventHandler(async (event) => {
 
     const supabase = await serverSupabaseClient<Database>(event)
 
-    const { data, error } = await supabase
-        .from('event_registrations')
-        .select('id, status, attended, registered_at, guest_name, guest_email, profile_id, profiles(display_name, coordination)')
-        .eq('event_id', eventId)
-        .order('registered_at', { ascending: true })
+    const { data, error } = await supabase.rpc('event_registration_roster', { p_event_id: eventId })
 
     if (error) {
         throw createError({
@@ -37,13 +37,5 @@ export default defineEventHandler(async (event) => {
         })
     }
 
-    return (data ?? []).map((row) => ({
-        id: row.id,
-        status: row.status,
-        attended: row.attended,
-        registered_at: row.registered_at,
-        is_guest: row.profile_id === null,
-        name: row.profile_id ? (row.profiles?.display_name ?? 'Sin nombre') : (row.guest_name ?? 'Invitado'),
-        detail: row.profile_id ? (row.profiles?.coordination ?? null) : row.guest_email
-    }))
+    return data ?? []
 })

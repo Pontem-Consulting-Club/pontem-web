@@ -271,3 +271,43 @@ select pg_temp.check('ADM-3 desactivar deja de publicar el perfil',
 select pg_temp.check('FR-04 public."Users" fue eliminada',
     not exists (select 1 from information_schema.tables
                  where table_schema = 'public' and table_name = 'Users'));
+
+-- ============================================================
+-- 8. Lista de inscritos para quien organiza (FR-21, EDI-2)
+-- ============================================================
+
+-- Las policies de profiles no dejan a un editor leer otras cuentas; la lista
+-- sale de event_registration_roster(), que entrega solo nombre y coordinacion.
+delete from public."Events" where id = 900101;
+insert into public."Events" (id, title, subtitle, date, registration_mode)
+values (900101, 'Evento lista de inscritos', 'prueba', now() + interval '30 days', 'open');
+insert into public.event_registrations (event_id, profile_id)
+values (900101, '44444444-4444-4444-4444-444444444444');
+insert into public.event_registrations (event_id, guest_name, guest_email)
+values (900101, 'Invitada de prueba', 'invitada@example.org');
+
+select pg_temp.check('EDI-2 un editor ve la lista completa del evento',
+    pg_temp.count_as('22222222-2222-2222-2222-222222222222',
+        $q$select count(*) from public.event_registration_roster(900101)$q$) = 2);
+
+-- El nombre esperado se lee como postgres: el editor no puede leerlo de profiles.
+select pg_temp.check('EDI-2 un editor ve el nombre de cada miembro, no "Sin nombre"',
+    pg_temp.count_as('22222222-2222-2222-2222-222222222222',
+        format($q$select count(*) from public.event_registration_roster(900101)
+                   where not is_guest and name = %L and name <> 'Sin nombre'$q$,
+               (select display_name from public.profiles
+                 where id = '44444444-4444-4444-4444-444444444444'))) = 1);
+
+select pg_temp.check('la lista marca a los invitados con su correo',
+    pg_temp.count_as('22222222-2222-2222-2222-222222222222',
+        $q$select count(*) from public.event_registration_roster(900101)
+           where is_guest and name = 'Invitada de prueba' and detail = 'invitada@example.org'$q$) = 1);
+
+select pg_temp.check('FR-21 un miembro no puede leer la lista de un evento',
+    pg_temp.denied('44444444-4444-4444-4444-444444444444',
+        $q$select * from public.event_registration_roster(900101)$q$));
+
+select pg_temp.check('un anonimo no puede leer la lista de un evento',
+    pg_temp.denied(null, $q$select * from public.event_registration_roster(900101)$q$));
+
+delete from public."Events" where id = 900101;
