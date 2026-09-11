@@ -81,6 +81,10 @@ const showNotFound = computed(() => {
   return !newsItem.value
 })
 
+// Una noticia que no existe responde 404 de verdad, no "no encontrada" con 200.
+// Un id invalido ya se redirige a la lista arriba.
+useNotFoundStatus({ found: () => !isValidId || !showNotFound.value, error })
+
 // Se espera el perfil antes de decidir: en el servidor, sin esperarlo, el rol
 // todavia no se conoce y se sacaria del modo edicion incluso a quien edita.
 await profileReady

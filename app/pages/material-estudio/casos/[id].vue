@@ -22,6 +22,10 @@ const { data: caseStudy, status, error, refresh } = await useFetch<CaseStudyDeta
   { immediate: isValidId }
 )
 
+// Un caso que no existe responde 404 de verdad, no "no encontrado" con 200. Un id
+// invalido ya se redirigio arriba.
+useNotFoundStatus({ found: () => !isValidId || Boolean(caseStudy.value), error })
+
 useHead({
   title: computed(() => caseStudy.value?.title
     ? `${caseStudy.value.title} - Pontem`

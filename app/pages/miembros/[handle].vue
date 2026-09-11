@@ -48,6 +48,10 @@ const coordinationLabels = TEAM_COORDINATION_LABELS
 
 const { data: member, error } = await useFetch<PublicProfile>(() => `/api/members/${handle.value}`)
 
+// Un perfil privado, inactivo o inexistente responde 404. La API no distingue los
+// tres a proposito, y la pagina tampoco.
+useNotFoundStatus({ found: () => Boolean(member.value), error })
+
 const { url: avatarUrl } = useStorageImage(computed(() => member.value?.avatar_path ?? null))
 
 const initials = computed(() => (member.value?.display_name ?? '')
