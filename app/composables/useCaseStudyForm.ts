@@ -31,7 +31,8 @@ export const useCaseStudyForm = () => {
     document_url: null,
     document_name: null,
     document_size_bytes: null,
-    published_date: new Date().toISOString().slice(0, 10)
+    // El dia de Chile: despues de las 21:00 el dia UTC ya es manana.
+    published_date: todayInClub()
   })
 
   const normalizeValue = (value?: string | number | null) => {
