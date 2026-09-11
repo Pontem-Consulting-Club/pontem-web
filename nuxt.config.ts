@@ -12,6 +12,13 @@ export default defineNuxtConfig({
     '@nuxt/image',
   ],
 
+  // El sitio solo tiene diseño claro. Con el modo de color activo, un sistema en
+  // modo oscuro ponía <html class="dark"> y los textos sin color propio (como el
+  // título del formulario de eventos) quedaban blancos sobre tarjetas blancas.
+  ui: {
+    colorMode: false,
+  },
+
   supabase: {
     key: process.env.SUPABASE_PUBLISHABLE_KEY, // Esta llave se llama así en la integración de Supabase para Vercel
     redirectOptions: {
