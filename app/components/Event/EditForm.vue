@@ -17,14 +17,14 @@
                 <div class="flex-1 flex flex-col gap-3">
                     <UInput v-model="form.title" placeholder="Título" variant="none"
                         :ui="{ base: 'text-xl font-semibold placeholder:text-primary/50' }" />
-                    <UInput v-model="form.subtitle" placeholder="Subtítulo" variant="none"
+                    <UInput v-model.nullable="form.subtitle" placeholder="Subtítulo" variant="none"
                         :ui="{ base: [baseUIClasses] }" />
-                    <UTextarea v-model="form.description" :rows="3" placeholder="Descripción" variant="none" autoresize
+                    <UTextarea v-model.nullable="form.description" :rows="3" placeholder="Descripción" variant="none" autoresize
                         :ui="{ base: [baseUIClasses, 'text-justify'] }" />
                     <div class="flex flex-wrap gap-4 text-sm">
-                        <UInput v-model="form.location" placeholder="Ubicación" variant="none"
+                        <UInput v-model.nullable="form.location" placeholder="Ubicación" variant="none"
                             :ui="{ base: baseUIClasses }" />
-                        <UInput v-model="form.link" type="url" placeholder="Enlace" variant="none"
+                        <UInput v-model.nullable="form.link" type="url" placeholder="Enlace" variant="none"
                             :ui="{ base: 'text-primary-600 placeholder:text-gray-400' }" />
                     </div>
                 </div>
@@ -121,7 +121,10 @@ const registrationOpenModel = computed({
 const capacityModel = computed({
     get: () => form.value.capacity ?? null,
     set: (value) => {
-        const parsed = value === null || value === '' ? null : Number(value)
+        // Un UInput type="number" sin el modificador .number entrega el texto del
+        // campo: al vaciarlo llega '' aunque el tipo del computed diga number.
+        const raw = value as number | string | null
+        const parsed = raw === null || raw === '' ? null : Number(raw)
         form.value.capacity = parsed === null || Number.isNaN(parsed) ? null : parsed
     }
 })

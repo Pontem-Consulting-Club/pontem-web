@@ -1,7 +1,7 @@
 <template>
   <div>
     <UContainer class="py-24 pt-32">
-      <NotFoundState v-if="error" message="No encontramos ese perfil" />
+      <NotFoundState v-if="error" title="Perfil no encontrado" message="No encontramos ese perfil" />
 
       <article v-else-if="member" class="mx-auto flex max-w-2xl flex-col items-center gap-6 text-center">
         <div class="h-36 w-36 overflow-hidden rounded-full bg-gray-100">

@@ -1,6 +1,13 @@
 import type { H3Event } from 'h3'
-import type { SupabaseClient } from '@supabase/supabase-js'
+import type { serverSupabaseClient } from '#supabase/server'
+import type { Database } from '~~/app/types/database.types'
 import { isStorageKey } from '~~/server/utils/storagePaths'
+
+// El tipo sale del cliente del modulo: `@supabase/supabase-js` no es dependencia
+// directa del proyecto, asi que importarlo directamente no resuelve con pnpm.
+// Se instancia con `Database` porque todas las rutas pasan
+// `serverSupabaseClient<Database>(event)`.
+type SupabaseClient = Awaited<ReturnType<typeof serverSupabaseClient<Database>>>
 
 export interface FilePart {
     data: Buffer

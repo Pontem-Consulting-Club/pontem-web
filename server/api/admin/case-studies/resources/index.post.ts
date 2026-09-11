@@ -21,7 +21,8 @@ export default defineEventHandler(async (event) => {
         })
     }
 
-    if (!normalizeValue(body.title)) {
+    const title = normalizeValue(body.title)
+    if (!title) {
         throw createError({
             statusCode: 400,
             statusMessage: 'Title is required'
@@ -62,7 +63,7 @@ export default defineEventHandler(async (event) => {
     const payload: CaseStudyResourcePayload = {
         case_study_id: caseStudyId,
         kind,
-        title: body.title.trim(),
+        title,
         link: normalizeValue(body.link),
         document_url: documentPath,
         position: (lastResource?.position ?? 0) + 1

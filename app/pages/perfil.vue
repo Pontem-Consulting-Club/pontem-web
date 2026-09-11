@@ -66,13 +66,13 @@
 
             <UFormField label="Biografía"
               description="Se muestra en tu perfil público, si decides publicarlo.">
-              <UTextarea v-model="form.bio" :rows="4" autoresize class="w-full"
+              <UTextarea v-model.nullable="form.bio" :rows="4" autoresize class="w-full"
                 placeholder="En qué estás, qué te interesa" />
             </UFormField>
 
             <div class="grid gap-5 sm:grid-cols-2">
               <UFormField label="Coordinación">
-                <USelectMenu v-model="form.coordination" :items="coordinationOptions" value-key="value"
+                <USelectMenu v-model.nullable="form.coordination" :items="coordinationOptions" value-key="value"
                   label-key="label" class="w-full" placeholder="Sin coordinación" />
               </UFormField>
 
@@ -140,7 +140,7 @@
 </template>
 
 <script setup lang="ts">
-import { TEAM_COORDINATION_OPTIONS } from '~/constants/teamRoles'
+import { TEAM_COORDINATION_OPTIONS, type TeamCoordination } from '~/constants/teamRoles'
 import { ROLE_LABELS, PROFILE_STATE_LABELS } from '~~/shared/authz'
 import type { Profile } from '~/composables/useProfile'
 
@@ -166,7 +166,7 @@ const coordinationOptions = TEAM_COORDINATION_OPTIONS
 const form = reactive({
   display_name: '',
   bio: '' as string | null,
-  coordination: null as string | null,
+  coordination: null as TeamCoordination | null,
   generation: null as number | null,
   is_public: false
 })
@@ -226,8 +226,8 @@ const save = async () => {
   }
 }
 
-const uploadAvatar = async (file: File | File[] | null) => {
-  const picked = Array.isArray(file) ? file[0] : file
+const uploadAvatar = async (file: File | null | undefined) => {
+  const picked = file ?? null
   if (!picked) return
 
   error.value = ''

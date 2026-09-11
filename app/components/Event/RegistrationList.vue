@@ -37,7 +37,7 @@
               </td>
               <td class="px-3 py-2">
                 <UCheckbox :model-value="row.attended" :disabled="busyId === row.id || row.status === 'cancelled'"
-                  @update:model-value="(value: boolean) => setAttendance(row, value)" />
+                  @update:model-value="(value) => setAttendance(row, value === true)" />
               </td>
             </tr>
           </tbody>

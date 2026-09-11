@@ -34,19 +34,19 @@
             </UFormField>
 
             <UFormField>
-                <UInput v-model="form.subtitle" placeholder="Subtítulo" class="w-full h-fit" variant="none"
+                <UInput v-model.nullable="form.subtitle" placeholder="Subtítulo" class="w-full h-fit" variant="none"
                     :ui="{ base: [baseUIClasses, 'text-lg font-bold'] }" />
             </UFormField>
 
             <UFormField>
-                <UTextarea v-model="form.content" :rows="10" placeholder="Descripción" class="w-full" variant="none"
+                <UTextarea v-model.nullable="form.content" :rows="10" placeholder="Descripción" class="w-full" variant="none"
                     autoresize :ui="{ base: [baseUIClasses, 'text-md text-justify'] }" />
             </UFormField>
 
             <div class="flex items-center justify-between text-sm mb-4 gap-2">
                 <UFormField>
                     <span class="text-gray-700 font-medium pl-3">Autor:</span>
-                    <UInput v-model="form.author" placeholder="Autor" variant="none" :ui="{ base: baseUIClasses }" />
+                    <UInput v-model.nullable="form.author" placeholder="Autor" variant="none" :ui="{ base: baseUIClasses }" />
                 </UFormField>
 
                 <UFormField>
