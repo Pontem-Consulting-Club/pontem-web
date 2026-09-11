@@ -179,13 +179,13 @@ insert into public."HeroSlides" (title, subtitle, button_text, image_url, link, 
    'Conoce el club', '/Equipo2024.jpeg', '/nosotros', 1),
   ('Postulaciones abiertas 2026',
    'Buscamos estudiantes de todas las carreras. No necesitas experiencia previa.',
-   'Postula aqui', '/BienvenidaConsultores.jpg', '/postulaciones', 2),
+   'Postula aqui', '/BienvenidaConsultores.jpg', '/nosotros', 2),
   ('Consultoria social',
    'Seis proyectos por semestre junto a fundaciones y cooperativas de todo Chile',
    'Ver proyectos', '/FotoparaGrupos.png', '/consultoria-social', 3),
   ('Formacion continua',
    'Talleres, casos en vivo y mentorias con consultoras y bancos de inversion',
-   'Ver actividades', '/LugarEstudio.jpg', '/actividades', 4);
+   'Ver actividades', '/LugarEstudio.jpg', '/eventos', 4);
 
 -- ------------------------------------------------------------------- cuentas
 -- FR-30: una cuenta por rol, para que los permisos se ejerciten en canary y en
