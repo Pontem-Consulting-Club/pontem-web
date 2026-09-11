@@ -5,7 +5,9 @@
         <h2 class="text-center text-2xl font-bold">{{ heading }}</h2>
       </template>
 
-      <div v-if="!hasSession" class="flex flex-col gap-4 text-center">
+      <LoadingSpinner v-if="isResolving" />
+
+      <div v-else-if="!hasSession" class="flex flex-col gap-4 text-center">
         <UIcon name="i-lucide-link-2-off" class="mx-auto h-10 w-10 text-gray-400" />
         <p>
           Este enlace ya no sirve. Los enlaces de recuperación caducan al usarse o
@@ -66,9 +68,32 @@ const show = ref(false)
 const isLoading = ref(false)
 const error = ref('')
 
-// El enlace del correo abre la app con una sesión de recuperación ya iniciada.
-// Sin ella no hay nada que cambiar.
+// El enlace del correo abre la app con una sesión ya iniciada. Sin ella no hay
+// nada que cambiar. Hasta leer la URL en el navegador no sabemos si la hay.
+const isResolving = ref(true)
 const hasSession = computed(() => Boolean(user.value))
+
+onMounted(async () => {
+  // La recuperación llega como PKCE (?code=) y el cliente la resuelve solo. La
+  // invitación no: inviteUserByEmail la genera el servidor, sin PKCE, y vuelve con
+  // la sesión en el fragmento (#access_token=...). El cliente del módulo usa PKCE
+  // y descarta ese formato, así que sin esto nadie podía aceptar una invitación.
+  const fragment = new URLSearchParams(window.location.hash.slice(1))
+  const accessToken = fragment.get('access_token')
+  const refreshToken = fragment.get('refresh_token')
+
+  if (fragment.get('type') === 'invite' && accessToken && refreshToken) {
+    // Son credenciales: fuera de la barra de direcciones y del historial.
+    window.history.replaceState(window.history.state, '', `${window.location.pathname}${window.location.search}`)
+    await supabase.auth.setSession({ access_token: accessToken, refresh_token: refreshToken })
+  }
+
+  // Espera a que el cliente termine con la URL y deja el usuario listo sin
+  // depender de cuándo llegue el evento de onAuthStateChange.
+  const { data } = await supabase.auth.getClaims()
+  user.value = data?.claims ?? null
+  isResolving.value = false
+})
 
 const submit = async () => {
   error.value = ''
