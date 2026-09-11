@@ -26,7 +26,13 @@ const { isEditor } = useProfile()
 const isCreating = ref(false)
 const draftMember = ref<TeamRecord | null>(null)
 
+// Editar a alguien del equipo. La lista de cada coordinacion solo muestra nombres,
+// asi que el formulario se abre arriba de la grilla, donde tambien se crea.
+const editingMember = ref<TeamRecord | null>(null)
+const editorPanel = ref<HTMLElement | null>(null)
+
 const startCreate = () => {
+  editingMember.value = null
   isCreating.value = true
   draftMember.value = {
     id: 0,
@@ -42,6 +48,18 @@ const cancelCreate = () => {
 
 const handleCreated = () => {
   cancelCreate()
+}
+
+const startEdit = async (member: TeamRecord) => {
+  cancelCreate()
+  editingMember.value = { ...member }
+  // El nombre puede quedar lejos del formulario: lo trae a la vista.
+  await nextTick()
+  editorPanel.value?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+}
+
+const closeEdit = () => {
+  editingMember.value = null
 }
 
 const teamByRole = computed(() => {
@@ -91,6 +109,10 @@ const teamByRole = computed(() => {
         <div v-if="isCreating && draftMember" class="mb-6">
           <TeamCard :member="draftMember" :is-new="true" @created="handleCreated" @cancel-create="cancelCreate" @updated="refresh" />
         </div>
+
+        <div v-else-if="editingMember" ref="editorPanel" class="mb-6">
+          <TeamCard :key="editingMember.id" :member="editingMember" start-editing @updated="refresh" @closed="closeEdit" />
+        </div>
  
         <EmptyState v-else-if="teamByRole.length === 0" message="No hay integrantes disponibles" />
 
@@ -118,10 +140,17 @@ const teamByRole = computed(() => {
 
               <!-- Nombres -->
               <div class="flex flex-col gap-1 overflow-hidden">
-                <p v-for="member in dept.members" :key="member.id"
-                  class="text-xs text-gray-400 leading-snug truncate">
-                  {{ member.name }}
-                </p>
+                <template v-for="member in dept.members" :key="member.id">
+                  <button v-if="isEditor" type="button" :aria-label="`Editar a ${member.name}`"
+                    class="group flex min-w-0 items-center gap-1 text-left text-xs text-gray-400 leading-snug hover:text-primary"
+                    @click="startEdit(member)">
+                    <span class="truncate">{{ member.name }}</span>
+                    <UIcon name="i-lucide-pencil" class="w-3 h-3 shrink-0 text-gray-300 group-hover:text-primary" />
+                  </button>
+                  <p v-else class="text-xs text-gray-400 leading-snug truncate">
+                    {{ member.name }}
+                  </p>
+                </template>
                 <p v-if="dept.members.length === 0" class="text-xs text-gray-400 italic">Sin integrantes aún</p>
               </div>
 

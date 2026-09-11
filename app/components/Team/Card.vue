@@ -19,25 +19,28 @@ interface Props {
     member: TeamRecord
     isNew?: boolean
     coordinationImageUrl?: string | null
+    // Abre directo en el formulario, para editar a alguien elegido desde una lista.
+    startEditing?: boolean
 }
 
 const _props = withDefaults(defineProps<Props>(), {
     isNew: false,
     coordinationImageUrl: null,
+    startEditing: false,
 })
 
 const member = toRef(_props, 'member')
 const emit = defineEmits<{
-    (e: 'updated' | 'created' | 'cancel-create'): void
+    (e: 'updated' | 'created' | 'cancel-create' | 'closed'): void
 }>()
 
 const { isEditor } = useProfile()
 
-const isEditing = ref(_props.isNew)
+const isEditing = ref(_props.isNew || _props.startEditing)
 const isSaving = ref(false)
 const isDeleting = ref(false)
 const formError = ref('')
-const form = ref<Partial<TeamRecord>>({})
+const form = ref<Partial<TeamRecord>>({ ..._props.member })
 
 watch(member, (value) => {
     if (_props.isNew || !isEditing.value) {
@@ -79,6 +82,7 @@ const cancelEdit = () => {
     form.value = { ...member.value }
     formError.value = ''
     isEditing.value = false
+    emit('closed')
 }
 
 const saveEdit = async () => {
@@ -102,6 +106,7 @@ const saveEdit = async () => {
         }
         isEditing.value = false
         emit('updated')
+        if (!_props.isNew) emit('closed')
     } catch (error: unknown) {
         const apiError = typeof error === 'object' && error !== null && 'data' in error
             ? (error as { data?: { statusMessage?: string; message?: string } })
@@ -129,6 +134,7 @@ const handleDelete = async () => {
         await $fetch(`/api/admin/team/${member.value.id}`, { method: 'DELETE' })
         isEditing.value = false
         emit('updated')
+        emit('closed')
     } catch (error: unknown) {
         const apiError = typeof error === 'object' && error !== null && 'data' in error
             ? (error as { data?: { statusMessage?: string; message?: string } })
