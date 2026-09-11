@@ -16,16 +16,22 @@ export type ProfileState = Database['public']['Enums']['profile_state']
 export const CAPABILITIES = {
     admin: [
         'content.edit',
+        'events.register',
         'registrations.read',
         'registrations.manage',
         'users.manage'
     ],
     editor: [
         'content.edit',
+        'events.register',
         'registrations.read',
         'registrations.manage'
     ],
-    member: []
+    // Inscribirse a actividades (MEM-4). Como toda capacidad, se pierde con la
+    // cuenta desactivada y no llega hasta terminar el onboarding.
+    member: [
+        'events.register'
+    ]
 } as const satisfies Record<UserRole, readonly string[]>
 
 export type Capability = (typeof CAPABILITIES)[UserRole][number]

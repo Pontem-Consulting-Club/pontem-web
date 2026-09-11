@@ -1,6 +1,7 @@
 import { serverSupabaseClient } from '#supabase/server'
 import type { Database } from '~/types/database.types'
 import { getRequestProfile } from '~~/server/utils/requireCan'
+import { can, type AuthzProfile } from '~~/shared/authz'
 
 type EventRow = Database['public']['Tables']['Events']['Row']
 
@@ -72,6 +73,17 @@ export default defineEventHandler(async (event) => {
 
     // ---------------------------------------------------------------- miembro
     if (profile) {
+        // Una cuenta invitada o desactivada no se inscribe (FR-03). RLS exige lo
+        // mismo; esto le da a la persona un mensaje que entienda.
+        if (!can(profile as AuthzProfile, 'events.register')) {
+            throw createError({
+                statusCode: 403,
+                statusMessage: profile.state === 'invited'
+                    ? 'Completa tu perfil antes de inscribirte.'
+                    : 'Tu cuenta esta desactivada. Pide a la coordinacion que la reactive.'
+            })
+        }
+
         const { error } = await supabase
             .from('event_registrations')
             .insert({ event_id: eventId, profile_id: profile.id })

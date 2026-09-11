@@ -25,7 +25,7 @@ exception when others then
 end $$;
 
 -- Idempotencia: limpia lo que haya dejado una corrida anterior.
-delete from public."Events" where id in (900001, 900002);
+delete from public."Events" where id in (900001, 900002, 900003);
 
 -- Evento de prueba con cupo para dos.
 insert into public."Events" (id, title, subtitle, date, registration_mode, capacity)
@@ -148,6 +148,8 @@ delete from public.rate_limit_hits where actor like '%prueba%' or actor = 'ip-de
 delete from auth.users where id = '55555555-5555-5555-5555-555555555555';
 insert into auth.users (id, email, aud, role)
 values ('55555555-5555-5555-5555-555555555555', 'cupo-miembro@example.org', 'authenticated', 'authenticated');
+-- Solo una cuenta activa se inscribe (FR-03).
+update public.profiles set state = 'active' where id = '55555555-5555-5555-5555-555555555555';
 
 -- Mensaje de error de la sentencia corrida como `actor`, o null si paso.
 create or replace function pg_temp.error_as(actor uuid, stmt text) returns text
@@ -181,13 +183,81 @@ select pg_temp.check('un miembro se inscribe en un evento sin cupo declarado',
         values (900002, '55555555-5555-5555-5555-555555555555')
     $q$) is null);
 
+-- ============================================================
+-- Lo propio de un miembro: cancelar y volver, nada mas (FR-19, FR-21, FR-03)
+-- ============================================================
+
+-- La accion y su comprobacion van en sentencias separadas: una sentencia mira la
+-- base como estaba cuando empezo y no ve lo que escribio la funcion que llamo.
+
+insert into public."Events" (id, title, subtitle, date, registration_mode, registration_open)
+values (900003, 'Evento cerrado', 'prueba', now() + interval '30 days', 'open', false);
+
+-- El miembro quedo inscrito en 900002 en el control de arriba.
+select pg_temp.check('FR-19 un miembro cancela su propia inscripcion',
+    pg_temp.error_as('55555555-5555-5555-5555-555555555555', $q$
+        update public.event_registrations set status = 'cancelled'
+         where event_id = 900002 and profile_id = '55555555-5555-5555-5555-555555555555'
+    $q$) is null);
+select pg_temp.check('FR-19 la inscripcion queda cancelada', (select status from public.event_registrations where event_id = 900002 and profile_id = '55555555-5555-5555-5555-555555555555') = 'cancelled');
+
+select pg_temp.check('un miembro vuelve a inscribirse en un evento abierto',
+    pg_temp.error_as('55555555-5555-5555-5555-555555555555', $q$
+        update public.event_registrations set status = 'registered'
+         where event_id = 900002 and profile_id = '55555555-5555-5555-5555-555555555555'
+    $q$) is null);
+select pg_temp.check('la inscripcion queda vigente otra vez', (select status from public.event_registrations where event_id = 900002 and profile_id = '55555555-5555-5555-5555-555555555555') = 'registered');
+
+select pg_temp.check('FR-21 un miembro no marca su propia asistencia',
+    pg_temp.error_as('55555555-5555-5555-5555-555555555555', $q$
+        update public.event_registrations set attended = true
+         where event_id = 900002 and profile_id = '55555555-5555-5555-5555-555555555555'
+    $q$) is not null);
+select pg_temp.check('FR-21 la asistencia sigue sin marcar',
+    not (select attended from public.event_registrations where event_id = 900002 and profile_id = '55555555-5555-5555-5555-555555555555'));
+
+select pg_temp.check('un miembro no mueve su inscripcion a un evento cerrado',
+    pg_temp.error_as('55555555-5555-5555-5555-555555555555', $q$
+        update public.event_registrations set event_id = 900003
+         where event_id = 900002 and profile_id = '55555555-5555-5555-5555-555555555555'
+    $q$) is not null);
+select pg_temp.check('el evento cerrado sigue sin inscripciones',
+    (select count(*) from public.event_registrations where event_id = 900003) = 0);
+
+-- Una cuenta desactivada conserva lo minimo: bajarse de lo que ya tenia.
+update public.profiles set state = 'inactive' where id = '55555555-5555-5555-5555-555555555555';
+
+select pg_temp.check('FR-03 una cuenta desactivada puede cancelar lo suyo',
+    pg_temp.error_as('55555555-5555-5555-5555-555555555555', $q$
+        update public.event_registrations set status = 'cancelled'
+         where event_id = 900002 and profile_id = '55555555-5555-5555-5555-555555555555'
+    $q$) is null);
+select pg_temp.check('FR-03 la cancelacion queda guardada', (select status from public.event_registrations where event_id = 900002 and profile_id = '55555555-5555-5555-5555-555555555555') = 'cancelled');
+
+select pg_temp.check('FR-03 una cuenta desactivada no reactiva su inscripcion',
+    pg_temp.error_as('55555555-5555-5555-5555-555555555555', $q$
+        update public.event_registrations set status = 'registered'
+         where event_id = 900002 and profile_id = '55555555-5555-5555-5555-555555555555'
+    $q$) is not null);
+select pg_temp.check('FR-03 la inscripcion sigue cancelada', (select status from public.event_registrations where event_id = 900002 and profile_id = '55555555-5555-5555-5555-555555555555') = 'cancelled');
+
+delete from public.event_registrations where profile_id = '55555555-5555-5555-5555-555555555555';
+
+select pg_temp.check('FR-03 una cuenta desactivada no se inscribe',
+    pg_temp.error_as('55555555-5555-5555-5555-555555555555', $q$
+        insert into public.event_registrations (event_id, profile_id)
+        values (900002, '55555555-5555-5555-5555-555555555555')
+    $q$) is not null);
+select pg_temp.check('FR-03 no queda ninguna fila suya',
+    (select count(*) from public.event_registrations where profile_id = '55555555-5555-5555-5555-555555555555') = 0);
+
 delete from auth.users where id = '55555555-5555-5555-5555-555555555555';
 
 -- ============================================================
 -- Borrado en cascada
 -- ============================================================
 
-delete from public."Events" where id in (900001, 900002);
+delete from public."Events" where id in (900001, 900002, 900003);
 
 select pg_temp.check('borrar un evento se lleva sus inscripciones',
-    (select count(*) from public.event_registrations where event_id in (900001, 900002)) = 0);
+    (select count(*) from public.event_registrations where event_id in (900001, 900002, 900003)) = 0);
