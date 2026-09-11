@@ -159,14 +159,42 @@ select pg_temp.check('FR-14 un miembro no edita el perfil de otra persona',
 -- 4. Nunca sin administradores (FR-10)
 -- ============================================================
 
+-- La base local puede tener otras cuentas admin activas (seed, bootstrap), y el
+-- trigger las cuenta a todas. Para probar "el ultimo admin", `actor` queda como
+-- el unico durante la sentencia. Todo pasa en una sola sentencia: si algo falla,
+-- se deshace entero y ninguna cuenta real queda desactivada.
+create or replace function pg_temp.denied_as_sole_admin(actor uuid, stmt text) returns boolean
+language plpgsql as $$
+declare
+    others uuid[];
+    result boolean;
+begin
+    select coalesce(array_agg(id), '{}') into others
+      from public.profiles
+     where role = 'admin' and state = 'active' and id <> actor;
+    update public.profiles set state = 'inactive' where id = any(others);
+    result := pg_temp.denied(actor, stmt);
+    update public.profiles set state = 'active' where id = any(others);
+    return result;
+end $$;
+
 select pg_temp.check('FR-10 no se puede desactivar al ultimo admin',
-    pg_temp.denied('11111111-1111-1111-1111-111111111111',
+    pg_temp.denied_as_sole_admin('11111111-1111-1111-1111-111111111111',
         $q$update public.profiles set state = 'inactive' where id = '11111111-1111-1111-1111-111111111111'$q$));
 
 update public.profiles set role = 'admin' where id = '44444444-4444-4444-4444-444444444444';
 update public.profiles set state = 'inactive' where id = '44444444-4444-4444-4444-444444444444';
 select pg_temp.check('con otro admin activo si se permite desactivar',
     (select state from public.profiles where id = '44444444-4444-4444-4444-444444444444') = 'inactive');
+
+-- El trigger cuenta todas las filas aunque quien escribe ya no vea las ajenas:
+-- al desactivarse, un admin deja de ser admin dentro del mismo trigger.
+update public.profiles set state = 'active' where id = '44444444-4444-4444-4444-444444444444';
+select pg_temp.run_as('11111111-1111-1111-1111-111111111111',
+    $q$update public.profiles set state = 'inactive' where id = '11111111-1111-1111-1111-111111111111'$q$);
+select pg_temp.check('ADM-5 con otro admin activo, un admin puede desactivarse a si mismo',
+    (select state from public.profiles where id = '11111111-1111-1111-1111-111111111111') = 'inactive');
+update public.profiles set state = 'active' where id = '11111111-1111-1111-1111-111111111111';
 update public.profiles set state = 'active', role = 'member' where id = '44444444-4444-4444-4444-444444444444';
 
 -- ============================================================

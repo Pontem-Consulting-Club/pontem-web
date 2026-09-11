@@ -140,6 +140,50 @@ select pg_temp.check('un evento inexistente devuelve su codigo',
 delete from public.rate_limit_hits where actor like '%prueba%' or actor = 'ip-de-prueba';
 
 -- ============================================================
+-- Cupo visto por un miembro (FR-20)
+-- ============================================================
+
+-- RLS le muestra a un miembro solo sus propias inscripciones. El trigger de cupo
+-- tiene que contar las de todos igual, o un miembro entra a un evento lleno.
+delete from auth.users where id = '55555555-5555-5555-5555-555555555555';
+insert into auth.users (id, email, aud, role)
+values ('55555555-5555-5555-5555-555555555555', 'cupo-miembro@example.org', 'authenticated', 'authenticated');
+
+-- Mensaje de error de la sentencia corrida como `actor`, o null si paso.
+create or replace function pg_temp.error_as(actor uuid, stmt text) returns text
+language plpgsql as $$
+begin
+    execute 'set local role authenticated';
+    execute format('set local request.jwt.claims = %L',
+                   json_build_object('sub', actor, 'role', 'authenticated')::text);
+    begin
+        execute stmt;
+    exception when others then
+        reset role;
+        return sqlerrm;
+    end;
+    reset role;
+    return null;
+end $$;
+
+-- 900001 sigue lleno: cupo 2, con dos inscripciones vigentes de invitados.
+select pg_temp.check('FR-20 un miembro tampoco entra a un evento lleno',
+    coalesce(pg_temp.error_as('55555555-5555-5555-5555-555555555555', $q$
+        insert into public.event_registrations (event_id, profile_id)
+        values (900001, '55555555-5555-5555-5555-555555555555')
+    $q$), '') like '%cupos%');
+
+-- Control: el mismo miembro si puede inscribirse donde no hay cupo, asi que el
+-- rechazo de arriba vino del cupo y no de RLS.
+select pg_temp.check('un miembro se inscribe en un evento sin cupo declarado',
+    pg_temp.error_as('55555555-5555-5555-5555-555555555555', $q$
+        insert into public.event_registrations (event_id, profile_id)
+        values (900002, '55555555-5555-5555-5555-555555555555')
+    $q$) is null);
+
+delete from auth.users where id = '55555555-5555-5555-5555-555555555555';
+
+-- ============================================================
 -- Borrado en cascada
 -- ============================================================
 
