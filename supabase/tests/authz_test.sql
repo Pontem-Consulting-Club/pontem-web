@@ -311,3 +311,59 @@ select pg_temp.check('un anonimo no puede leer la lista de un evento',
     pg_temp.denied(null, $q$select * from public.event_registration_roster(900101)$q$));
 
 delete from public."Events" where id = 900101;
+
+-- ============================================================
+-- 9. Casos de estudio: solo editores y admins escriben (FR-09)
+-- ============================================================
+
+-- true si `actor` pudo ejecutar la sentencia. Lo escrito se deshace en el acto
+-- (subtransaccion), asi la prueba no deja filas ni objetos en storage.
+create or replace function pg_temp.allowed_then_undone(actor uuid, stmt text) returns boolean
+language plpgsql as $$
+begin
+    perform pg_temp.impersonate(actor);
+    begin
+        execute stmt;
+        raise exception 'deshacer' using errcode = 'ZZ001';
+    exception
+        when sqlstate 'ZZ001' then
+            reset role;
+            return true;
+        when others then
+            reset role;
+            return false;
+    end;
+end $$;
+
+select pg_temp.check('FR-09 un editor crea casos de estudio',
+    pg_temp.allowed_then_undone('22222222-2222-2222-2222-222222222222',
+        $q$insert into public."CaseStudies" (title, category) values ('prueba authz', 'FINANZAS')$q$));
+
+select pg_temp.check('FR-09 un miembro no crea casos de estudio',
+    not pg_temp.allowed_then_undone('44444444-4444-4444-4444-444444444444',
+        $q$insert into public."CaseStudies" (title, category) values ('prueba authz', 'FINANZAS')$q$));
+
+select pg_temp.check('FR-09 un anonimo no crea casos de estudio',
+    not pg_temp.allowed_then_undone(null,
+        $q$insert into public."CaseStudies" (title, category) values ('prueba authz', 'FINANZAS')$q$));
+
+select pg_temp.check('FR-09 un miembro no edita casos de estudio',
+    pg_temp.count_as('44444444-4444-4444-4444-444444444444',
+        $q$with changed as (update public."CaseStudies" set title = title returning 1) select count(*) from changed$q$) = 0);
+
+select pg_temp.check('FR-09 un editor agrega recursos a un caso',
+    pg_temp.allowed_then_undone('22222222-2222-2222-2222-222222222222',
+        $q$insert into public."CaseStudyResources" (case_study_id, kind, title, link)
+           select id, 'APUNTE', 'prueba authz', 'https://example.org' from public."CaseStudies" order by id limit 1$q$));
+
+select pg_temp.check('FR-09 un miembro no borra recursos de casos',
+    pg_temp.count_as('44444444-4444-4444-4444-444444444444',
+        $q$with gone as (delete from public."CaseStudyResources" returning 1) select count(*) from gone$q$) = 0);
+
+select pg_temp.check('FR-09 un editor sube al bucket documents',
+    pg_temp.allowed_then_undone('22222222-2222-2222-2222-222222222222',
+        $q$insert into storage.objects (bucket_id, name) values ('documents', 'prueba-authz/editor.pdf')$q$));
+
+select pg_temp.check('FR-09 un miembro no sube al bucket documents',
+    not pg_temp.allowed_then_undone('44444444-4444-4444-4444-444444444444',
+        $q$insert into storage.objects (bucket_id, name) values ('documents', 'prueba-authz/miembro.pdf')$q$));
