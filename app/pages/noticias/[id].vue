@@ -65,7 +65,7 @@ const editNews = computed<NewsRecord | null>(() => {
       type: null,
       image_url: null,
       author: null,
-      published_date: new Date().toISOString().slice(0, 10),
+      published_date: new Date().toISOString(),
       content: null,
       link: null
     }

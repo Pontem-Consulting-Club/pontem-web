@@ -20,7 +20,7 @@ const startCreate = () => {
     title: '',
     subtitle: null,
     description: null,
-    date: new Date().toISOString().slice(0, 10),
+    date: setClubDay(todayInClub()),
     image_url: null,
     location: null,
     link: null
