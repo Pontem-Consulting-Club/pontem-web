@@ -1,13 +1,13 @@
 import { serverSupabaseClient } from '#supabase/server'
 import type { Database, Tables } from '~/types/database.types'
-import { requireUser } from '~~/server/utils/requireUser'
+import { requireCan } from '~~/server/utils/requireCan'
 
 type HeroSlideRow = Tables<'HeroSlides'>
 
 type HeroSlidePayload = Pick<HeroSlideRow, 'title' | 'subtitle' | 'button_text' | 'image_url' | 'link' | 'position'>
 
 export default defineEventHandler(async (event) => {
-  await requireUser(event)
+  await requireCan(event, 'content.edit')
 
   const normalizeValue = (value?: string | null) => {
     if (value === undefined || value === null) return null

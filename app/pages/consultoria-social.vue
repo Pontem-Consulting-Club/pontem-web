@@ -35,7 +35,7 @@
                 2026 — S1
               </span>
             </div>
-            <div v-if="isAuthenticated" class="flex gap-2">
+            <div v-if="isEditor" class="flex gap-2">
               <UButton icon="i-lucide-plus" variant="soft" color="primary" size="sm" :disabled="isCreating" @click="startCreate">
                 Agregar
               </UButton>
@@ -95,7 +95,7 @@ const metrics = [
   { value: '60+', label: 'Estudiantes participantes' },
 ]
 
-const { isAuthenticated } = useAuth()
+const { isEditor } = useProfile()
 const isCreating = ref(false)
 const draftProject = ref<ProjectRecord | null>(null)
 

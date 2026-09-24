@@ -12,14 +12,14 @@
                 <div class="flex flex-col flex-1 gap-3">
                     <UInput v-model="form.title" placeholder="Título" variant="none"
                         :ui="{ base: 'text-xl text-primary font-semibold placeholder:text-primary/50' }" />
-                    <UInput v-model="form.subtitle" placeholder="Subtítulo" variant="none"
+                    <UInput v-model.nullable="form.subtitle" placeholder="Subtítulo" variant="none"
                         :ui="{ base: [baseUIClasses, 'font-semibold'] }" />
-                    <UTextarea v-model="form.description" :maxrows="0" placeholder="Descripción" variant="none" autoresize
+                    <UTextarea v-model.nullable="form.description" :maxrows="0" placeholder="Descripción" variant="none" autoresize
                         :ui="{ base: [baseUIClasses, 'text-justify'] }" />
                     <div class="flex gap-2 mt-1">
-                        <UInput v-model="form.link_text" placeholder="Texto del enlace" variant="none"
+                        <UInput v-model.nullable="form.link_text" placeholder="Texto del enlace" variant="none"
                             :ui="{ base: baseUIClasses }" />
-                        <UInput v-model="form.link" type="url" placeholder="Enlace" variant="none"
+                        <UInput v-model.nullable="form.link" type="url" placeholder="Enlace" variant="none"
                             :ui="{ base: baseUIClasses }" />
                     </div>
                 </div>

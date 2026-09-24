@@ -30,6 +30,10 @@
         <UButton type="submit" block size="lg" :loading="isLoading" :disabled="!isHydrated">
           Entrar
         </UButton>
+
+        <UButton to="/recuperar-clave" variant="ghost" block size="sm">
+          Olvidé mi contraseña
+        </UButton>
       </form>
     </UCard>
   </UContainer>
@@ -60,10 +64,18 @@ onMounted(() => {
   isHydrated.value = true
 })
 
-// Redirect if already authenticated
+// VIS-2: al entrar, seguir a donde la persona iba en vez de dejarla en la portada.
+const route = useRoute()
+const destination = computed(() => {
+  const target = route.query.redirect
+  const path = Array.isArray(target) ? target[0] : target
+  // Solo rutas internas: un redirect a otro dominio seria un open redirect.
+  return path && path.startsWith('/') && !path.startsWith('//') ? path : '/'
+})
+
 onMounted(() => {
   if (isAuthenticated.value) {
-    router.push('/')
+    router.push(destination.value)
   }
 })
 
@@ -81,7 +93,7 @@ const handleSubmit = async () => {
     const result = await login(email.value, password.value)
 
     if (result.success) {
-      router.push('/')
+      router.push(destination.value)
     } else {
       error.value = result.error || 'Error al iniciar sesión'
     }

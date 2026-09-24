@@ -4,7 +4,7 @@
             <UButton to="/noticias" variant="soft" size="md" icon="i-lucide-arrow-left">
                 Volver a noticias
             </UButton>
-            <UButton v-if="isAuthenticated" icon="i-lucide-pencil" size="md" color="primary" variant="soft"
+            <UButton v-if="canEdit" icon="i-lucide-pencil" size="md" color="primary" variant="soft"
                 :to="`/noticias/${idParam}?edit=1`">
                 Editar
             </UButton>
@@ -40,7 +40,7 @@ import type { NewsRecord } from '~/types/content'
 
 const props = defineProps<{
     newsItem: NewsRecord
-    isAuthenticated: boolean
+    canEdit: boolean
     idParam: string
 }>()
 

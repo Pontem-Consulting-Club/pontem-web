@@ -1,9 +1,9 @@
 import { serverSupabaseClient } from '#supabase/server'
 import type { Database } from '~/types/database.types'
-import { requireUser } from '~~/server/utils/requireUser'
+import { requireCan } from '~~/server/utils/requireCan'
 
 export default defineEventHandler(async (event) => {
-  await requireUser(event)
+  await requireCan(event, 'content.edit')
 
   const body = await readBody<{ ids?: unknown }>(event)
   const ids = Array.isArray(body?.ids) ? body.ids.map(Number) : []

@@ -9,7 +9,7 @@ interface Props {
 const props = defineProps<Props>()
 const emit = defineEmits<{ (e: 'deleted'): void }>()
 
-const { isAuthenticated } = useAuth()
+const { isEditor } = useProfile()
 const supabase = useSupabaseClient()
 
 const kindStyles: Record<string, { wrapper: string, text: string }> = {
@@ -79,7 +79,7 @@ const handleDelete = async (resource: CaseStudyResourceRecord) => {
             {{ resource.title }}
           </span>
         </div>
-        <UButton v-if="isAuthenticated" icon="i-lucide-trash-2" size="xs" color="error" variant="ghost"
+        <UButton v-if="isEditor" icon="i-lucide-trash-2" size="xs" color="error" variant="ghost"
           :loading="deletingId === resource.id" aria-label="Eliminar recurso"
           @click.prevent.stop="handleDelete(resource)" />
       </component>

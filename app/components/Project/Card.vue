@@ -3,7 +3,7 @@
     :is-deleting="isDeleting" :form-error="formError" @submit="saveEdit" @cancel="cancelEdit" @delete="handleDelete" />
 
   <UCard v-else variant="soft" class="rounded-xl bg-white relative flex flex-col overflow-hidden p-0">
-    <UButton v-if="isAuthenticated" icon="i-lucide-pencil" size="xs" color="primary" variant="ghost"
+    <UButton v-if="isEditor" icon="i-lucide-pencil" size="xs" color="primary" variant="ghost"
       class="absolute top-3 right-3 z-10" @click="startEdit" />
 
     <NuxtImg
@@ -46,7 +46,7 @@ const emit = defineEmits<{
   (e: 'updated' | 'created' | 'cancel-create'): void
 }>()
 
-const { isAuthenticated } = useAuth()
+const { isEditor } = useProfile()
 
 const isEditing = ref(_props.isNew)
 const isSaving = ref(false)
@@ -101,7 +101,7 @@ const buildFormData = (payload: ReturnType<typeof buildPayload>, file?: File | n
 
 const startEdit = () => {
   if (_props.isNew) return
-  if (!isAuthenticated.value) return
+  if (!isEditor.value) return
   form.value = { ...project.value }
   formError.value = ''
   isEditing.value = true

@@ -6,16 +6,20 @@ useHead({
 })
 
 const router = useRouter()
-const { isAuthenticated } = useAuth()
+const { isEditor, ready: profileReady } = useProfile()
 
 const { form, formError, isSaving, emptyCaseStudy, create } = useCaseStudyForm()
 
 form.value = emptyCaseStudy()
 
-// La proteccion real vive en el server (requireUser); esto solo evita mostrar el formulario.
+// La proteccion real vive en el servidor (requireCan 'content.edit') y en RLS; esto
+// solo evita mostrar el formulario a quien no puede editar contenido.
 // `navigateTo` (a diferencia de router.replace) tambien corta el render en SSR.
+// Se espera el perfil antes de decidir: en el servidor, sin esperarlo, el rol
+// todavia no se conoce y se sacaria del modo edicion incluso a quien edita.
+await profileReady
 watchEffect(async () => {
-  if (!isAuthenticated.value) {
+  if (!isEditor.value) {
     await navigateTo('/material-estudio', { replace: true })
   }
 })
@@ -33,7 +37,7 @@ const handleCancel = () => {
 </script>
 
 <template>
-  <UContainer v-if="isAuthenticated" class="py-16">
+  <UContainer v-if="isEditor" class="py-16">
     <div class="max-w-3xl mx-auto mb-6">
       <UButton to="/material-estudio" variant="soft" icon="i-lucide-arrow-left" size="md">
         Volver a Material de Estudio

@@ -17,8 +17,11 @@ const emit = defineEmits<{
   (e: 'updated' | 'created' | 'cancel-create'): void
 }>()
 
-const { isAuthenticated } = useAuth()
 const { formatDate } = useDateFormatting()
+const { can, isEditor } = useProfile()
+
+// EDI-2: la lista de inscritos es para quien organiza, no para cualquiera.
+const canReadRegistrations = computed(() => can('registrations.read'))
 
 const isEditing = ref(_props.isNew)
 const isSaving = ref(false)
@@ -63,14 +66,18 @@ const buildPayload = () => ({
   description: normalizeValue(form.value.description as string | null),
   image_url: normalizeValue(form.value.image_url as string | null),
   location: normalizeValue(form.value.location as string | null),
-  link: normalizeValue(form.value.link as string | null)
+  link: normalizeValue(form.value.link as string | null),
+  registration_mode: form.value.registration_mode ?? 'none',
+  capacity: form.value.capacity ?? null,
+  registration_open: form.value.registration_open ?? true
 })
 
 const buildFormData = (payload: ReturnType<typeof buildPayload>, file?: File | null) => {
   const formData = new FormData()
 
   Object.entries(payload).forEach(([key, value]) => {
-    formData.append(key, value ?? '')
+    // El booleano y el cupo viajan como texto: el servidor los reinterpreta.
+    formData.append(key, value === null || value === undefined ? '' : String(value))
   })
 
   if (file) {
@@ -82,7 +89,7 @@ const buildFormData = (payload: ReturnType<typeof buildPayload>, file?: File | n
 
 const startEdit = () => {
   if (_props.isNew) return
-  if (!isAuthenticated.value) return
+  if (!isEditor.value) return
   if (_props.variant === 'compact') return
   form.value = { ...event.value }
   formError.value = ''
@@ -168,7 +175,7 @@ const handleDelete = async () => {
 
   <UCard v-else-if="variant === 'full'"
     class="rounded-3xl bg-white/90 shadow-sm hover:shadow-lg transition-shadow relative">
-    <UButton v-if="isAuthenticated" icon="i-lucide-pencil" size="xs" color="primary" variant="ghost"
+    <UButton v-if="isEditor" icon="i-lucide-pencil" size="xs" color="primary" variant="ghost"
       class="absolute top-3 right-3 z-10" @click="startEdit" />
 
     <div class="flex flex-col md:flex-row gap-6">
@@ -203,6 +210,13 @@ const handleDelete = async () => {
             Ver más
           </a>
         </div>
+
+        <EventRegistration v-if="!_props.isNew" :event-id="event.id"
+          :mode="event.registration_mode ?? 'none'" :registration-open="event.registration_open ?? true"
+          :capacity="event.capacity ?? null" :date="event.date" />
+
+        <EventRegistrationList v-if="!_props.isNew && canReadRegistrations
+          && (event.registration_mode ?? 'none') !== 'none'" :event-id="event.id" />
       </div>
       <div class="md:w-48 shrink-0 relative">
         <NuxtImg :src="imageUrl ?? '/LogoColorSolo.png'" alt="Imagen del evento"
@@ -212,7 +226,7 @@ const handleDelete = async () => {
   </UCard>
 
   <UCard v-else-if="variant === 'past'" class="rounded-2xl opacity-75 bg-white/90 shadow-sm relative">
-    <UButton v-if="isAuthenticated" icon="i-lucide-pencil" size="xs" color="primary" variant="ghost"
+    <UButton v-if="isEditor" icon="i-lucide-pencil" size="xs" color="primary" variant="ghost"
       class="absolute top-3 right-3 z-10" @click="startEdit" />
     <div class="flex flex-col md:flex-row gap-4 items-start md:items-center">
       <span class="text-sm md:w-32">

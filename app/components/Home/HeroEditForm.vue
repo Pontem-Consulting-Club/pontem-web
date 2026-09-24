@@ -10,13 +10,13 @@
                 <UForm :state="form" class="max-w-2xl text-white flex flex-col gap-3" @submit.prevent="handleSubmit">
                     <UInput v-model="form.title" placeholder="Título" variant="none" :class="fieldClasses"
                         :ui="{ base: [titleUIClasses] }" />
-                    <UTextarea v-model="form.subtitle" :rows="2" placeholder="Subtítulo" variant="none" autoresize
+                    <UTextarea v-model.nullable="form.subtitle" :rows="2" placeholder="Subtítulo" variant="none" autoresize
                         :class="fieldClasses" :ui="{ base: [baseUIClasses] }" />
 
                     <div class="flex flex-wrap gap-3">
-                        <UInput v-model="form.button_text" placeholder="Texto del botón" variant="none"
+                        <UInput v-model.nullable="form.button_text" placeholder="Texto del botón" variant="none"
                             :class="fieldClasses" :ui="{ base: [baseUIClasses] }" />
-                        <UInput v-model="form.link" placeholder="Enlace (/eventos o https://...)" variant="none"
+                        <UInput v-model.nullable="form.link" placeholder="Enlace (/eventos o https://...)" variant="none"
                             :class="[fieldClasses, 'grow']" :ui="{ base: [baseUIClasses] }" />
                     </div>
 

@@ -5,7 +5,7 @@
       <div class="flex flex-row items-center justify-between gap-4">
       <!-- Filters -->
       <NewsFilterPills v-model="selectedTypes" :options="types" label="Selecciona las noticias que deseas ver:" />
-      <UButton v-if="isAuthenticated" variant="soft" icon="i-lucide-plus" color="primary" size="md" @click="startCreate">
+      <UButton v-if="isEditor" variant="soft" icon="i-lucide-plus" color="primary" size="md" @click="startCreate">
         Agregar
       </UButton>
       </div>
@@ -39,7 +39,7 @@ const { data: news, status } = await useFetch<NewsRecord[]>('/api/news', {
   default: () => []
 })
 
-const { isAuthenticated } = useAuth()
+const { isEditor } = useProfile()
 const router = useRouter()
 
 const startCreate = () => {

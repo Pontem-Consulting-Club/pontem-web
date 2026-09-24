@@ -143,41 +143,41 @@ onBeforeUnmount(revokeLogoPreview)
         </UFormField>
 
         <UFormField label="Empresa / Consultora">
-          <UInput v-model="form.company" placeholder="Ej. McKinsey, BCG, Bain..." size="lg" class="w-full"
+          <UInput v-model.nullable="form.company" placeholder="Ej. McKinsey, BCG, Bain..." size="lg" class="w-full"
             :ui="inputUi" />
         </UFormField>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <UFormField label="Dificultad">
-          <USelectMenu v-model="form.difficulty" :items="CASE_DIFFICULTY_OPTIONS" value-key="value" label-key="label"
+          <USelectMenu v-model.nullable="form.difficulty" :items="CASE_DIFFICULTY_OPTIONS" value-key="value" label-key="label"
             placeholder="Selecciona dificultad" size="lg" class="w-full" />
         </UFormField>
 
         <UFormField label="Tiempo estimado (minutos)">
-          <UInput v-model="form.duration_minutes" type="number" min="0" placeholder="Ej. 45" size="lg" class="w-full"
+          <UInput v-model.nullable="form.duration_minutes" type="number" min="0" placeholder="Ej. 45" size="lg" class="w-full"
             :ui="inputUi" />
         </UFormField>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <UFormField label="Tipo de caso">
-          <UInput v-model="form.case_type" placeholder="Ej. Case Interview, Frameworks" size="lg" class="w-full"
+          <UInput v-model.nullable="form.case_type" placeholder="Ej. Case Interview, Frameworks" size="lg" class="w-full"
             :ui="inputUi" />
         </UFormField>
 
         <UFormField label="Fecha de publicación">
-          <UInput v-model="form.published_date" type="date" size="lg" class="w-full" :ui="inputUi" />
+          <UInput v-model.nullable="form.published_date" type="date" size="lg" class="w-full" :ui="inputUi" />
         </UFormField>
       </div>
 
       <UFormField label="Planteamiento del problema">
-        <UTextarea v-model="form.summary" :rows="4" autoresize
+        <UTextarea v-model.nullable="form.summary" :rows="4" autoresize
           placeholder="Describe el contexto y el desafío del caso" class="w-full" :ui="inputUi" />
       </UFormField>
 
       <UFormField label="Encargo al equipo consultor">
-        <UTextarea v-model="form.problem_statement" :rows="3" autoresize
+        <UTextarea v-model.nullable="form.problem_statement" :rows="3" autoresize
           placeholder="Qué se le pide resolver al equipo" class="w-full" :ui="inputUi" />
       </UFormField>
 

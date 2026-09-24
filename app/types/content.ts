@@ -1,6 +1,7 @@
 import type { Database } from './database.types'
 
 type TeamCoordination = Database['public']['Enums']['ClubCoordination']
+type RegistrationMode = Database['public']['Enums']['registration_mode']
 
 export interface EventRecord {
     id: number
@@ -11,6 +12,9 @@ export interface EventRecord {
     image_url?: string | null
     location?: string | null
     link?: string | null
+    registration_mode?: RegistrationMode
+    capacity?: number | null
+    registration_open?: boolean
 }
 
 export interface ProjectRecord {

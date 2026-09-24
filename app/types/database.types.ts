@@ -129,34 +129,98 @@ export type Database = {
           },
         ]
       }
+      event_registrations: {
+        Row: {
+          attended: boolean
+          event_id: number
+          guest_email: string | null
+          guest_name: string | null
+          id: number
+          profile_id: string | null
+          registered_at: string
+          status: Database["public"]["Enums"]["registration_status"]
+        }
+        Insert: {
+          attended?: boolean
+          event_id: number
+          guest_email?: string | null
+          guest_name?: string | null
+          id?: number
+          profile_id?: string | null
+          registered_at?: string
+          status?: Database["public"]["Enums"]["registration_status"]
+        }
+        Update: {
+          attended?: boolean
+          event_id?: number
+          guest_email?: string | null
+          guest_name?: string | null
+          id?: number
+          profile_id?: string | null
+          registered_at?: string
+          status?: Database["public"]["Enums"]["registration_status"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_registrations_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "Events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_registrations_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_registrations_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "public_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       Events: {
         Row: {
+          capacity: number | null
           date: string | null
           description: string | null
           id: number
           image_url: string | null
           link: string | null
           location: string | null
+          registration_mode: Database["public"]["Enums"]["registration_mode"]
+          registration_open: boolean
           subtitle: string
           title: string
         }
         Insert: {
+          capacity?: number | null
           date?: string | null
           description?: string | null
           id?: number
           image_url?: string | null
           link?: string | null
           location?: string | null
+          registration_mode?: Database["public"]["Enums"]["registration_mode"]
+          registration_open?: boolean
           subtitle: string
           title: string
         }
         Update: {
+          capacity?: number | null
           date?: string | null
           description?: string | null
           id?: number
           image_url?: string | null
           link?: string | null
           location?: string | null
+          registration_mode?: Database["public"]["Enums"]["registration_mode"]
+          registration_open?: boolean
           subtitle?: string
           title?: string
         }
@@ -228,6 +292,65 @@ export type Database = {
         }
         Relationships: []
       }
+      profiles: {
+        Row: {
+          avatar_path: string | null
+          bio: string | null
+          coach_enabled: boolean
+          coordination: Database["public"]["Enums"]["ClubCoordination"] | null
+          created_at: string
+          display_name: string
+          generation: number | null
+          handle: string | null
+          id: string
+          is_public: boolean
+          role: Database["public"]["Enums"]["user_role"]
+          state: Database["public"]["Enums"]["profile_state"]
+          team_id: number | null
+          updated_at: string
+        }
+        Insert: {
+          avatar_path?: string | null
+          bio?: string | null
+          coach_enabled?: boolean
+          coordination?: Database["public"]["Enums"]["ClubCoordination"] | null
+          created_at?: string
+          display_name?: string
+          generation?: number | null
+          handle?: string | null
+          id: string
+          is_public?: boolean
+          role?: Database["public"]["Enums"]["user_role"]
+          state?: Database["public"]["Enums"]["profile_state"]
+          team_id?: number | null
+          updated_at?: string
+        }
+        Update: {
+          avatar_path?: string | null
+          bio?: string | null
+          coach_enabled?: boolean
+          coordination?: Database["public"]["Enums"]["ClubCoordination"] | null
+          created_at?: string
+          display_name?: string
+          generation?: number | null
+          handle?: string | null
+          id?: string
+          is_public?: boolean
+          role?: Database["public"]["Enums"]["user_role"]
+          state?: Database["public"]["Enums"]["profile_state"]
+          team_id?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profiles_team_id_fkey"
+            columns: ["team_id"]
+            isOneToOne: false
+            referencedRelation: "Team"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       Projects: {
         Row: {
           description: string | null
@@ -261,6 +384,27 @@ export type Database = {
           semester?: string | null
           subtitle?: string | null
           title?: string | null
+        }
+        Relationships: []
+      }
+      rate_limit_hits: {
+        Row: {
+          actor: string
+          bucket: string
+          hits: number
+          window_start: string
+        }
+        Insert: {
+          actor: string
+          bucket: string
+          hits?: number
+          window_start: string
+        }
+        Update: {
+          actor?: string
+          bucket?: string
+          hits?: number
+          window_start?: string
         }
         Relationships: []
       }
@@ -303,30 +447,129 @@ export type Database = {
         }
         Relationships: []
       }
-      Users: {
+    }
+    Views: {
+      my_registration_stats: {
         Row: {
-          id: number
-          password: string | null
-          username: string
+          attended: number | null
+          cancelled: number | null
+          profile_id: string | null
+          registered: number | null
+          upcoming: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_registrations_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_registrations_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "public_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      public_profiles: {
+        Row: {
+          avatar_path: string | null
+          bio: string | null
+          coordination: Database["public"]["Enums"]["ClubCoordination"] | null
+          display_name: string | null
+          generation: number | null
+          handle: string | null
+          id: string | null
         }
         Insert: {
-          id?: number
-          password?: string | null
-          username: string
+          avatar_path?: string | null
+          bio?: string | null
+          coordination?: Database["public"]["Enums"]["ClubCoordination"] | null
+          display_name?: string | null
+          generation?: number | null
+          handle?: string | null
+          id?: string | null
         }
         Update: {
-          id?: number
-          password?: string | null
-          username?: string
+          avatar_path?: string | null
+          bio?: string | null
+          coordination?: Database["public"]["Enums"]["ClubCoordination"] | null
+          display_name?: string | null
+          generation?: number | null
+          handle?: string | null
+          id?: string | null
         }
         Relationships: []
       }
     }
-    Views: {
-      [_ in never]: never
-    }
     Functions: {
-      [_ in never]: never
+      admin_user_directory: {
+        Args: never
+        Returns: {
+          avatar_path: string
+          bio: string
+          coach_enabled: boolean
+          coordination: Database["public"]["Enums"]["ClubCoordination"]
+          created_at: string
+          display_name: string
+          email: string
+          generation: number
+          handle: string
+          id: string
+          is_public: boolean
+          last_sign_in_at: string
+          role: Database["public"]["Enums"]["user_role"]
+          state: Database["public"]["Enums"]["profile_state"]
+          team_id: number
+          updated_at: string
+        }[]
+      }
+      auth_role: {
+        Args: never
+        Returns: Database["public"]["Enums"]["user_role"]
+      }
+      bootstrap_admins: { Args: never; Returns: string[] }
+      can_edit_content: { Args: never; Returns: boolean }
+      claim_handle: {
+        Args: { for_profile: string; source: string }
+        Returns: string
+      }
+      event_registration_roster: {
+        Args: { p_event_id: number }
+        Returns: {
+          attended: boolean
+          detail: string
+          id: number
+          is_guest: boolean
+          name: string
+          registered_at: string
+          status: Database["public"]["Enums"]["registration_status"]
+        }[]
+      }
+      is_admin: { Args: never; Returns: boolean }
+      rate_limit_allows: {
+        Args: {
+          p_actor: string
+          p_bucket: string
+          p_limit: number
+          p_window: string
+        }
+        Returns: boolean
+      }
+      register_guest: {
+        Args: {
+          p_email: string
+          p_event_id: number
+          p_name: string
+          p_source?: string
+        }
+        Returns: string
+      }
+      slugify_handle: { Args: { source: string }; Returns: string }
+      unaccent_fallback: { Args: { source: string }; Returns: string }
     }
     Enums: {
       CaseCategory:
@@ -346,6 +589,10 @@ export type Database = {
         | "EXTERNAL_REL"
         | "IT"
         | "FINANCE"
+      profile_state: "invited" | "active" | "inactive"
+      registration_mode: "none" | "members_only" | "open"
+      registration_status: "registered" | "cancelled" | "waitlisted"
+      user_role: "admin" | "editor" | "member"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -495,6 +742,10 @@ export const Constants = {
         "IT",
         "FINANCE",
       ],
+      profile_state: ["invited", "active", "inactive"],
+      registration_mode: ["none", "members_only", "open"],
+      registration_status: ["registered", "cancelled", "waitlisted"],
+      user_role: ["admin", "editor", "member"],
     },
   },
 } as const

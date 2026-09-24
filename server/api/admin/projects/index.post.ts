@@ -1,13 +1,13 @@
 import { serverSupabaseClient } from '#supabase/server'
 import type { Database } from '~/types/database.types'
-import { requireUser } from '~~/server/utils/requireUser'
+import { requireCan } from '~~/server/utils/requireCan'
 
 type ProjectRow = Database['public']['Tables']['Projects']['Row']
 
 type ProjectPayload = Pick<ProjectRow, 'title' | 'subtitle' | 'description' | 'image_url' | 'link' | 'link_text'>
 
 export default defineEventHandler(async (event) => {
-    await requireUser(event)
+    await requireCan(event, 'content.edit')
 
     const normalizeValue = (value?: string | null) => {
         if (value === undefined || value === null) return null

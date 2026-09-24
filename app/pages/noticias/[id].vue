@@ -9,7 +9,7 @@
         :is-deleting="isDeleting" :form-error="formError" @submit="saveEdit" @cancel="handleCancel"
         @delete="handleDelete" />
 
-      <NewsDisplay v-else-if="newsItem" :news-item="newsItem" :is-authenticated="isAuthenticated" :id-param="idParam" />
+      <NewsDisplay v-else-if="newsItem" :news-item="newsItem" :can-edit="isEditor" :id-param="idParam" />
       <NotFoundState v-else icon="i-lucide-file-x" title="Noticia no encontrada" button-text="Volver a noticias"
         button-link="/noticias" />
     </div>
@@ -26,7 +26,7 @@ const isNew = idParam === 'new'
 const numericId = Number(idParam)
 const isValidId = !Number.isNaN(numericId)
 
-const { isAuthenticated } = useAuth()
+const { isEditor, ready: profileReady } = useProfile()
 
 const isEditMode = computed(() => {
   const editQuery = route.query.edit
@@ -81,9 +81,16 @@ const showNotFound = computed(() => {
   return !newsItem.value
 })
 
+// Una noticia que no existe responde 404 de verdad, no "no encontrada" con 200.
+// Un id invalido ya se redirige a la lista arriba.
+useNotFoundStatus({ found: () => !isValidId || !showNotFound.value, error })
+
+// Se espera el perfil antes de decidir: en el servidor, sin esperarlo, el rol
+// todavia no se conoce y se sacaria del modo edicion incluso a quien edita.
+await profileReady
 watchEffect(() => {
   if (!isEditMode.value) return
-  if (!isAuthenticated.value) {
+  if (!isEditor.value) {
     router.replace(isNew ? '/noticias' : `/noticias/${idParam}`)
   }
 })

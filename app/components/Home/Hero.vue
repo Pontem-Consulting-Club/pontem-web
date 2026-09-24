@@ -12,7 +12,7 @@
       @delete="handleDelete" />
 
     <!-- Admin controls -->
-    <div v-if="isAuthenticated && !isEditing" class="absolute top-4 right-4 z-30 flex gap-1">
+    <div v-if="isEditor && !isEditing" class="absolute top-4 right-4 z-30 flex gap-1">
       <UButton v-if="currentSlideRecord" icon="i-lucide-arrow-up" size="xs" color="neutral" variant="solid"
         aria-label="Mover slide antes" :disabled="currentSlide === 0" @click="moveSlide(-1)" />
       <UButton v-if="currentSlideRecord" icon="i-lucide-arrow-down" size="xs" color="neutral" variant="solid"
@@ -47,7 +47,7 @@ const { data: slides, refresh } = await useFetch<HeroSlideRecord[]>('/api/hero-s
   default: () => []
 })
 
-const { isAuthenticated } = useAuth()
+const { isEditor } = useProfile()
 
 const currentSlide = ref(0)
 const isCreating = ref(false)
@@ -143,7 +143,7 @@ const resolveApiError = (error: unknown, fallback: string) => {
 }
 
 const startEdit = () => {
-  if (!isAuthenticated.value || !currentSlideRecord.value) return
+  if (!isEditor.value || !currentSlideRecord.value) return
   form.value = { ...currentSlideRecord.value }
   formError.value = ''
   isCreating.value = false
@@ -151,7 +151,7 @@ const startEdit = () => {
 }
 
 const startCreate = () => {
-  if (!isAuthenticated.value) return
+  if (!isEditor.value) return
   form.value = {
     title: '',
     subtitle: null,

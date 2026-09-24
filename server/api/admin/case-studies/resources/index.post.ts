@@ -1,6 +1,6 @@
 import { serverSupabaseClient } from '#supabase/server'
 import type { Database, Tables } from '~/types/database.types'
-import { requireUser } from '~~/server/utils/requireUser'
+import { requireCan } from '~~/server/utils/requireCan'
 import { isValidCaseResourceKind } from '~~/server/utils/caseStudies'
 import { normalizeValue, parsePayload, uploadToBucket } from '~~/server/utils/uploads'
 
@@ -9,7 +9,7 @@ type CaseStudyResourceRow = Tables<'CaseStudyResources'>
 type CaseStudyResourcePayload = Omit<CaseStudyResourceRow, 'id' | 'created_at'>
 
 export default defineEventHandler(async (event) => {
-    await requireUser(event)
+    await requireCan(event, 'content.edit')
 
     const { body, files } = await parsePayload(event, ['document'])
 
@@ -21,7 +21,8 @@ export default defineEventHandler(async (event) => {
         })
     }
 
-    if (!normalizeValue(body.title)) {
+    const title = normalizeValue(body.title)
+    if (!title) {
         throw createError({
             statusCode: 400,
             statusMessage: 'Title is required'
@@ -62,7 +63,7 @@ export default defineEventHandler(async (event) => {
     const payload: CaseStudyResourcePayload = {
         case_study_id: caseStudyId,
         kind,
-        title: body.title.trim(),
+        title,
         link: normalizeValue(body.link),
         document_url: documentPath,
         position: (lastResource?.position ?? 0) + 1

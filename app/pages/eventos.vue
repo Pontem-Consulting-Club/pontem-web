@@ -9,7 +9,7 @@ const { data: events, status, refresh } = await useFetch<EventRecord[]>('/api/ev
   default: () => []
 })
 
-const { isAuthenticated } = useAuth()
+const { isEditor } = useProfile()
 const isCreating = ref(false)
 const draftEvent = ref<EventRecord | null>(null)
 
@@ -58,7 +58,7 @@ const pastEvents = computed(() => {
     <PageHeader title="Nuestros Eventos" background-image="/BTGDay.jpeg" />
 
     <UContainer class="py-16">
-      <div v-if="isAuthenticated" class="flex justify-end mb-6">
+      <div v-if="isEditor" class="flex justify-end mb-6">
         <UButton icon="i-lucide-plus" variant="soft" color="primary" size="md" :disabled="isCreating" @click="startCreate">
           Agregar
         </UButton>
