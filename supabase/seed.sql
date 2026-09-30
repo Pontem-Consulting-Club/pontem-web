@@ -24,9 +24,13 @@ end $$;
 -- truncate falla si se deja fuera una tabla que apunta a otra del grupo.
 truncate table public.event_registrations,
                public."TeamCoordination", public."Projects",
-               public."News", public."Events", public."HeroSlides",
-               public."CaseStudies", public."CaseStudyResources"
+               public."News", public."Events", public."HeroSlides"
   restart identity;
+
+-- La biblioteca de casos (public/casos/) la carga una migracion, no este seed:
+-- solo se borran los casos de prueba. Sus recursos caen por ON DELETE CASCADE.
+delete from public."CaseStudies"
+  where document_url is null or document_url not like '/casos/%';
 
 -- "Team" se limpia con delete y no con truncate: public.profiles.team_id lo
 -- referencia y truncate falla ante cualquier foreign key, tenga datos o no. El
@@ -301,10 +305,16 @@ insert into public."CaseStudies"
    'Hay que disenar como levantar la informacion que falta y proponer cambios al programa que suban la retencion con el mismo presupuesto.',
    null, null, null, '2026-06-11');
 
-insert into public."CaseStudyResources" (case_study_id, kind, title, link, position) values
-  (1, 'APUNTE',      'Frameworks de entrada a nuevos mercados (GTM)', 'https://example.org/apuntes/gtm', 1),
-  (1, 'DATASET',     'Proyecciones financieras LATAM 2026',           'https://example.org/datasets/latam-2026', 2),
-  (1, 'MASTERCLASS', 'Resolucion en vivo: expansion regional',        'https://example.org/masterclass/expansion', 3),
-  (2, 'APUNTE',      'Fundamentos de cadena de suministro',           'https://example.org/apuntes/supply-chain', 1),
-  (3, 'DATASET',     'Comparables de valorizacion fintech LATAM',     'https://example.org/datasets/fintech-latam', 1),
-  (4, 'APUNTE',      'Medicion de impacto en programas sociales',     'https://example.org/apuntes/impacto', 1);
+-- Por titulo y no por id: las migraciones ya cargan la biblioteca real de casos,
+-- asi que los de arriba no quedan con los ids 1 a 4.
+insert into public."CaseStudyResources" (case_study_id, kind, title, link, position)
+select c.id, r.kind::public."CaseResourceKind", r.title, r.link, r.position
+from (values
+  ('Estrategia de entrada a LatAm',           'APUNTE',      'Frameworks de entrada a nuevos mercados (GTM)', 'https://example.org/apuntes/gtm', 1),
+  ('Estrategia de entrada a LatAm',           'DATASET',     'Proyecciones financieras LATAM 2026',           'https://example.org/datasets/latam-2026', 2),
+  ('Estrategia de entrada a LatAm',           'MASTERCLASS', 'Resolucion en vivo: expansion regional',        'https://example.org/masterclass/expansion', 3),
+  ('Optimizacion de la cadena de suministro', 'APUNTE',      'Fundamentos de cadena de suministro',           'https://example.org/apuntes/supply-chain', 1),
+  ('Analisis de una fusion regional',         'DATASET',     'Comparables de valorizacion fintech LATAM',     'https://example.org/datasets/fintech-latam', 1),
+  ('Rediseno del programa de becas',          'APUNTE',      'Medicion de impacto en programas sociales',     'https://example.org/apuntes/impacto', 1)
+) as r (case_title, kind, title, link, position)
+join public."CaseStudies" c on c.title = r.case_title;
