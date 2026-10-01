@@ -1,71 +1,79 @@
 <template>
-    <UCard variant="soft" class="rounded-xl bg-white/75">
-        <div class="flex items-center mb-4">
-            <UButton variant="soft" icon="i-lucide-arrow-left" @click="emit('cancel')">
-                Volver
-            </UButton>
-        </div>
-        <UForm @submit.prevent="handleSubmit">
-            <!-- Mirrors the display card's flex flex-col md:flex-row layout -->
-            <div class="flex flex-col md:flex-row gap-4">
-                <!-- Left column: text fields matching display order and styles -->
-                <div class="flex flex-col flex-1 gap-3">
-                    <UInput v-model="form.title" placeholder="Título" variant="none"
-                        :ui="{ base: 'text-xl text-primary font-semibold placeholder:text-primary/50' }" />
-                    <UInput v-model.nullable="form.subtitle" placeholder="Subtítulo" variant="none"
-                        :ui="{ base: [baseUIClasses, 'font-semibold'] }" />
-                    <UTextarea v-model.nullable="form.description" :maxrows="0" placeholder="Descripción" variant="none" autoresize
-                        :ui="{ base: [baseUIClasses, 'text-justify'] }" />
-                    <div class="flex gap-2 mt-1">
-                        <UInput v-model.nullable="form.link_text" placeholder="Texto del enlace" variant="none"
-                            :ui="{ base: baseUIClasses }" />
-                        <UInput v-model.nullable="form.link" type="url" placeholder="Enlace" variant="none"
-                            :ui="{ base: baseUIClasses }" />
-                    </div>
-                </div>
+    <UCard variant="soft" class="rounded-xl bg-white">
+        <!-- Apilado como la tarjeta (imagen arriba, texto abajo): asi cabe en una
+             columna de la grilla de tres y en la lista de proyectos anteriores. -->
+        <form class="flex flex-col gap-4" @submit.prevent="handleSubmit">
+            <UFileUpload :model-value="pendingFile" accept="image/*" variant="area" size="md" :preview="false"
+                :interactive="false" :disabled="isSaving || !!isDeleting"
+                :ui="{ base: 'h-full', wrapper: 'h-full', files: 'hidden', label: 'hidden', description: 'hidden' }"
+                @update:model-value="setPendingFile">
+                <template #default="{ open }">
+                    <button type="button"
+                        class="relative flex h-44 w-full items-center justify-center overflow-hidden rounded-lg border-2 border-dashed transition"
+                        :class="imagePreviewUrl ? 'border-transparent text-white' : 'border-gray-200 bg-gray-50 text-gray-500 hover:bg-gray-100'"
+                        :style="uploadBackgroundStyle" @click="open()">
+                        <span v-if="imagePreviewUrl" class="absolute inset-0 bg-black/40" />
+                        <span class="relative z-10 flex flex-col items-center gap-2 text-sm font-medium">
+                            <UIcon name="i-lucide-upload" class="h-5 w-5" />
+                            <span>{{ imagePreviewUrl ? 'Cambiar imagen' : 'Subir imagen' }}</span>
+                        </span>
+                    </button>
+                </template>
+            </UFileUpload>
 
-                <!-- Right column: image upload mirrors the display image position -->
-                <div class="relative m-auto w-130 max-w-full">
-                    <UFileUpload :model-value="pendingFile" accept="image/*" variant="area" size="md" :preview="false"
-                        :interactive="false" :disabled="isSaving || !!isDeleting"
-                        :ui="{ base: 'h-full', wrapper: 'h-full', files: 'hidden', label: 'hidden', description: 'hidden' }"
-                        @update:model-value="setPendingFile">
-                        <template #default="{ open }">
-                            <button type="button"
-                                class="relative flex min-h-48 w-full min-w-48 items-center justify-center bg-gray-200 overflow-hidden rounded-xl text-white/80 transition hover:text-white"
-                                :style="uploadBackgroundStyle" @click="open()">
-                                <span v-if="uploadBackgroundStyle" class="absolute inset-0 bg-black/30" />
-                                <span class="relative z-10 flex flex-col items-center gap-2 text-sm font-medium">
-                                    <UIcon name="i-lucide-upload" class="h-5 w-5" />
-                                    <span>{{ imagePreviewUrl ? 'Cambiar imagen' : 'Subir imagen' }}</span>
-                                </span>
-                            </button>
-                        </template>
-                    </UFileUpload>
-                </div>
-            </div>
+            <UFormField label="Título" required>
+                <UInput v-model="form.title" placeholder="Ej. Fundación Raíces Urbanas" class="w-full" :ui="inputUi" />
+            </UFormField>
 
-            <UAlert v-if="displayError" color="error" icon="i-lucide-alert-circle" :description="displayError"
-                class="mt-4" />
+            <UFormField label="Subtítulo">
+                <UInput v-model.nullable="form.subtitle" placeholder="Ej. Estrategia de canal digital" class="w-full"
+                    :ui="inputUi" />
+            </UFormField>
 
-            <div class="flex justify-between mt-4">
-                <UButton v-if="!isNew" type="button" color="error" variant="soft" size="md" icon="i-lucide-trash-2"
+            <UFormField label="Descripción">
+                <UTextarea v-model.nullable="form.description" :rows="3" autoresize
+                    placeholder="Qué hizo el equipo y qué entregó" class="w-full" :ui="inputUi" />
+            </UFormField>
+
+            <UFormField label="Semestre">
+                <USelectMenu v-model="semesterModel" :items="semesters" :search-input="false"
+                    placeholder="Elige un semestre" class="w-full" />
+            </UFormField>
+
+            <UCheckbox v-model="isActiveModel" label="Proyecto activo"
+                description="Desmárcalo para moverlo a Proyectos anteriores." />
+
+            <UFormField label="Enlace">
+                <UInput v-model.nullable="form.link" type="url" placeholder="https://" class="w-full" :ui="inputUi" />
+            </UFormField>
+
+            <UFormField label="Texto del botón" description="Si lo dejas vacío dice «Ver más».">
+                <UInput v-model.nullable="form.link_text" placeholder="Ver más" class="w-full" :ui="inputUi" />
+            </UFormField>
+
+            <UAlert v-if="displayError" color="error" icon="i-lucide-alert-circle" :description="displayError" />
+
+            <div class="flex flex-wrap items-center gap-2 pt-4 border-t border-gray-100">
+                <UButton v-if="!isNew" type="button" color="error" variant="soft" icon="i-lucide-trash-2"
                     :loading="!!isDeleting" :disabled="isSaving || !!isDeleting" @click="emit('delete')">
                     Eliminar
                 </UButton>
-                <UButton type="submit" color="primary" size="md" variant="soft" :loading="isSaving"
-                    :disabled="!!isDeleting">
-                    Guardar
+                <UButton type="button" color="neutral" variant="soft" class="ml-auto" :disabled="isSaving"
+                    @click="emit('cancel')">
+                    Cancelar
+                </UButton>
+                <UButton type="submit" color="primary" :loading="isSaving" :disabled="!!isDeleting">
+                    {{ isNew ? 'Crear' : 'Guardar' }}
                 </UButton>
             </div>
-        </UForm>
+        </form>
     </UCard>
 </template>
 
 <script setup lang="ts">
 import type { ProjectRecord } from '~/types/content'
 
-const baseUIClasses = 'text-gray-600 placeholder:text-gray-400'
+const inputUi = { base: 'text-gray-900 placeholder:text-gray-400' }
 
 const form = defineModel<Partial<ProjectRecord>>('form', { required: true })
 
@@ -80,6 +88,22 @@ const emit = defineEmits<{
     (event: 'submit', file?: File | null): void
     (event: 'cancel' | 'delete'): void
 }>()
+
+// Se calcula una vez: si se recalculara con form.semester, la lista se
+// reordenaria mientras se elige.
+const semesters = semesterOptions(form.value.semester)
+
+// USelectMenu no acepta null; en la tabla "sin semestre" es null.
+const semesterModel = computed({
+    get: () => form.value.semester ?? undefined,
+    set: (value: string | undefined) => { form.value.semester = value ?? null }
+})
+
+// Un proyecto sin el dato cuenta como activo, igual que el default de la tabla.
+const isActiveModel = computed({
+    get: () => form.value.is_active !== false,
+    set: (value: boolean | 'indeterminate') => { form.value.is_active = value === true }
+})
 
 const pendingFile = ref<File | null>(null)
 const uploadPreviewUrl = ref<string | null>(null)

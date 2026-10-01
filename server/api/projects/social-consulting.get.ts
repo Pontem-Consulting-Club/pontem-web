@@ -22,6 +22,8 @@ export default defineEventHandler(async (event) => {
         .from('Projects')
         .select('*')
         .eq('is_active', false)
+        // "2026 — S1" ordena bien como texto; los sin semestre van al final.
+        .order('semester', { ascending: false, nullsFirst: false })
         .order('id', { ascending: false })
 
     if (pastError) {

@@ -3,7 +3,9 @@ import type { Database } from '~/types/database.types'
 import { requireCan } from '~~/server/utils/requireCan'
 
 type ProjectRow = Database['public']['Tables']['Projects']['Row']
-type ProjectPayload = Pick<ProjectRow, 'title' | 'subtitle' | 'description' | 'image_url' | 'link' | 'link_text'>
+type ProjectPayload = Pick<ProjectRow, 'title' | 'subtitle' | 'description' | 'image_url' | 'link' | 'link_text' | 'semester'> & {
+  is_active?: boolean
+}
 
 export default defineEventHandler(async (event) => {
   await requireCan(event, 'content.edit')
@@ -98,7 +100,13 @@ export default defineEventHandler(async (event) => {
     description: normalizeValue(body.description ?? null),
     image_url: imagePath,
     link: normalizeValue(body.link ?? null),
-    link_text: normalizeValue(body.link_text ?? null)
+    link_text: normalizeValue(body.link_text ?? null),
+    semester: normalizeValue(body.semester ?? null)
+  }
+  // Sin el campo, se respeta lo que hay: asi se pasa un proyecto a "anteriores" y de vuelta.
+  const isActive = String(body.is_active)
+  if (isActive === 'true' || isActive === 'false') {
+    payload.is_active = isActive === 'true'
   }
   const { error } = await supabase
     .from('Projects')

@@ -1,22 +1,33 @@
 <template>
   <ProjectEditForm v-if="isEditing" v-model:form="form" :is-new="_props.isNew" :is-saving="isSaving"
-    :is-deleting="isDeleting" :form-error="formError" @submit="saveEdit" @cancel="cancelEdit" @delete="handleDelete" />
+    :is-deleting="isDeleting" :form-error="formError"
+    :class="_props.layout === 'row' ? 'my-4 max-w-xl ring-1 ring-gray-200' : undefined"
+    @submit="saveEdit" @cancel="cancelEdit" @delete="handleDelete" />
+
+  <!-- Fila de "Proyectos anteriores" -->
+  <div v-else-if="_props.layout === 'row'"
+    class="flex flex-col gap-1 py-3 sm:grid sm:grid-cols-[120px_1fr_2fr_auto] sm:gap-4 sm:items-center">
+    <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">{{ project.semester }}</span>
+    <span class="text-sm font-semibold text-gray-700">{{ project.title }}</span>
+    <span class="text-xs text-gray-500 sm:truncate">{{ project.subtitle }}</span>
+    <UButton v-if="isEditor" icon="i-lucide-pencil" size="xs" color="primary" variant="ghost"
+      aria-label="Editar proyecto" class="self-start sm:self-auto" @click="startEdit" />
+  </div>
 
   <UCard v-else variant="soft" class="rounded-xl bg-white relative flex flex-col overflow-hidden p-0">
-    <UButton v-if="isEditor" icon="i-lucide-pencil" size="xs" color="primary" variant="ghost"
-      class="absolute top-3 right-3 z-10" @click="startEdit" />
+    <UButton v-if="isEditor" icon="i-lucide-pencil" size="xs" color="primary" variant="soft"
+      aria-label="Editar proyecto" class="absolute top-3 right-3 z-10 bg-white/90 shadow-sm hover:bg-white"
+      @click="startEdit" />
 
-    <NuxtImg
-      :src="imageUrl ?? '/LogoColorSolo.png'"
-      alt="Imagen del proyecto"
-      class="w-full h-44 object-cover flex-shrink-0"
-    />
+    <NuxtImg v-if="imageUrl" :src="imageUrl" :alt="project.title" class="w-full h-44 object-cover flex-shrink-0" />
+    <!-- Sin imagen: el logo completo, no recortado por object-cover. -->
+    <NuxtImg v-else src="/LogoColorSolo.png" alt="" class="w-full h-44 object-contain p-8 bg-gray-50 flex-shrink-0" />
 
     <div class="flex flex-col flex-1 p-5 gap-1">
       <div class="text-base text-primary font-bold leading-snug">
         {{ project.title }}
       </div>
-      <div v-if="project.subtitle" class="text-xs text-gray-400 font-medium mb-1">
+      <div v-if="project.subtitle" class="text-xs text-gray-500 font-medium mb-1">
         {{ project.subtitle }}
       </div>
       <div v-if="project.description" class="text-sm text-gray-500 leading-relaxed flex-1">
@@ -35,10 +46,13 @@ import type { ProjectRecord } from '~/types/content'
 interface Props {
   project: ProjectRecord
   isNew?: boolean
+  /** `row` es la fila compacta de "Proyectos anteriores". */
+  layout?: 'card' | 'row'
 }
 
 const _props = withDefaults(defineProps<Props>(), {
-  isNew: false
+  isNew: false,
+  layout: 'card'
 })
 
 const project = toRef(_props, 'project')
@@ -82,14 +96,16 @@ const buildPayload = () => ({
   description: normalizeValue(form.value.description as string | null),
   image_url: normalizeValue(form.value.image_url as string | null),
   link: normalizeValue(form.value.link as string | null),
-  link_text: normalizeValue(form.value.link_text as string | null)
+  link_text: normalizeValue(form.value.link_text as string | null),
+  semester: normalizeValue(form.value.semester as string | null),
+  is_active: form.value.is_active !== false
 })
 
 const buildFormData = (payload: ReturnType<typeof buildPayload>, file?: File | null) => {
   const formData = new FormData()
 
   Object.entries(payload).forEach(([key, value]) => {
-    formData.append(key, value ?? '')
+    formData.append(key, value === null ? '' : String(value))
   })
 
   if (file) {
@@ -133,7 +149,6 @@ const saveEdit = async (file?: File | null) => {
     if (_props.isNew) {
       await $fetch('/api/admin/projects', { method: 'POST', body: formData })
       emit('created')
-      emit('updated')
     } else {
       await $fetch(`/api/admin/projects/${project.value.id}`, { method: 'PUT', body: formData })
     }
