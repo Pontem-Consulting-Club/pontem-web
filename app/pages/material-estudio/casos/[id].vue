@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { CaseStudyDetail } from '~/types/content'
 import type { CaseStudyFiles } from '~/composables/useCaseStudyForm'
-import { CASE_CATEGORY_ICONS, CASE_CATEGORY_LABELS, CASE_DIFFICULTY_LABELS } from '~/constants/caseStudies'
+import { CASE_DIFFICULTY_LABELS, getCaseCategoryIcon, getCaseCategoryLabel } from '~/constants/caseStudies'
 
 const route = useRoute()
 const router = useRouter()
@@ -106,7 +106,7 @@ const handleDelete = async () => {
           <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-gray-400">
             <NuxtLink to="/material-estudio" class="hover:text-primary transition-colors">Casos</NuxtLink>
             <UIcon name="i-lucide-chevron-right" class="w-3.5 h-3.5" />
-            <span class="text-gray-600">{{ CASE_CATEGORY_LABELS[caseStudy.category] }}</span>
+            <span class="text-gray-600">{{ getCaseCategoryLabel(caseStudy.category) }}</span>
           </div>
 
           <div class="flex items-start justify-between gap-4">
@@ -128,8 +128,8 @@ const handleDelete = async () => {
             </span>
             <span class="px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-2"
               :class="getCategoryBadge(caseStudy.category)">
-              <UIcon :name="CASE_CATEGORY_ICONS[caseStudy.category]" class="w-3.5 h-3.5" />
-              {{ CASE_CATEGORY_LABELS[caseStudy.category] }}
+              <UIcon :name="getCaseCategoryIcon(caseStudy.category)" class="w-3.5 h-3.5" />
+              {{ getCaseCategoryLabel(caseStudy.category) }}
             </span>
             <span v-if="publishedLabel"
               class="bg-pontemred-50 text-pontemred-600 px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-2">

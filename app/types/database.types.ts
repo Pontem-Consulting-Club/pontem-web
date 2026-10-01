@@ -37,7 +37,7 @@ export type Database = {
       CaseStudies: {
         Row: {
           case_type: string | null
-          category: Database["public"]["Enums"]["CaseCategory"]
+          category: Database["public"]["Enums"]["CaseCategory"] | null
           company: string | null
           company_logo_url: string | null
           created_at: string
@@ -55,7 +55,7 @@ export type Database = {
         }
         Insert: {
           case_type?: string | null
-          category: Database["public"]["Enums"]["CaseCategory"]
+          category?: Database["public"]["Enums"]["CaseCategory"] | null
           company?: string | null
           company_logo_url?: string | null
           created_at?: string
@@ -73,7 +73,7 @@ export type Database = {
         }
         Update: {
           case_type?: string | null
-          category?: Database["public"]["Enums"]["CaseCategory"]
+          category?: Database["public"]["Enums"]["CaseCategory"] | null
           company?: string | null
           company_logo_url?: string | null
           created_at?: string
@@ -576,12 +576,18 @@ export type Database = {
     }
     Enums: {
       CaseCategory:
-        | "ESTRATEGIA"
-        | "OPERACIONES"
-        | "FINANZAS"
-        | "MARKETING"
-        | "IMPACTO_SOCIAL"
-      CaseDifficulty: "FACIL" | "MEDIO" | "DIFICIL" | "EXPERTO"
+        | "rentabilidad"
+        | "crecimiento-ingresos"
+        | "entrada-mercado"
+        | "ma-inversion"
+        | "pricing"
+        | "operaciones-supply-chain"
+        | "estrategia-competitiva"
+        | "organizacion-transformacion"
+        | "sector-publico-impacto"
+        | "estimacion"
+        | "no-convencional"
+      CaseDifficulty: "l1-introductorio" | "l2-intermedio" | "l3-avanzado"
       CaseResourceKind: "APUNTE" | "DATASET" | "MASTERCLASS"
       ClubCoordination:
         | "DIRECTORS"
@@ -727,13 +733,19 @@ export const Constants = {
   public: {
     Enums: {
       CaseCategory: [
-        "ESTRATEGIA",
-        "OPERACIONES",
-        "FINANZAS",
-        "MARKETING",
-        "IMPACTO_SOCIAL",
+        "rentabilidad",
+        "crecimiento-ingresos",
+        "entrada-mercado",
+        "ma-inversion",
+        "pricing",
+        "operaciones-supply-chain",
+        "estrategia-competitiva",
+        "organizacion-transformacion",
+        "sector-publico-impacto",
+        "estimacion",
+        "no-convencional",
       ],
-      CaseDifficulty: ["FACIL", "MEDIO", "DIFICIL", "EXPERTO"],
+      CaseDifficulty: ["l1-introductorio", "l2-intermedio", "l3-avanzado"],
       CaseResourceKind: ["APUNTE", "DATASET", "MASTERCLASS"],
       ClubCoordination: [
         "DIRECTORS",
