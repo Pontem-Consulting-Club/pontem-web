@@ -1,29 +1,16 @@
+import { Constants } from '~~/app/types/database.types'
 import type { Database } from '~~/app/types/database.types'
 
 type CaseCategory = Database['public']['Enums']['CaseCategory']
 type CaseDifficulty = Database['public']['Enums']['CaseDifficulty']
 type CaseResourceKind = Database['public']['Enums']['CaseResourceKind']
 
-export const CASE_CATEGORIES: CaseCategory[] = [
-  'ESTRATEGIA',
-  'OPERACIONES',
-  'FINANZAS',
-  'MARKETING',
-  'IMPACTO_SOCIAL'
-]
+export const CASE_CATEGORIES: readonly CaseCategory[] = Constants.public.Enums.CaseCategory
+export const CASE_DIFFICULTIES: readonly CaseDifficulty[] = Constants.public.Enums.CaseDifficulty
+export const CASE_RESOURCE_KINDS: readonly CaseResourceKind[] = Constants.public.Enums.CaseResourceKind
 
-export const CASE_DIFFICULTIES: CaseDifficulty[] = [
-  'FACIL',
-  'MEDIO',
-  'DIFICIL',
-  'EXPERTO'
-]
-
-export const CASE_RESOURCE_KINDS: CaseResourceKind[] = [
-  'APUNTE',
-  'DATASET',
-  'MASTERCLASS'
-]
+// Los casebooks son colecciones sin categoria; todo lo demas la exige.
+export const CASEBOOK_TYPE = 'Casebook'
 
 const CASE_CATEGORY_SET = new Set<string>(CASE_CATEGORIES)
 const CASE_DIFFICULTY_SET = new Set<string>(CASE_DIFFICULTIES)

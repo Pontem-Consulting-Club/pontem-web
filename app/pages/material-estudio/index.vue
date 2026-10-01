@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import studyMaterials from '~/assets/data/studyMaterials.json'
 import type { CaseStudyRecord } from '~/types/content'
-import type { CaseCategory } from '~/constants/caseStudies'
-import { CASE_CATEGORY_LABELS } from '~/constants/caseStudies'
+import type { CaseStudyTab } from '~/constants/caseStudies'
+import { getCaseCategoryLabel } from '~/constants/caseStudies'
 
 useHead({
   title: studyMaterials.title
@@ -18,13 +18,25 @@ const { data: caseStudies, status } = await useFetch<CaseStudyRecord[]>('/api/ca
 })
 
 const search = ref('')
-const selectedCategory = ref<CaseCategory | null>(null)
+const selectedCategory = ref<CaseStudyTab | null>(null)
+
+// Un caso sin categoria es un casebook: va en su propia pestana.
+const tabOf = (caseStudy: CaseStudyRecord): CaseStudyTab => caseStudy.category ?? 'casebooks'
+
+const tabCounts = computed(() => {
+  const counts: Partial<Record<CaseStudyTab, number>> = {}
+  for (const caseStudy of caseStudies.value || []) {
+    const tab = tabOf(caseStudy)
+    counts[tab] = (counts[tab] ?? 0) + 1
+  }
+  return counts
+})
 
 const filteredCaseStudies = computed(() => {
   const term = search.value.trim().toLowerCase()
 
   return (caseStudies.value || []).filter((caseStudy) => {
-    if (selectedCategory.value && caseStudy.category !== selectedCategory.value) {
+    if (selectedCategory.value && tabOf(caseStudy) !== selectedCategory.value) {
       return false
     }
 
@@ -35,7 +47,7 @@ const filteredCaseStudies = computed(() => {
       caseStudy.company,
       caseStudy.case_type,
       caseStudy.summary,
-      CASE_CATEGORY_LABELS[caseStudy.category]
+      getCaseCategoryLabel(caseStudy.category)
     ]
 
     return haystack.some(value => value?.toLowerCase().includes(term))
@@ -88,7 +100,7 @@ const openDrive = () => {
         </div>
       </div>
 
-      <CaseStudyCategoryFilter v-model="selectedCategory" />
+      <CaseStudyCategoryFilter v-model="selectedCategory" :counts="tabCounts" :total="caseStudies.length" />
 
       <LoadingSpinner v-if="status === 'pending'" />
 
@@ -115,8 +127,8 @@ const openDrive = () => {
           <p class="text-sm text-gray-500">
             Solicita acceso a nuestro Drive con todo el material de estudio.
           </p>
-          <button class="hover:scale-105 transition-transform cursor-pointer mt-auto" @click="openDrive">
-            <img src="/drive-logo.png" alt="Google Drive" class="h-16 w-auto mx-auto">
+          <button class="flex-1 w-full flex items-center justify-center cursor-pointer group" aria-label="Abrir Drive de Estudio" @click="openDrive">
+            <img src="/drive-logo.png" alt="Google Drive" class="h-16 w-auto group-hover:scale-105 transition-transform">
           </button>
         </div>
 

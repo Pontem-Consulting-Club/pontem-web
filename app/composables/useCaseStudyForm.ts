@@ -1,4 +1,5 @@
 import type { CaseStudyRecord } from '~/types/content'
+import { CASEBOOK_TYPE } from '~/constants/caseStudies'
 
 export interface CaseStudyFiles {
   logo: File | null
@@ -22,7 +23,7 @@ export const useCaseStudyForm = () => {
     title: '',
     company: null,
     company_logo_url: null,
-    category: 'ESTRATEGIA',
+    category: null,
     difficulty: null,
     duration_minutes: null,
     case_type: null,
@@ -46,8 +47,9 @@ export const useCaseStudyForm = () => {
       return 'El título es obligatorio.'
     }
 
-    if (!normalizeValue(form.value.category)) {
-      return 'La categoría es obligatoria.'
+    // Un casebook es una coleccion y no lleva categoria; un caso la exige.
+    if (form.value.case_type !== CASEBOOK_TYPE && !normalizeValue(form.value.category)) {
+      return 'La categoría es obligatoria (salvo en casebooks).'
     }
 
     const duration = normalizeValue(form.value.duration_minutes)

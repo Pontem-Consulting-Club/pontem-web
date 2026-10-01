@@ -72,7 +72,7 @@ export interface CaseStudyRecord {
     title: string
     company?: string | null
     company_logo_url?: string | null
-    category: CaseCategory
+    category: CaseCategory | null
     difficulty?: CaseDifficulty | null
     duration_minutes?: number | null
     icon?: string | null

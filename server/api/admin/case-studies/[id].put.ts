@@ -1,7 +1,7 @@
 import { serverSupabaseClient } from '#supabase/server'
 import type { Database, Tables } from '~/types/database.types'
 import { requireCan } from '~~/server/utils/requireCan'
-import { isValidCaseCategory, isValidCaseDifficulty } from '~~/server/utils/caseStudies'
+import { CASEBOOK_TYPE, isValidCaseCategory, isValidCaseDifficulty } from '~~/server/utils/caseStudies'
 import { normalizeValue, parsePayload, removeFromBucket, uploadToBucket } from '~~/server/utils/uploads'
 
 type CaseStudyRow = Tables<'CaseStudies'>
@@ -32,13 +32,16 @@ export default defineEventHandler(async (event) => {
         })
     }
 
-    const category = normalizeValue(body.category)
-    if (!isValidCaseCategory(category)) {
+    // Un casebook es una coleccion y no lleva categoria; un caso la exige.
+    const isCasebook = normalizeValue(body.case_type) === CASEBOOK_TYPE
+    const rawCategory = normalizeValue(body.category)
+    if (!isCasebook && !isValidCaseCategory(rawCategory)) {
         throw createError({
             statusCode: 400,
             statusMessage: 'A valid category is required'
         })
     }
+    const category = !isCasebook && isValidCaseCategory(rawCategory) ? rawCategory : null
 
     const difficulty = normalizeValue(body.difficulty)
     if (difficulty && !isValidCaseDifficulty(difficulty)) {

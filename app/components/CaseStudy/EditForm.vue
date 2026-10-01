@@ -137,8 +137,8 @@ onBeforeUnmount(revokeLogoPreview)
       </UFormField>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <UFormField label="Categoría" required>
-          <USelectMenu v-model="form.category" :items="CASE_CATEGORY_OPTIONS" value-key="value" label-key="label"
+        <UFormField label="Categoría" help="Según la pregunta del cliente, no la herramienta de análisis. Los casebooks van sin categoría.">
+          <USelectMenu v-model.nullable="form.category" :items="CASE_CATEGORY_OPTIONS" value-key="value" label-key="label"
             placeholder="Selecciona una categoría" size="lg" class="w-full" />
         </UFormField>
 
