@@ -6,7 +6,8 @@ import { normalizeValue, parsePayload, removeFromBucket, uploadToBucket } from '
 
 type CaseStudyRow = Tables<'CaseStudies'>
 
-type CaseStudyPayload = Omit<CaseStudyRow, 'id' | 'created_at'>
+// icon no se edita desde el formulario: se deja fuera para no pisar el que ya tiene.
+type CaseStudyPayload = Omit<CaseStudyRow, 'id' | 'created_at' | 'icon'>
 
 export default defineEventHandler(async (event) => {
     await requireCan(event, 'content.edit')
