@@ -75,6 +75,7 @@ export interface CaseStudyRecord {
     category: CaseCategory
     difficulty?: CaseDifficulty | null
     duration_minutes?: number | null
+    icon?: string | null
     case_type?: string | null
     summary?: string | null
     problem_statement?: string | null

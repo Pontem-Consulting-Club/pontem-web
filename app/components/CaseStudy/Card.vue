@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { CaseStudyRecord } from '~/types/content'
-import { CASE_CATEGORY_LABELS, CASE_DIFFICULTY_LABELS } from '~/constants/caseStudies'
+import { CASE_CATEGORY_ICONS, CASE_CATEGORY_LABELS, CASE_DIFFICULTY_LABELS } from '~/constants/caseStudies'
 
 const props = defineProps<{
   caseStudy: CaseStudyRecord
@@ -31,9 +31,12 @@ const duration = computed(() => {
     <div class="p-6 flex flex-col gap-4 flex-1">
       <div class="flex justify-between items-start gap-3">
         <div class="flex items-center gap-3 min-w-0">
-          <div class="w-10 h-10 rounded-full bg-gray-50 border border-gray-100 overflow-hidden shrink-0 flex items-center justify-center">
-            <img v-if="logoUrl" :src="logoUrl" :alt="caseStudy.company ?? 'Empresa'" class="w-full h-full object-contain p-1">
-            <UIcon v-else name="i-lucide-building-2" class="w-4 h-4 text-gray-300" />
+          <div v-if="logoUrl" class="w-10 h-10 rounded-full bg-gray-50 border border-gray-100 overflow-hidden shrink-0 flex items-center justify-center">
+            <img :src="logoUrl" :alt="caseStudy.company ?? 'Empresa'" class="w-full h-full object-contain p-1">
+          </div>
+          <div v-else class="w-10 h-10 rounded-full shrink-0 flex items-center justify-center"
+            :class="getCategoryBadge(caseStudy.category)">
+            <UIcon :name="caseStudy.icon || CASE_CATEGORY_ICONS[caseStudy.category]" class="w-5 h-5" />
           </div>
           <span v-if="caseStudy.company" class="text-xs font-semibold uppercase tracking-wider text-gray-400 truncate">
             {{ caseStudy.company }}

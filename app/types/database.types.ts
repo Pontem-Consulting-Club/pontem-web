@@ -46,6 +46,7 @@ export type Database = {
           document_size_bytes: number | null
           document_url: string | null
           duration_minutes: number | null
+          icon: string | null
           id: number
           problem_statement: string | null
           published_date: string | null
@@ -63,6 +64,7 @@ export type Database = {
           document_size_bytes?: number | null
           document_url?: string | null
           duration_minutes?: number | null
+          icon?: string | null
           id?: number
           problem_statement?: string | null
           published_date?: string | null
@@ -80,6 +82,7 @@ export type Database = {
           document_size_bytes?: number | null
           document_url?: string | null
           duration_minutes?: number | null
+          icon?: string | null
           id?: number
           problem_statement?: string | null
           published_date?: string | null
