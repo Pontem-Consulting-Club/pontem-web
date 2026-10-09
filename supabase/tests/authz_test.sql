@@ -365,15 +365,15 @@ end $$;
 
 select pg_temp.check('FR-09 un editor crea casos de estudio',
     pg_temp.allowed_then_undone('22222222-2222-2222-2222-222222222222',
-        $q$insert into public."CaseStudies" (title, category) values ('prueba authz', 'FINANZAS')$q$));
+        $q$insert into public."CaseStudies" (title, category) values ('prueba authz', 'ma-inversion')$q$));
 
 select pg_temp.check('FR-09 un miembro no crea casos de estudio',
     not pg_temp.allowed_then_undone('44444444-4444-4444-4444-444444444444',
-        $q$insert into public."CaseStudies" (title, category) values ('prueba authz', 'FINANZAS')$q$));
+        $q$insert into public."CaseStudies" (title, category) values ('prueba authz', 'ma-inversion')$q$));
 
 select pg_temp.check('FR-09 un anonimo no crea casos de estudio',
     not pg_temp.allowed_then_undone(null,
-        $q$insert into public."CaseStudies" (title, category) values ('prueba authz', 'FINANZAS')$q$));
+        $q$insert into public."CaseStudies" (title, category) values ('prueba authz', 'ma-inversion')$q$));
 
 select pg_temp.check('FR-09 un miembro no edita casos de estudio',
     pg_temp.count_as('44444444-4444-4444-4444-444444444444',

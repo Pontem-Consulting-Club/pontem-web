@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { CaseStudyRecord } from '~/types/content'
-import { CASE_CATEGORY_ICONS, CASE_CATEGORY_LABELS, CASE_DIFFICULTY_LABELS } from '~/constants/caseStudies'
+import { CASE_DIFFICULTY_LABELS, getCaseCategoryIcon, getCaseCategoryLabel } from '~/constants/caseStudies'
 
 const props = defineProps<{
   caseStudy: CaseStudyRecord
@@ -36,7 +36,7 @@ const duration = computed(() => {
           </div>
           <div v-else class="w-10 h-10 rounded-full shrink-0 flex items-center justify-center"
             :class="getCategoryBadge(caseStudy.category)">
-            <UIcon :name="caseStudy.icon || CASE_CATEGORY_ICONS[caseStudy.category]" class="w-5 h-5" />
+            <UIcon :name="caseStudy.icon || getCaseCategoryIcon(caseStudy.category)" class="w-5 h-5" />
           </div>
           <span v-if="caseStudy.company" class="text-xs font-semibold uppercase tracking-wider text-gray-400 truncate">
             {{ caseStudy.company }}
@@ -53,9 +53,9 @@ const duration = computed(() => {
 
       <div class="flex flex-wrap gap-2 mt-auto pt-2">
         <span class="text-xs font-semibold px-2 py-1 rounded" :class="getCategoryBadge(caseStudy.category)">
-          {{ CASE_CATEGORY_LABELS[caseStudy.category] }}
+          {{ getCaseCategoryLabel(caseStudy.category) }}
         </span>
-        <span v-if="caseStudy.case_type" class="text-xs font-semibold px-2 py-1 rounded bg-gray-50 text-gray-500">
+        <span v-if="caseStudy.case_type && caseStudy.category" class="text-xs font-semibold px-2 py-1 rounded bg-gray-50 text-gray-500">
           {{ caseStudy.case_type }}
         </span>
       </div>

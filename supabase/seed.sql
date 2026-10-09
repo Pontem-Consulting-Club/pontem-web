@@ -282,25 +282,25 @@ insert into public."CaseStudies"
    case_type, summary, problem_statement, document_url, document_name,
    document_size_bytes, published_date) values
   ('Estrategia de entrada a LatAm', 'TechCorp', '/LogoColorSolo.png',
-   'ESTRATEGIA', 'MEDIO', 45, 'Case Interview',
+   'entrada-mercado', 'l2-intermedio', 45, 'Case Interview',
    'TechCorp, una empresa de software B2B con presencia en Norteamerica, lleva seis trimestres sin crecer. Detectaron oportunidades en America Latina, pero sus primeros intentos de entrada terminaron en perdidas operativas por no adaptar el producto ni la estructura comercial al mercado local.',
    'El equipo consultor debe proponer una estrategia de entrada que acote el riesgo inicial, priorice los segmentos de clientes mas rentables de la region y defina una estructura organizativa que soporte operaciones descentralizadas sin degradar el servicio.',
    '/docs/Casebook_Pontem_2021.pdf', 'techcorp_estrategia_latam.pdf', 2015932, '2026-03-15'),
 
   ('Optimizacion de la cadena de suministro', 'RetailGiant', null,
-   'OPERACIONES', 'DIFICIL', 30, 'Case Interview',
+   'operaciones-supply-chain', 'l3-avanzado', 30, 'Case Interview',
    'RetailGiant opera 120 tiendas en Chile y Peru con una red logistica que crecio sin planificacion central. Los quiebres de stock en las categorias de mayor rotacion llegan al 12% mensual.',
    'Se pide redisenar la red de distribucion para bajar los quiebres de stock por debajo del 4%, sin que el costo logistico total suba mas que la inflacion del periodo.',
    null, null, null, '2026-04-02'),
 
   ('Analisis de una fusion regional', 'GlobalBank', null,
-   'FINANZAS', 'EXPERTO', 60, 'Frameworks',
+   'ma-inversion', 'l3-avanzado', 60, 'Frameworks',
    'GlobalBank evalua adquirir una fintech de pagos con operacion en cuatro paises. La operacion se valoriza en USD 340 millones y la due diligence preliminar levanto dudas sobre la calidad de los ingresos recurrentes.',
    'El equipo debe construir un modelo de valorizacion, separar las sinergias reales de las declaradas por el vendedor y recomendar si se avanza, se renegocia el precio o se abandona la operacion.',
    null, null, null, '2026-05-20'),
 
   ('Rediseno del programa de becas', 'Fundacion Raices', null,
-   'IMPACTO_SOCIAL', 'FACIL', 40, 'Case Interview',
+   'sector-publico-impacto', 'l1-introductorio', 40, 'Case Interview',
    'Una fundacion que entrega becas de continuidad de estudios detecta que un tercio de sus beneficiarios abandona el programa antes del segundo ano, sin que el equipo sepa por que.',
    'Hay que disenar como levantar la informacion que falta y proponer cambios al programa que suban la retencion con el mismo presupuesto.',
    null, null, null, '2026-06-11');
