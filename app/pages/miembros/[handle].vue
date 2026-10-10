@@ -13,7 +13,7 @@
         </div>
 
         <div class="flex flex-col gap-2">
-          <h1 class="text-3xl font-bold">{{ member.display_name }}</h1>
+          <h1 class="text-title text-highlighted">{{ member.display_name }}</h1>
           <div class="flex flex-wrap items-center justify-center gap-2">
             <UBadge v-if="member.coordination" size="lg">
               {{ coordinationLabels[member.coordination] }}

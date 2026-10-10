@@ -84,7 +84,7 @@ const teamByRole = computed(() => {
  
 <template>
   <div>
-    <PageHeader title="Nosotros" background-image="/Equipo2024.jpeg" />
+    <PageBanner title="Nosotros" image="/Equipo2024.jpeg" />
  
     <UContainer class="py-16 space-y-28">
 
@@ -96,7 +96,7 @@ const teamByRole = computed(() => {
  
       <!-- ── EQUIPO ────────────────────────────────────────────── -->
       <section>
-        <SectionHeader title="Nuestro Equipo" centered class="mb-12" />
+        <SectionTitle title="Nuestro Equipo" centered class="mb-12" />
  
         <div v-if="isEditor" class="flex justify-end mb-6">
           <UButton icon="i-lucide-plus" color="primary" size="md" :disabled="isCreating" @click="startCreate">

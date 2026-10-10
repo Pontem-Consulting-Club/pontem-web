@@ -12,12 +12,12 @@
     <div class="relative z-20 h-full flex items-center">
       <div class="container mx-auto px-4 md:px-8 lg:px-32">
         <div class="max-w-2xl text-white">
-          <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
+          <h2 class="mb-4 text-display">
             {{ slide.title }}
-          </h1>
-          <h5 v-if="slide.subtitle" class="text-lg md:text-xl mb-8 opacity-90">
+          </h2>
+          <p v-if="slide.subtitle" class="mb-8 text-lg opacity-90 md:text-xl">
             {{ slide.subtitle }}
-          </h5>
+          </p>
           <!-- Button for links -->
           <div v-if="slide.link && slide.button_text" class="h-full w-fit rounded-lg bg-brand-wash">
             <NuxtLink :id="`hero-cta-${slide.id}`" :to="slide.link" :target="isExternalLink ? '_blank' : undefined"

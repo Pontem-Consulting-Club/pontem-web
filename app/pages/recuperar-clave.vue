@@ -2,7 +2,7 @@
   <UContainer class="flex min-h-[calc(100vh-4rem)] items-center justify-center py-16">
     <UCard class="w-full max-w-md">
       <template #header>
-        <h2 class="text-center text-2xl font-bold">Recuperar contraseña</h2>
+        <h1 class="text-center text-heading text-highlighted">Recuperar contraseña</h1>
       </template>
 
       <div v-if="sent" class="flex flex-col gap-4 text-center">

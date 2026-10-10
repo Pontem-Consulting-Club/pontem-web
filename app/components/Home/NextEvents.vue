@@ -1,32 +1,22 @@
 <template>
-  <section class="bg-accented/60 py-16 clip-wave-top md:py-24">
-    <div class="w-full px-4 lg:w-3/5 mx-auto lg:mt-12">
-      <div class="text-center mb-12">
-        <h2 class="text-3xl md:text-4xl font-bold mb-4">
-          Próximos Eventos
-        </h2>
-        <p class="text-lg">
-          No te pierdas nuestros próximos eventos y actividades
-        </p>
-      </div>
+  <UPageSection title="Próximos Eventos" description="No te pierdas nuestros próximos eventos y actividades"
+    class="bg-accented/60 clip-wave-top">
+    <LoadingSpinner v-if="status === 'pending'" />
 
-      <LoadingSpinner v-if="status === 'pending'" />
+    <EmptyState v-else-if="upcomingEvents.length === 0" message="No hay eventos próximos programados" />
 
-      <EmptyState v-else-if="upcomingEvents.length === 0" message="No hay eventos próximos programados" />
+    <UPageGrid v-else>
+      <EventCard v-for="event in upcomingEvents" :key="event.id" :event="event" variant="compact"
+        @updated="refresh" />
+    </UPageGrid>
 
-      <div v-else class="grid md:grid-cols-3 gap-6">
-        <EventCard v-for="event in upcomingEvents" :key="event.id" :event="event" variant="compact"
-          @updated="refresh" />
-      </div>
 
-      <div class="text-center mt-10">
-        <UButton to="/eventos" size="lg"
-          class="font-semibold transition-colors bg-default text-muted hover:bg-default hover:outline">
-          Ver todos los eventos
-        </UButton>
-      </div>
+    <div class="mt-10 text-center">
+      <UButton to="/eventos" size="lg" color="neutral" variant="outline">
+        Ver todos los eventos
+      </UButton>
     </div>
-  </section>
+  </UPageSection>
 </template>
 
 <script setup lang="ts">

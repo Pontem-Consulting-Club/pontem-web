@@ -8,7 +8,7 @@ defineProps<Props>()
 
 <template>
   <UCard variant="item" class="text-center">
-    <h3 class="text-lg font-semibold text-primary">
+    <h3 class="text-subheading text-highlighted">
       {{ name }}
     </h3>
   </UCard>

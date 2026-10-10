@@ -105,14 +105,17 @@ test.describe('estructura', () => {
     }
   })
 
-  test('nada se anima con movimiento reducido', async ({ browser }) => {
-    const page = await browser.newPage({ reducedMotion: 'reduce' })
+})
+
+test.describe('movimiento reducido', () => {
+  test.use({ reducedMotion: 'reduce' })
+
+  test('nada se anima', async ({ page }) => {
     for (const ruta of ['/', '/consultoria-social']) {
       await abrir(page, ruta)
       const animaciones = await page.evaluate(() =>
         document.getAnimations().filter(a => a.playState === 'running').map(a => (a as CSSAnimation).animationName ?? 'js'))
       expect.soft(animaciones, `${ruta}: animaciones activas`).toEqual([])
     }
-    await page.close()
   })
 })

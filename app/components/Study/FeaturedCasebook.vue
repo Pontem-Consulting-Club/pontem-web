@@ -25,7 +25,7 @@ withDefaults(defineProps<Props>(), {
         <UIcon name="i-lucide-star" class="size-3.5" />
         Recurso destacado
       </div>
-      <h2 class="text-2xl md:text-3xl font-bold text-white">
+      <h2 class="text-title text-white">
         {{ title }}
       </h2>
       <p class="text-sm text-dimmed max-w-md">

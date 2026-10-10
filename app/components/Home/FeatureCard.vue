@@ -3,7 +3,7 @@
     <div class="flex justify-center mb-4">
       <UIcon :name="icon" class="size-12" :class="iconColor" />
     </div>
-    <h3 class="text-xl font-semibold mb-2">
+    <h3 class="mb-2 text-subheading text-highlighted">
       {{ title }}
     </h3>
     <p>

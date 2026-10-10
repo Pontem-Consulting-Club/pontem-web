@@ -15,7 +15,11 @@ export const onImage = {
   },
   // Sobre una foto cada campo necesita su propia superficie para leerse como editable.
   input: { base: onImageField },
-  textarea: { base: onImageField }
+  textarea: { base: onImageField },
+  pageHero: {
+    title: 'text-white',
+    description: 'text-white/85'
+  }
 }
 
 /**

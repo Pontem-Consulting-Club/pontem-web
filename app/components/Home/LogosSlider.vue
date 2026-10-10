@@ -3,9 +3,9 @@
     <!-- Header section -->
     <div class="mt-12 w-full bg-accented/60 clip-wave-top">
       <div class="text-center py-12 px-4">
-        <h3 class="text-2xl font-semibold">
+        <h2 class="text-heading">
           Consultoras que impulsan el talento
-        </h3>
+        </h2>
         <p class="max-w-3xl mx-auto">
           Gracias a nuestra colaboración con estas consultoras líderes, ofrecemos a los estudiantes oportunidades de
           desarrollo profesional y la posibilidad de trabajar en proyectos que impactan en el mundo real:

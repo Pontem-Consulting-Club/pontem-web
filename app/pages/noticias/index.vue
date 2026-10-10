@@ -1,6 +1,6 @@
 <template>
   <div>
-    <PageHeader title="Noticias y Blog" background-image="/ActividadSumma.JPG" />
+    <PageBanner title="Noticias y Blog" image="/ActividadSumma.JPG" />
     <UContainer class="py-8">
       <div class="flex flex-row items-center justify-between gap-4">
       <!-- Filters -->
@@ -12,14 +12,15 @@
 
       <LoadingSpinner v-if="status === 'pending'" />
 
+      <h2 class="sr-only">Todas las noticias</h2>
       <div v-if="paginatedNews.length === 0" class="text-center">
         <UIcon name="i-lucide-inbox" class="size-16 mx-auto mb-4" />
         <p>No hay noticias disponibles</p>
       </div>
 
-      <div v-else class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <UPageGrid v-else>
         <NewsCard v-for="newsItem in paginatedNews" :key="newsItem.id" :news-item="newsItem"/>
-      </div>
+      </UPageGrid>
 
       <!-- Pagination -->
       <div v-if="totalPages > 1" class="mt-12 flex justify-center">

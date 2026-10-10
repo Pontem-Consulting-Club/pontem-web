@@ -2,9 +2,9 @@
   <UContainer class="py-16 flex items-center justify-center min-h-[calc(100vh-4rem)]">
     <UCard class="w-full max-w-md">
       <template #header>
-        <h2 class="text-2xl font-bold text-center">
+        <h1 class="text-center text-heading text-highlighted">
           Iniciar Sesión
-        </h2>
+        </h1>
       </template>
 
       <form method="post" class="space-y-6" autocomplete="on" @submit.prevent="handleSubmit">

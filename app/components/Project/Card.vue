@@ -25,9 +25,9 @@
       <NuxtImg v-else src="/LogoColorSolo.png" alt="" class="h-44 w-full bg-muted object-contain p-8" />
     </template>
 
-      <div class="text-base/snug text-primary font-bold">
+      <h3 class="text-subheading text-highlighted">
         {{ project.title }}
-      </div>
+      </h3>
       <div v-if="project.subtitle" class="text-xs text-muted font-medium mb-1">
         {{ project.subtitle }}
       </div>

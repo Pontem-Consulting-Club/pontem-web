@@ -1,6 +1,6 @@
 <template>
   <div>
-    <PageHeader title="Mi Perfil" background-image="/LugarEstudio.jpg" />
+    <PageBanner title="Mi Perfil" image="/LugarEstudio.jpg" />
 
     <UContainer class="py-16">
       <UAlert v-if="needsOnboarding" icon="i-lucide-hand" color="primary" variant="soft" class="mb-8"
@@ -94,8 +94,7 @@
 
         <!-- MEM-5: números pequeños y honestos, no una capa de gamificación. -->
         <section class="lg:col-span-2">
-          <SectionHeaderWithIcon title="Mi participación" icon="i-lucide-calendar-check"
-            icon-color="text-primary" />
+          <SectionTitle class="mb-8" title="Mi participación" icon="i-lucide-calendar-check" />
 
           <div class="mb-6 grid gap-4 sm:grid-cols-3">
             <div v-for="tile in statTiles" :key="tile.label"

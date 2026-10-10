@@ -48,7 +48,7 @@ const duration = computed(() => {
         </span>
       </div>
 
-      <h3 class="text-lg/snug font-bold text-highlighted">
+      <h3 class="text-subheading text-highlighted">
         {{ caseStudy.title }}
       </h3>
 

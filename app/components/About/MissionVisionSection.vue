@@ -1,6 +1,6 @@
 <template>
   <section>
-    <SectionHeader title="Misión & Visión" centered class="mb-14" />
+    <SectionTitle title="Misión & Visión" centered class="mb-14" />
 
     <div class="grid md:grid-cols-2 gap-8">
       <UCard variant="feature" class="relative">
@@ -13,7 +13,7 @@
               <UIcon name="i-lucide-target" class="size-6 text-primary-500" />
             </div>
             <div>
-              <h3 class="text-2xl font-bold tracking-tight text-highlighted">Misión</h3>
+              <h3 class="text-heading text-highlighted">Misión</h3>
               <div class="h-0.5 w-8 rounded-full bg-primary-500 mt-1" />
             </div>
           </div>
@@ -33,7 +33,7 @@
               <UIcon name="i-lucide-eye" class="size-6 text-secondary-300" />
             </div>
             <div>
-              <h3 class="text-2xl font-bold tracking-tight text-highlighted">Visión</h3>
+              <h3 class="text-heading text-highlighted">Visión</h3>
               <div class="h-0.5 w-8 rounded-full bg-secondary-200 mt-1" />
             </div>
           </div>

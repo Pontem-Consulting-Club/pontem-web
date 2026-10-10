@@ -28,7 +28,7 @@ const getDotColor = (index: number) => {
 
 <template>
   <section>
-    <SectionHeader title="Nuestra Historia" centered class="mb-14" />
+    <SectionTitle title="Nuestra Historia" centered class="mb-14" />
 
     <!-- Desktop: horizontal timeline (md+) -->
     <div class="hidden md:block relative">

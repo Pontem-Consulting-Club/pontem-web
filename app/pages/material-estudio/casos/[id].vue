@@ -110,7 +110,7 @@ const handleDelete = async () => {
           </div>
 
           <div class="flex items-start justify-between gap-4">
-            <h1 class="text-3xl/tight md:text-4xl font-bold text-highlighted">
+            <h1 class="text-title text-highlighted">
               {{ caseStudy.title }}
             </h1>
             <UButton v-if="isEditor" icon="i-lucide-pencil" size="md" color="primary"
@@ -153,7 +153,7 @@ const handleDelete = async () => {
         <!-- Planteamiento -->
         <UCard v-if="caseStudy.summary || caseStudy.problem_statement" class="relative">
           <div class="absolute top-0 left-0 w-1 h-full" :class="getCategoryBadge(caseStudy.category)" />
-          <h3 class="text-xl font-bold text-highlighted mb-4 flex items-center gap-2">
+          <h3 class="mb-4 flex items-center gap-2 text-heading text-highlighted">
             <UIcon name="i-lucide-lightbulb" :class="getCategoryText(caseStudy.category)" class="size-5" />
             Planteamiento del Problema
           </h3>
@@ -175,7 +175,7 @@ const handleDelete = async () => {
             <UIcon name="i-lucide-download" class="size-7 text-primary" />
           </div>
           <div>
-            <h3 class="text-lg font-bold text-highlighted mb-1">Descargar Caso Completo</h3>
+            <h3 class="mb-1 text-subheading text-highlighted">Descargar Caso Completo</h3>
             <p class="text-sm text-muted">
               Descarga el documento para revisarlo con calma o imprimirlo.
             </p>

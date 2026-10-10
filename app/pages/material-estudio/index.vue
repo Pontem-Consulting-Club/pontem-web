@@ -68,7 +68,7 @@ const openDrive = () => {
         <span class="size-2 rounded-full bg-secondary-300" />
         Learning &amp; Development
       </div>
-      <h1 class="text-4xl md:text-5xl font-bold text-highlighted mt-2">
+      <h1 class="mt-2 text-display text-highlighted">
         Material de <span class="text-primary">Estudio</span>
       </h1>
       <p class="text-lg text-muted max-w-xl">
@@ -88,7 +88,7 @@ const openDrive = () => {
       <StudySectionLabel number="02" label="Biblioteca" />
 
       <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
-        <h2 class="text-3xl font-bold text-highlighted">Casos de Estudio</h2>
+        <h2 class="text-title text-highlighted">Casos de Estudio</h2>
         <div class="flex items-center gap-2 w-full md:w-auto">
           <UInput v-model="search" icon="i-lucide-search" size="lg" class="md:w-96"
             placeholder="Buscar por empresa, área o palabra clave..." />
@@ -108,9 +108,9 @@ const openDrive = () => {
           ? 'Todavía no hay casos de estudio publicados'
           : 'Ningún caso coincide con tu búsqueda'" />
 
-      <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <UPageGrid v-else>
         <CaseStudyCard v-for="caseStudy in filteredCaseStudies" :key="caseStudy.id" :case-study="caseStudy" />
-      </div>
+      </UPageGrid>
     </section>
 
     <!-- Recurso destacado -->
@@ -122,7 +122,7 @@ const openDrive = () => {
 
       <div class="grid md:grid-cols-2 gap-6">
         <UCard :ui="{ body: 'flex flex-col items-center gap-4 text-center' }">
-          <h3 class="text-xl font-bold text-highlighted">Drive de Estudio</h3>
+          <h3 class="text-subheading text-highlighted">Drive de Estudio</h3>
           <p class="text-sm text-muted">
             Solicita acceso a nuestro Drive con todo el material de estudio.
           </p>
@@ -132,7 +132,7 @@ const openDrive = () => {
         </UCard>
 
         <UCard :ui="{ body: 'flex flex-col gap-4' }">
-          <h3 class="text-xl font-bold text-highlighted text-center">Case Books Recomendados</h3>
+          <h3 class="text-center text-subheading text-highlighted">Case Books Recomendados</h3>
           <p class="text-sm text-muted text-center">
             Recursos externos para practicar casos de consultoría.
           </p>

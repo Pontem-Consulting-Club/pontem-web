@@ -1,6 +1,6 @@
 <template>
   <div>
-    <PageHeader title="Personas" background-image="/Equipo2024.jpeg" />
+    <PageBanner title="Personas" image="/Equipo2024.jpeg" />
 
     <UContainer class="py-16">
       <!-- Invitar -->
@@ -8,7 +8,7 @@
         <template #header>
           <div class="flex items-center gap-2">
             <UIcon name="i-lucide-user-plus" class="text-primary" />
-            <h2 class="font-semibold">Invitar a alguien</h2>
+            <h2 class="text-heading text-highlighted">Invitar a alguien</h2>
           </div>
         </template>
 

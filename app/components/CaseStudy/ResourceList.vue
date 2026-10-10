@@ -53,7 +53,7 @@ const handleDelete = async (resource: CaseStudyResourceRecord) => {
 
 <template>
   <UCard :ui="{ body: 'flex flex-col gap-4' }">
-    <h3 class="text-lg font-bold text-highlighted flex items-center gap-2 border-b border-muted pb-3">
+    <h3 class="flex items-center gap-2 border-b border-muted pb-3 text-subheading text-highlighted">
       <UIcon name="i-lucide-library" class="size-5 text-tertiary-900" />
       Recursos Relacionados
     </h3>

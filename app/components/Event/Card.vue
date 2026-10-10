@@ -189,9 +189,9 @@ const handleDelete = async () => {
         </div>
       </div>
       <div class="flex-1">
-        <div class="text-xl font-semibold mb-2">
+        <h3 class="mb-2 text-subheading text-highlighted">
           {{ event.title }}
-        </div>
+        </h3>
         <div v-if="event.subtitle" class="mb-3 text-toned">
           {{ event.subtitle }}
         </div>
@@ -232,7 +232,7 @@ const handleDelete = async () => {
         {{ formatDate(event.date) }}
       </span>
       <div class="flex-1">
-        <h3 class="text-lg font-medium">
+        <h3 class="text-subheading">
           {{ event.title }}
         </h3>
         <p v-if="event.subtitle" class="text-sm">
@@ -251,7 +251,7 @@ const handleDelete = async () => {
       </div>
     </template>
 
-      <h3 class="text-xl font-semibold mb-2">
+      <h3 class="mb-2 text-subheading text-highlighted">
         {{ event.title }}
       </h3>
       <p v-if="event.subtitle" class="mb-4">

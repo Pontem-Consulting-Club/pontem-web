@@ -8,9 +8,9 @@
       <TypeBadge v-if="newsItem.type" :type="newsItem.type" size="xs" />
     </div>
 
-    <div class="text-xl font-semibold mb-2">
+    <h3 class="mb-2 text-subheading text-highlighted">
       {{ newsItem.title }}
-    </div>
+    </h3>
 
     <div v-if="newsItem.subtitle" class="mb-4 flex-1 text-toned">
       {{ newsItem.subtitle }}

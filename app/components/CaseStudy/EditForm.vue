@@ -120,7 +120,7 @@ onBeforeUnmount(revokeLogoPreview)
 <template>
   <UCard class="mx-auto w-full max-w-3xl">
     <div class="mb-8">
-      <h1 class="text-2xl font-bold text-highlighted mb-2">
+      <h1 class="mb-2 text-title text-highlighted">
         {{ props.isNew ? 'Subir Nuevo Caso' : 'Editar Caso' }}
       </h1>
       <p class="text-sm text-muted">

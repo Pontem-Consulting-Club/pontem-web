@@ -17,9 +17,9 @@ const socialLinks = [
   <section class="py-16 md:py-24">
     <UContainer>
       <div class="text-center mb-4">
-        <h5 class="text-xl md:text-2xl font-bold mt-20 mb-4">
+        <h2 class="mt-20 mb-4 text-heading">
           Conéctate con nosotros y no te pierdas nuestros eventos
-        </h5>
+        </h2>
       </div>
 
       <div class="flex justify-center gap-10 mb-10">

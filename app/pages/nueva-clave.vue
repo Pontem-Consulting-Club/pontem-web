@@ -2,7 +2,7 @@
   <UContainer class="flex min-h-[calc(100vh-4rem)] items-center justify-center py-16">
     <UCard class="w-full max-w-md">
       <template #header>
-        <h2 class="text-center text-2xl font-bold">{{ heading }}</h2>
+        <h1 class="text-center text-heading text-highlighted">{{ heading }}</h1>
       </template>
 
       <LoadingSpinner v-if="isResolving" />

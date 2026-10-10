@@ -18,7 +18,7 @@ withDefaults(defineProps<Props>(), {
 <template>
   <div class="text-center">
     <UIcon :name="icon" class="size-16 mx-auto mb-4" />
-    <h1 class="text-2xl font-bold mb-4">{{ title }}</h1>
+    <h1 class="mb-4 text-title text-highlighted">{{ title }}</h1>
     <p v-if="message" class="mb-6">{{ message }}</p>
     <UButton :to="buttonLink" variant="outline"
       class="border-2 hover:text-white transition-colors duration-300 rounded-lg">

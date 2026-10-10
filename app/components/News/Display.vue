@@ -16,7 +16,7 @@
             <div v-if="headerType" class="mb-4">
                 <TypeBadge :type="headerType" size="base" />
             </div>
-            <h1 class="text-3xl md:text-3xl font-bold mb-4 text-primary">
+            <h1 class="mb-4 text-title text-highlighted">
                 {{ newsItem.title }}
             </h1>
             <p v-if="headerSubtitle" class="font-semibold text-lg mb-6">

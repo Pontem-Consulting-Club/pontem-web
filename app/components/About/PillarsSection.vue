@@ -37,7 +37,7 @@ const pillars: Pillar[] = [
 
 <template>
   <section>
-    <SectionHeader title="Nuestros Pilares" centered class="mb-14" />
+    <SectionTitle title="Nuestros Pilares" centered class="mb-14" />
 
     <div class="grid md:grid-cols-2 gap-10">
       <UCard v-for="pillar in pillars" :key="pillar.title" variant="feature" class="group"
@@ -54,7 +54,7 @@ const pillars: Pillar[] = [
             <UIcon :name="pillar.icon" class="size-7" />
           </div>
           <div>
-            <h3 class="text-xl font-bold text-highlighted mb-1">{{ pillar.title }}</h3>
+            <h3 class="mb-1 text-subheading text-highlighted">{{ pillar.title }}</h3>
             <div
               :class="[
                 'h-1 w-10 rounded-full transition-all duration-300 group-hover:w-16',

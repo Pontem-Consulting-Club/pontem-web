@@ -9,7 +9,7 @@
 
         <!-- Navigation Column -->
         <div class="text-center md:text-left">
-          <h5 class="font-semibold mb-4 text-lg">Pontem</h5>
+          <h2 class="mb-4 text-lg font-semibold">Pontem</h2>
           <nav class="flex flex-col gap-2">
             <NuxtLink v-for="item in navigationWithAdmin" :key="item.to" :to="item.to"
               class="text-white/80 hover:text-white hover:font-bold transition-all text-sm">
@@ -20,7 +20,7 @@
 
         <!-- Contact Column -->
         <div class="text-center md:text-left">
-          <h5 class="font-semibold mb-4 text-lg">Contacto</h5>
+          <h2 class="mb-4 text-lg font-semibold">Contacto</h2>
           <nav class="flex flex-col gap-2">
             <a v-for="link in socialLinks" :key="link.href" :href="link.href" target="_blank" rel="noopener noreferrer"
               :class="[
