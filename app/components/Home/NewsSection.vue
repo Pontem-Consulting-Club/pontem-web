@@ -1,37 +1,26 @@
 <template>
-  <section class="relative py-16 md:py-24 rounded-[48px] mx-2 md:mx-6">
-    <UContainer>
-      <div class="text-center mb-12">
-        <h3 class="text-3xl md:text-4xl font-bold mb-4">
-          Noticias y Blog
-        </h3>
-        <p class="text-lg">
-          Mantente al día con las últimas novedades
-        </p>
-      </div>
+  <UPageSection title="Noticias y Blog" description="Mantente al día con las últimas novedades">
+    <LoadError v-if="error" title="No pudimos cargar las noticias" :retry="refresh" />
 
-      <LoadingSpinner v-if="status === 'pending'" />
+    <UEmpty v-else-if="latestNews.length === 0" title="No hay noticias disponibles" icon="i-lucide-inbox"/>
 
-      <EmptyState v-else-if="latestNews.length === 0" message="No hay noticias disponibles" />
+    <UPageGrid v-else>
+      <NewsCard v-for="newsItem in latestNews" :key="newsItem.id" :news-item="newsItem" />
+    </UPageGrid>
 
-      <div v-else class="grid md:grid-cols-3 gap-6">
-        <NewsCard v-for="newsItem in latestNews" :key="newsItem.id" :news-item="newsItem"/>
-      </div>
 
-      <div class="text-center mt-10">
-        <UButton to="/noticias" size="lg" variant="soft"
-          class="font-semibold transition-colors bg-white text-gray-500 hover:bg-white hover:outline">
-          Ver todas las noticias
-        </UButton>
-      </div>
-    </UContainer>
-  </section>
+    <div class="mt-10 text-center">
+      <UButton to="/noticias" size="lg" color="neutral" variant="outline">
+        Ver todas las noticias
+      </UButton>
+    </div>
+  </UPageSection>
 </template>
 
 <script setup lang="ts">
 import type { NewsRecord } from '~/types/content'
 
-const { data: news, status } = await useFetch<NewsRecord[]>('/api/news', {
+const { data: news, error, refresh } = await useFetch<NewsRecord[]>('/api/news', {
   default: () => []
 })
 

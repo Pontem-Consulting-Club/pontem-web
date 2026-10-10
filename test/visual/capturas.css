@@ -1,0 +1,4 @@
+/* Se aplica solo al tomar capturas: oculta el botón flotante de Nuxt DevTools. */
+#nuxt-devtools-container,
+nuxt-devtools-frame,
+.nuxt-devtools-panel { display: none !important; }

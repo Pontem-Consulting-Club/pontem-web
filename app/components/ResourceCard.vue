@@ -12,12 +12,12 @@ withDefaults(defineProps<Props>(), {
 </script>
 
 <template>
-  <UCard class="hover:shadow-lg transition-shadow bg-white">
+  <UCard variant="item">
     <div class="flex items-center gap-4">
-      <UIcon :name="icon" :class="['w-10 h-10', iconColor]" />
+      <UIcon :name="icon" :class="['size-10', iconColor]" />
       <div class="text-left">
         <h3 class="font-semibold">{{ title }}</h3>
-        <p class="text-sm ">{{ description }}</p>
+        <p class="text-sm">{{ description }}</p>
       </div>
     </div>
   </UCard>

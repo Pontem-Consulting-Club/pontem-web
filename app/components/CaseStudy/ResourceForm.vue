@@ -81,32 +81,30 @@ const handleSubmit = async () => {
 </script>
 
 <template>
-  <div class="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm">
-    <UButton v-if="!isOpen" icon="i-lucide-plus" variant="soft" size="sm" block @click="isOpen = true">
+  <UCard :ui="{ body: 'p-4 sm:p-4' }">
+    <UButton v-if="!isOpen" icon="i-lucide-plus" size="sm" block @click="isOpen = true">
       Agregar recurso
     </UButton>
 
     <form v-else class="flex flex-col gap-3" @submit.prevent="handleSubmit">
       <UFormField label="Tipo">
         <USelectMenu v-model="kind" :items="CASE_RESOURCE_KIND_OPTIONS" value-key="value" label-key="label"
-          class="w-full" />
+          />
       </UFormField>
 
       <UFormField label="Título" required>
-        <UInput v-model="title" placeholder="Ej. Frameworks de entrada a mercados" class="w-full"
-          :ui="{ base: 'text-gray-900 placeholder:text-gray-400' }" />
+        <UInput v-model="title" placeholder="Ej. Frameworks de entrada a mercados" />
       </UFormField>
 
       <UFormField label="Enlace" hint="o sube un archivo">
-        <UInput v-model="link" type="url" placeholder="https://..." class="w-full"
-          :ui="{ base: 'text-gray-900 placeholder:text-gray-400' }" />
+        <UInput v-model="link" type="url" placeholder="https://..." />
       </UFormField>
 
       <div class="flex items-center gap-2">
-        <UButton icon="i-lucide-paperclip" variant="soft" size="xs" @click="documentInput?.click()">
+        <UButton icon="i-lucide-paperclip" size="xs" @click="documentInput?.click()">
           {{ pendingDocument ? 'Cambiar archivo' : 'Adjuntar archivo' }}
         </UButton>
-        <span v-if="pendingDocument" class="text-xs text-gray-500 truncate">{{ pendingDocument.name }}</span>
+        <span v-if="pendingDocument" class="text-xs text-muted truncate">{{ pendingDocument.name }}</span>
         <input ref="documentInput" type="file" accept="application/pdf,.pdf,.xlsx,.xls" class="hidden"
           @change="handleFileChange">
       </div>
@@ -114,13 +112,13 @@ const handleSubmit = async () => {
       <UAlert v-if="error" color="error" icon="i-lucide-alert-circle" :description="error" />
 
       <div class="flex justify-end gap-2 pt-2">
-        <UButton color="neutral" variant="soft" size="sm" :disabled="isSaving" @click="close">
+        <UButton color="neutral" size="sm" :disabled="isSaving" @click="close">
           Cancelar
         </UButton>
-        <UButton type="submit" size="sm" :loading="isSaving">
+        <UButton variant="solid" type="submit" size="sm" :loading="isSaving">
           Guardar
         </UButton>
       </div>
     </form>
-  </div>
+  </UCard>
 </template>

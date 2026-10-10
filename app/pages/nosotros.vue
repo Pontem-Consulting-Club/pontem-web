@@ -3,13 +3,14 @@ import about from '~/assets/data/about.json'
 import { TEAM_COORDINATIONS, TEAM_COORDINATION_ICONS, TEAM_COORDINATION_LABELS } from '~/constants/teamRoles'
 import type { TeamRecord, TeamCoordinationRecord } from '~/types/content'
 
-useHead({
-  title: about.title
+usePageMeta({
+  title: about.title,
+  description: 'Quiénes somos: misión, pilares, historia y equipo de Pontem Consulting Club.'
 })
 
 const history = about.history
 
-const { data: teamData, status, refresh } = await useFetch<{ members: TeamRecord[], coordinations: TeamCoordinationRecord[] }>('/api/team', {
+const { data: teamData, error, refresh } = await useFetch<{ members: TeamRecord[], coordinations: TeamCoordinationRecord[] }>('/api/team', {
   default: () => ({ members: [], coordinations: [] })
 })
 
@@ -50,7 +51,14 @@ const handleCreated = () => {
   cancelCreate()
 }
 
-const startEdit = async (member: TeamRecord) => {
+// Mientras hay un formulario abierto, los nombres y "Agregar" quedan desactivados.
+const { anyOpen: editorOpen } = useEditorSlot()
+
+// El nombre que abrió el formulario recibe el foco al cerrarlo.
+let editTrigger: HTMLElement | null = null
+
+const startEdit = async (member: TeamRecord, event: MouseEvent) => {
+  editTrigger = event.currentTarget as HTMLElement
   cancelCreate()
   editingMember.value = { ...member }
   // El nombre puede quedar lejos del formulario: lo trae a la vista.
@@ -58,8 +66,10 @@ const startEdit = async (member: TeamRecord) => {
   editorPanel.value?.scrollIntoView({ behavior: 'smooth', block: 'center' })
 }
 
-const closeEdit = () => {
+const closeEdit = async () => {
   editingMember.value = null
+  await nextTick()
+  editTrigger?.focus()
 }
 
 const teamByRole = computed(() => {
@@ -84,7 +94,7 @@ const teamByRole = computed(() => {
  
 <template>
   <div>
-    <PageHeader title="Nosotros" background-image="/Equipo2024.jpeg" />
+    <PageBanner title="Nosotros" image="/Equipo2024.jpeg" />
  
     <UContainer class="py-16 space-y-28">
 
@@ -96,17 +106,17 @@ const teamByRole = computed(() => {
  
       <!-- ── EQUIPO ────────────────────────────────────────────── -->
       <section>
-        <SectionHeader title="Nuestro Equipo" centered class="mb-12" />
+        <SectionTitle title="Nuestro Equipo" centered class="mb-12" />
  
         <div v-if="isEditor" class="flex justify-end mb-6">
-          <UButton icon="i-lucide-plus" variant="soft" color="primary" size="md" :disabled="isCreating" @click="startCreate">
+          <UButton icon="i-lucide-plus" color="primary" size="md" :disabled="editorOpen" @click="startCreate">
             Agregar
           </UButton>
         </div>
  
-        <LoadingSpinner v-if="status === 'pending'" />
- 
-        <div v-if="isCreating && draftMember" class="mb-6">
+        <LoadError v-if="error" title="No pudimos cargar el equipo" :retry="refresh" />
+
+        <div v-else-if="isCreating && draftMember" class="mb-6">
           <TeamCard :member="draftMember" :is-new="true" @created="handleCreated" @cancel-create="cancelCreate" @updated="refresh" />
         </div>
 
@@ -114,11 +124,12 @@ const teamByRole = computed(() => {
           <TeamCard :key="editingMember.id" :member="editingMember" start-editing @updated="refresh" @closed="closeEdit" />
         </div>
  
-        <EmptyState v-else-if="teamByRole.length === 0" message="No hay integrantes disponibles" />
+        <UEmpty v-else-if="teamByRole.length === 0" title="No hay integrantes disponibles" icon="i-lucide-inbox"/>
 
-        <div v-if="teamByRole.length > 0" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div v-for="dept in teamByRole" :key="dept.key"
-            class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 flex h-56">
+        <div v-if="!error && teamByRole.length > 0" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Foto a la izquierda y nombres a la derecha, sin el relleno de la tarjeta -->
+          <UCard v-for="dept in teamByRole" :key="dept.key" class="h-56"
+            :ui="{ body: 'flex h-full p-0 sm:p-0' }">
 
             <!-- Imagen: 75% -->
             <div class="w-3/4 shrink-0">
@@ -134,32 +145,32 @@ const teamByRole = computed(() => {
             <div class="w-1/4 flex flex-col p-4 overflow-hidden">
               <!-- Header -->
               <div class="flex items-center gap-1.5 mb-3 shrink-0">
-                <UIcon :name="dept.icon" class="w-3.5 h-3.5 text-pontemred-500 shrink-0" />
-                <h3 class="font-bold text-gray-900 text-sm leading-tight">{{ dept.label }}</h3>
+                <UIcon :name="dept.icon" class="size-3.5 text-primary-500 shrink-0" />
+                <h3 class="font-bold text-highlighted text-sm/tight">{{ dept.label }}</h3>
               </div>
 
               <!-- Nombres -->
               <div class="flex flex-col gap-1 overflow-hidden">
                 <template v-for="member in dept.members" :key="member.id">
                   <button v-if="isEditor" type="button" :aria-label="`Editar a ${member.name}`"
-                    class="group flex min-w-0 items-center gap-1 text-left text-xs text-gray-400 leading-snug hover:text-primary"
-                    @click="startEdit(member)">
+                    class="group flex min-w-0 items-center gap-1 text-left text-xs/snug text-muted hover:text-primary disabled:pointer-events-none disabled:opacity-60"
+                    :disabled="editorOpen" @click="startEdit(member, $event)">
                     <span class="truncate">{{ member.name }}</span>
-                    <UIcon name="i-lucide-pencil" class="w-3 h-3 shrink-0 text-gray-300 group-hover:text-primary" />
+                    <UIcon name="i-lucide-pencil" class="size-3 shrink-0 text-dimmed group-hover:text-primary" />
                   </button>
-                  <p v-else class="text-xs text-gray-400 leading-snug truncate">
+                  <p v-else class="text-xs/snug text-muted truncate">
                     {{ member.name }}
                   </p>
                 </template>
-                <p v-if="dept.members.length === 0" class="text-xs text-gray-400 italic">Sin integrantes aún</p>
+                <p v-if="dept.members.length === 0" class="text-xs text-muted italic">Sin integrantes aún</p>
               </div>
 
               <!-- Contador abajo -->
-              <p class="mt-auto text-xs text-gray-300 shrink-0 pt-2">
+              <p class="mt-auto text-xs text-muted shrink-0 pt-2">
                 {{ dept.members.length }} {{ dept.members.length === 1 ? 'integrante' : 'integrantes' }}
               </p>
             </div>
-          </div>
+          </UCard>
         </div>
       </section>
  

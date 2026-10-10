@@ -1,42 +1,43 @@
 <template>
   <ProjectEditForm v-if="isEditing" v-model:form="form" :is-new="_props.isNew" :is-saving="isSaving"
     :is-deleting="isDeleting" :form-error="formError"
-    :class="_props.layout === 'row' ? 'my-4 max-w-xl ring-1 ring-gray-200' : undefined"
+    :class="_props.layout === 'row' ? 'my-4 max-w-xl ring-1 ring-default' : undefined"
     @submit="saveEdit" @cancel="cancelEdit" @delete="handleDelete" />
 
   <!-- Fila de "Proyectos anteriores" -->
   <div v-else-if="_props.layout === 'row'"
     class="flex flex-col gap-1 py-3 sm:grid sm:grid-cols-[120px_1fr_2fr_auto] sm:gap-4 sm:items-center">
-    <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">{{ project.semester }}</span>
-    <span class="text-sm font-semibold text-gray-700">{{ project.title }}</span>
-    <span class="text-xs text-gray-500 sm:truncate">{{ project.subtitle }}</span>
-    <UButton v-if="isEditor" icon="i-lucide-pencil" size="xs" color="primary" variant="ghost"
-      aria-label="Editar proyecto" class="self-start sm:self-auto" @click="startEdit" />
+    <span class="text-xs font-semibold text-muted uppercase tracking-wide">{{ project.semester }}</span>
+    <span class="text-sm font-semibold text-default">{{ project.title }}</span>
+    <span class="text-xs text-muted sm:truncate">{{ project.subtitle }}</span>
+    <ContentEditButton v-if="isEditor" ref="editButton" label="Editar proyecto" inline :disabled="otherEditorOpen"
+      class="self-start sm:self-auto" @click="startEdit" />
   </div>
 
-  <UCard v-else variant="soft" class="rounded-xl bg-white relative flex flex-col overflow-hidden p-0">
-    <UButton v-if="isEditor" icon="i-lucide-pencil" size="xs" color="primary" variant="soft"
-      aria-label="Editar proyecto" class="absolute top-3 right-3 z-10 bg-white/90 shadow-sm hover:bg-white"
-      @click="startEdit" />
+  <UCard v-else variant="item" class="relative flex flex-col" :ui="{ body: 'flex flex-1 flex-col gap-1' }">
+    <template #header>
+      <ContentEditButton v-if="isEditor" ref="editButton" label="Editar proyecto" :disabled="otherEditorOpen"
+        @click="startEdit" />
 
-    <NuxtImg v-if="imageUrl" :src="imageUrl" :alt="project.title" class="w-full h-44 object-cover flex-shrink-0" />
-    <!-- Sin imagen: el logo completo, no recortado por object-cover. -->
-    <NuxtImg v-else src="/LogoColorSolo.png" alt="" class="w-full h-44 object-contain p-8 bg-gray-50 flex-shrink-0" />
+      <NuxtImg v-if="imageUrl" :src="imageUrl" preset="card" :alt="project.title" class="h-44 w-full object-cover" />
+      <!-- Sin imagen: el logo completo, no recortado por object-cover. -->
+      <NuxtImg v-else src="/LogoColorSolo.png" alt="" class="h-44 w-full bg-muted object-contain p-8" />
+    </template>
 
-    <div class="flex flex-col flex-1 p-5 gap-1">
-      <div class="text-base text-primary font-bold leading-snug">
+      <h3 class="text-subheading text-highlighted">
         {{ project.title }}
-      </div>
-      <div v-if="project.subtitle" class="text-xs text-gray-500 font-medium mb-1">
+      </h3>
+      <div v-if="project.subtitle" class="text-xs text-muted font-medium mb-1">
         {{ project.subtitle }}
       </div>
-      <div v-if="project.description" class="text-sm text-gray-500 leading-relaxed flex-1">
+      <div v-if="project.description" class="text-sm/relaxed text-muted flex-1">
         {{ project.description }}
       </div>
-      <UButton v-if="project.link" class="max-w-fit mt-4" :href="project.link" target="_blank" variant="soft" size="sm">
+      <UButton v-if="project.link" class="max-w-fit mt-4" :href="project.link" target="_blank"
+        trailing-icon="i-lucide-external-link"
+        :aria-label="`${project.link_text || 'Ver más'}: ${project.title} (se abre en otra pestaña)`">
         {{ project.link_text || 'Ver más' }}
       </UButton>
-    </div>
   </UCard>
 </template>
 
@@ -69,6 +70,14 @@ const formError = ref('')
 const form = ref<Partial<ProjectRecord>>({})
 
 const { url: imageUrl } = useStorageImage(computed(() => project.value.image_url ?? null))
+
+const toast = useToast()
+const { confirmDelete, confirmDiscard } = useConfirm()
+const editButton = useTemplateRef('editButton')
+const { othersOpen: otherEditorOpen } = useEditorSlot(
+  () => (_props.isNew ? 'proyecto:nuevo' : `proyecto:${project.value.id}`),
+  { isEditing, focusOnClose: () => editButton.value?.focus() }
+)
 
 watch(project, (value) => {
   if (_props.isNew || !isEditing.value) {
@@ -123,7 +132,8 @@ const startEdit = () => {
   isEditing.value = true
 }
 
-const cancelEdit = () => {
+const cancelEdit = async (hasPendingFile = false) => {
+  if ((hasPendingFile || formChanged(form.value, project.value)) && !(await confirmDiscard())) return
   if (_props.isNew) {
     emit('cancel-create')
     return
@@ -152,6 +162,7 @@ const saveEdit = async (file?: File | null) => {
     } else {
       await $fetch(`/api/admin/projects/${project.value.id}`, { method: 'PUT', body: formData })
     }
+    toast.add({ title: _props.isNew ? 'Proyecto creado' : 'Proyecto guardado', icon: 'i-lucide-check', color: 'success' })
     isEditing.value = false
     emit('updated')
   } catch (error: unknown) {
@@ -168,17 +179,14 @@ const saveEdit = async (file?: File | null) => {
 
 const handleDelete = async () => {
   if (_props.isNew) return
-  const confirmed = typeof window !== 'undefined'
-    ? window.confirm('¿Eliminar este proyecto? Esta acción no se puede deshacer.')
-    : false
-
-  if (!confirmed) return
+  if (!(await confirmDelete('este proyecto'))) return
 
   isDeleting.value = true
   formError.value = ''
 
   try {
     await $fetch(`/api/admin/projects/${project.value.id}`, { method: 'DELETE' })
+    toast.add({ title: 'Proyecto eliminado', icon: 'i-lucide-check', color: 'success' })
     isEditing.value = false
     emit('updated')
   } catch (error: unknown) {

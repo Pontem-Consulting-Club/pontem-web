@@ -1,30 +1,30 @@
 <template>
   <div>
-    <PageHeader title="Personas" background-image="/Equipo2024.jpeg" />
+    <PageBanner title="Personas" image="/Equipo2024.jpeg" />
 
     <UContainer class="py-16">
       <!-- Invitar -->
-      <UCard variant="soft" class="mb-10 bg-white rounded-lg shadow-sm">
+      <UCard class="mb-10">
         <template #header>
           <div class="flex items-center gap-2">
-            <UIcon name="i-lucide-user-plus" class="text-primary-600" />
-            <h2 class="font-semibold">Invitar a alguien</h2>
+            <UIcon name="i-lucide-user-plus" class="text-primary" />
+            <h2 class="text-heading text-highlighted">Invitar a alguien</h2>
           </div>
         </template>
 
         <UForm :state="invite" class="grid gap-4 sm:grid-cols-[minmax(0,1fr)_200px_auto] sm:items-end"
           @submit.prevent="sendInvite">
           <UFormField label="Correo" required>
-            <UInput v-model="invite.email" type="email" placeholder="nombre@ejemplo.cl" class="w-full" />
+            <UInput v-model="invite.email" type="email" placeholder="nombre@ejemplo.cl" />
           </UFormField>
           <UFormField label="Rol inicial">
             <USelectMenu v-model="invite.role" :items="roleOptions" value-key="value" label-key="label"
-              class="w-full" />
+              />
           </UFormField>
-          <UButton type="submit" size="lg" :loading="isInviting">Enviar</UButton>
+          <UButton variant="solid" type="submit" size="lg" :loading="isInviting">Enviar</UButton>
         </UForm>
 
-        <p class="mt-3 text-xs text-gray-500">
+        <p class="mt-3 text-xs text-muted">
           Recibe un correo para elegir su clave. Pontem nunca ve ni guarda contraseñas.
         </p>
 
@@ -37,33 +37,33 @@
         <UInput v-model="search" icon="i-lucide-search" placeholder="Buscar por nombre o correo" class="max-w-xs" />
         <USelectMenu v-model="roleFilter" :items="roleFilterOptions" value-key="value" label-key="label"
           class="w-44" />
-        <span class="ml-auto text-sm text-gray-500">{{ filtered.length }} de {{ users.length }}</span>
+        <span class="ml-auto text-sm text-muted">{{ filtered.length }} de {{ users.length }}</span>
       </div>
 
-      <LoadingSpinner v-if="status === 'pending'" />
+      <LoadError v-if="error" title="No pudimos cargar las personas" :retry="refresh" />
 
       <div v-else-if="filtered.length === 0">
-        <EmptyState icon="i-lucide-users" message="No hay personas que coincidan" />
+        <UEmpty icon="i-lucide-users" title="No hay personas que coincidan" />
       </div>
 
-      <div v-else class="overflow-x-auto rounded-lg border border-gray-200 bg-white">
+      <div v-else class="overflow-x-auto rounded-lg border border-default bg-default">
         <table class="w-full text-sm">
-          <thead class="bg-gray-50 text-left text-xs uppercase tracking-wide text-gray-500">
+          <thead class="bg-muted text-left text-xs uppercase tracking-wide text-muted">
             <tr>
               <th class="px-4 py-3 font-medium">Persona</th>
               <th class="px-4 py-3 font-medium">Coordinación</th>
               <th class="px-4 py-3 font-medium">Rol</th>
               <th class="px-4 py-3 font-medium">Estado</th>
-              <th class="px-4 py-3" />
+              <th class="px-4 py-3"><span class="sr-only">Acciones</span></th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-gray-200">
+          <tbody class="divide-y divide-default">
             <tr v-for="person in filtered" :key="person.id" class="align-middle">
               <td class="px-4 py-3">
                 <div class="font-medium">{{ person.display_name || '—' }}</div>
-                <div class="text-xs text-gray-500">{{ person.email }}</div>
+                <div class="text-xs text-muted">{{ person.email }}</div>
               </td>
-              <td class="px-4 py-3 text-gray-600">
+              <td class="px-4 py-3 text-toned">
                 {{ person.coordination ? coordinationLabels[person.coordination] : '—' }}
               </td>
               <td class="px-4 py-3">
@@ -72,16 +72,16 @@
                   @update:model-value="(role: string) => updateUser(person, { role })" />
               </td>
               <td class="px-4 py-3">
-                <UBadge :color="stateColor(person.state)" variant="subtle" size="sm">
+                <UBadge :color="stateColor(person.state)" size="sm">
                   {{ stateLabels[person.state] }}
                 </UBadge>
               </td>
               <td class="px-4 py-3 text-right">
-                <UButton v-if="person.state === 'inactive'" size="xs" variant="soft" icon="i-lucide-rotate-ccw"
+                <UButton v-if="person.state === 'inactive'" size="xs" icon="i-lucide-rotate-ccw"
                   :loading="busyId === person.id" @click="updateUser(person, { state: 'active' })">
                   Reactivar
                 </UButton>
-                <UButton v-else size="xs" variant="soft" color="error" icon="i-lucide-user-minus"
+                <UButton v-else size="xs" color="error" icon="i-lucide-user-minus"
                   :loading="busyId === person.id" @click="updateUser(person, { state: 'inactive' })">
                   Desactivar
                 </UButton>
@@ -93,7 +93,7 @@
 
       <UAlert v-if="tableError" color="error" icon="i-lucide-alert-circle" :description="tableError" class="mt-4" />
 
-      <p class="mt-6 text-xs text-gray-500">
+      <p class="mt-6 text-xs text-muted">
         Desactivar conserva el historial de la persona y quita sus permisos de inmediato. No se puede desactivar ni
         degradar a la última cuenta administradora activa.
       </p>
@@ -121,7 +121,7 @@ const stateLabels = PROFILE_STATE_LABELS
 const roleOptions = USER_ROLES.map(role => ({ label: ROLE_LABELS[role], value: role }))
 const roleFilterOptions = [{ label: 'Todos los roles', value: 'all' }, ...roleOptions]
 
-const { data: users, status, refresh } = await useFetch<DirectoryEntry[]>('/api/admin/users', {
+const { data: users, error, refresh } = await useFetch<DirectoryEntry[]>('/api/admin/users', {
   default: () => []
 })
 

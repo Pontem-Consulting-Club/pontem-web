@@ -1,25 +1,23 @@
 <template>
   <div>
-    <PageHeader title="Noticias y Blog" background-image="/ActividadSumma.JPG" />
+    <PageBanner title="Noticias y Blog" image="/ActividadSumma.JPG" />
     <UContainer class="py-8">
       <div class="flex flex-row items-center justify-between gap-4">
       <!-- Filters -->
       <NewsFilterPills v-model="selectedTypes" :options="types" label="Selecciona las noticias que deseas ver:" />
-      <UButton v-if="isEditor" variant="soft" icon="i-lucide-plus" color="primary" size="md" @click="startCreate">
+      <UButton v-if="isEditor" icon="i-lucide-plus" color="primary" size="md" @click="startCreate">
         Agregar
       </UButton>
       </div>
 
-      <LoadingSpinner v-if="status === 'pending'" />
+      <h2 class="sr-only">Todas las noticias</h2>
+      <LoadError v-if="error" title="No pudimos cargar las noticias" :retry="refresh" />
 
-      <div v-if="paginatedNews.length === 0" class="text-center">
-        <UIcon name="i-lucide-inbox" class="w-16 h-16 mx-auto mb-4" />
-        <p>No hay noticias disponibles</p>
-      </div>
+      <UEmpty v-else-if="paginatedNews.length === 0" icon="i-lucide-inbox" title="No hay noticias disponibles" />
 
-      <div v-else class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <UPageGrid v-else>
         <NewsCard v-for="newsItem in paginatedNews" :key="newsItem.id" :news-item="newsItem"/>
-      </div>
+      </UPageGrid>
 
       <!-- Pagination -->
       <div v-if="totalPages > 1" class="mt-12 flex justify-center">
@@ -31,11 +29,12 @@
 <script setup lang="ts">
 import type { NewsRecord } from '~/types/content'
 
-useHead({
-  title: 'Noticias y Blog - Pontem'
+usePageMeta({
+  title: 'Noticias y Blog - Pontem',
+  description: 'Noticias, anuncios y artículos de Pontem Consulting Club.'
 })
 
-const { data: news, status } = await useFetch<NewsRecord[]>('/api/news', {
+const { data: news, error, refresh } = await useFetch<NewsRecord[]>('/api/news', {
   default: () => []
 })
 

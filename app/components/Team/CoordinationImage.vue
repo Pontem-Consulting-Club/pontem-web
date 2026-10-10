@@ -1,18 +1,19 @@
 <template>
-  <div class="relative h-full bg-gray-100">
+  <div class="relative h-full bg-elevated">
     <!-- Imagen o placeholder -->
-    <img v-if="imageUrl" :src="imageUrl" class="w-full h-full object-cover" >
-    <div v-else class="w-full h-full bg-gradient-to-r from-pontemred-100 to-pontemteal-100 flex items-center justify-center">
-      <UIcon :name="icon" class="w-12 h-12 text-pontemred-300" />
+    <!-- Decorativa: la tarjeta ya nombra la coordinación. -->
+    <NuxtImg v-if="imageUrl" :src="imageUrl" preset="card" alt="" class="size-full object-cover" />
+    <div v-else class="size-full bg-linear-to-r from-primary-100 to-secondary-50 flex items-center justify-center">
+      <UIcon :name="icon" class="size-12 text-primary-400" />
     </div>
 
     <!-- Overlay gradiente siempre visible -->
-    <div class="absolute inset-0 bg-gradient-to-r from-pontemred-500/40 to-pontemteal-500/40" />
+    <div class="absolute inset-0 bg-linear-to-r from-primary-500/40 to-secondary-300/40" />
 
     <!-- Admin: sin imagen → botón "Agregar foto" centrado -->
     <div v-if="isEditor && !imagePath"
       class="absolute inset-0 flex items-center justify-center">
-      <UButton icon="i-lucide-image" size="sm" color="neutral" variant="soft" @click="fileInput?.click()">
+      <UButton icon="i-lucide-image" size="sm" color="neutral" @click="fileInput?.click()">
         Agregar foto
       </UButton>
     </div>
@@ -20,10 +21,10 @@
     <!-- Admin: con imagen → overlay en hover con Cambiar y Eliminar -->
     <div v-if="isEditor && imagePath"
       class="absolute inset-0 flex items-center justify-center gap-3 bg-black/40 opacity-0 hover:opacity-100 transition-opacity">
-      <UButton icon="i-lucide-image" size="sm" color="neutral" variant="soft" @click="fileInput?.click()">
+      <UButton icon="i-lucide-image" size="sm" color="neutral" @click="fileInput?.click()">
         Cambiar
       </UButton>
-      <UButton icon="i-lucide-trash-2" size="sm" color="error" variant="soft" :loading="isDeleting" @click="handleDelete">
+      <UButton icon="i-lucide-trash-2" size="sm" color="error" :loading="isDeleting" @click="handleDelete">
         Eliminar
       </UButton>
     </div>

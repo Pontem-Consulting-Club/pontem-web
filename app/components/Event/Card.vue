@@ -31,6 +31,14 @@ const form = ref<Partial<EventRecord>>({})
 
 const { url: imageUrl } = useStorageImage(computed(() => event.value.image_url ?? null))
 
+const toast = useToast()
+const { confirmDelete, confirmDiscard } = useConfirm()
+const editButton = useTemplateRef('editButton')
+const { othersOpen: otherEditorOpen } = useEditorSlot(
+  () => (_props.isNew ? 'evento:nuevo' : `evento:${event.value.id}`),
+  { isEditing, focusOnClose: () => editButton.value?.focus() }
+)
+
 // El día de Chile, igual en el servidor (UTC) y en el navegador.
 const dayNumber = computed(() => Number(clubDay(event.value.date).slice(8, 10)))
 const monthYear = computed(() => formatClubDate(event.value.date, { month: 'short', year: 'numeric' }))
@@ -96,7 +104,8 @@ const startEdit = () => {
   isEditing.value = true
 }
 
-const cancelEdit = () => {
+const cancelEdit = async (hasPendingFile = false) => {
+  if ((hasPendingFile || formChanged(form.value, event.value)) && !(await confirmDiscard())) return
   if (_props.isNew) {
     emit('cancel-create')
     return
@@ -126,6 +135,7 @@ const saveEdit = async (file?: File | null) => {
     } else {
       await $fetch(`/api/admin/events/${event.value.id}`, { method: 'PUT', body: formData })
     }
+    toast.add({ title: _props.isNew ? 'Evento creado' : 'Evento guardado', icon: 'i-lucide-check', color: 'success' })
     isEditing.value = false
     emit('updated')
   } catch (error: unknown) {
@@ -142,17 +152,14 @@ const saveEdit = async (file?: File | null) => {
 
 const handleDelete = async () => {
   if (_props.isNew) return
-  const confirmed = typeof window !== 'undefined'
-    ? window.confirm('¿Eliminar este evento? Esta acción no se puede deshacer.')
-    : false
-
-  if (!confirmed) return
+  if (!(await confirmDelete('este evento'))) return
 
   isDeleting.value = true
   formError.value = ''
 
   try {
     await $fetch(`/api/admin/events/${event.value.id}`, { method: 'DELETE' })
+    toast.add({ title: 'Evento eliminado', icon: 'i-lucide-check', color: 'success' })
     isEditing.value = false
     emit('updated')
   } catch (error: unknown) {
@@ -173,40 +180,39 @@ const handleDelete = async () => {
     :is-saving="isSaving" :is-deleting="isDeleting" :form-error="formError" @submit="saveEdit" @cancel="cancelEdit"
     @delete="handleDelete" />
 
-  <UCard v-else-if="variant === 'full'"
-    class="rounded-3xl bg-white/90 shadow-sm hover:shadow-lg transition-shadow relative">
-    <UButton v-if="isEditor" icon="i-lucide-pencil" size="xs" color="primary" variant="ghost"
-      class="absolute top-3 right-3 z-10" @click="startEdit" />
+  <UCard v-else-if="variant === 'full'" variant="item" class="relative">
+    <ContentEditButton v-if="isEditor" ref="editButton" label="Editar evento" :disabled="otherEditorOpen"
+      @click="startEdit" />
 
     <div class="flex flex-col md:flex-row gap-6">
       <div class="md:w-32 shrink-0">
         <div class="bg-primary-50 rounded-lg p-4 text-center">
-          <span class="block text-3xl font-bold text-primary-600">
+          <span class="block text-3xl font-bold text-primary-700">
             {{ dayNumber }}
           </span>
-          <span class="block text-sm text-primary-600">
+          <span class="block text-sm text-primary-700">
             {{ monthYear }}
           </span>
         </div>
       </div>
       <div class="flex-1">
-        <div class="text-xl font-semibold mb-2">
+        <h3 class="mb-2 text-subheading text-highlighted">
           {{ event.title }}
-        </div>
-        <div v-if="event.subtitle" class="mb-3 text-gray-600">
+        </h3>
+        <div v-if="event.subtitle" class="mb-3 text-toned">
           {{ event.subtitle }}
         </div>
-        <div v-if="event.description" class="mb-4 text-gray-600">
+        <div v-if="event.description" class="mb-4 text-toned">
           {{ event.description }}
         </div>
         <div class="flex flex-wrap gap-4 text-sm">
           <span v-if="event.location" class="flex items-center gap-2">
-            <UIcon name="i-lucide-map-pin" class="w-4 h-4" />
+            <UIcon name="i-lucide-map-pin" class="size-4" />
             {{ event.location }}
           </span>
           <a v-if="event.link" :href="event.link" target="_blank"
-            class="flex items-center gap-2 text-primary-600 hover:underline">
-            <UIcon name="i-lucide-external-link" class="w-4 h-4" />
+            class="flex items-center gap-2 text-primary hover:underline">
+            <UIcon name="i-lucide-external-link" class="size-4" />
             Ver más
           </a>
         </div>
@@ -225,15 +231,15 @@ const handleDelete = async () => {
     </div>
   </UCard>
 
-  <UCard v-else-if="variant === 'past'" class="rounded-2xl opacity-75 bg-white/90 shadow-sm relative">
-    <UButton v-if="isEditor" icon="i-lucide-pencil" size="xs" color="primary" variant="ghost"
-      class="absolute top-3 right-3 z-10" @click="startEdit" />
+  <UCard v-else-if="variant === 'past'" class="relative opacity-75">
+    <ContentEditButton v-if="isEditor" ref="editButton" label="Editar evento" :disabled="otherEditorOpen"
+      @click="startEdit" />
     <div class="flex flex-col md:flex-row gap-4 items-start md:items-center">
       <span class="text-sm md:w-32">
         {{ formatDate(event.date) }}
       </span>
       <div class="flex-1">
-        <h3 class="text-lg font-medium">
+        <h3 class="text-subheading">
           {{ event.title }}
         </h3>
         <p v-if="event.subtitle" class="text-sm">
@@ -243,23 +249,24 @@ const handleDelete = async () => {
     </div>
   </UCard>
 
-  <div v-else class="rounded-3xl bg-white/90 hover:shadow-lg transition-shadow overflow-hidden shadow-sm">
-    <div class="bg-linear-to-r from-primary/10 to-secondary/10 px-4 py-3">
-      <span class="text-sm font-medium text-primary">
-        {{ formatDate(event.date) }}
-      </span>
-    </div>
-    <div class="p-6">
-      <h3 class="text-xl font-semibold mb-2">
+  <UCard v-else variant="item">
+    <template #header>
+      <div class="bg-linear-to-r from-primary/10 to-secondary/10 px-4 py-3">
+        <span class="text-sm font-medium text-primary">
+          {{ formatDate(event.date) }}
+        </span>
+      </div>
+    </template>
+
+      <h3 class="mb-2 text-subheading text-highlighted">
         {{ event.title }}
       </h3>
       <p v-if="event.subtitle" class="mb-4">
         {{ event.subtitle }}
       </p>
       <p v-if="event.location" class="text-sm flex items-center gap-2">
-        <UIcon name="i-lucide-map-pin" class="w-4 h-4" />
+        <UIcon name="i-lucide-map-pin" class="size-4" />
         {{ event.location }}
       </p>
-    </div>
-  </div>
+  </UCard>
 </template>

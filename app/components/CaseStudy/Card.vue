@@ -20,58 +20,59 @@ const duration = computed(() => {
 </script>
 
 <template>
-  <article
-    class="bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden flex flex-col relative">
-    <!-- Barra de acento segun categoria -->
-    <div class="h-1.5 w-full" :class="getCategoryAccent(caseStudy.category)" />
+  <UCard as="article" variant="item" class="relative flex flex-col" :ui="{ body: 'flex flex-1 flex-col gap-4' }">
+    <template #header>
+      <!-- Barra de acento segun categoria -->
+      <div class="h-1.5 w-full" :class="getCategoryAccent(caseStudy.category)" />
 
-    <UButton v-if="isEditor" icon="i-lucide-pencil" size="xs" color="primary" variant="ghost"
-      class="absolute top-4 right-3 z-10" aria-label="Editar caso" :to="`${detailLink}?edit=1`" />
+      <ContentEditButton v-if="isEditor" label="Editar caso" :to="`${detailLink}?edit=1`" />
+    </template>
 
-    <div class="p-6 flex flex-col gap-4 flex-1">
+
       <div class="flex justify-between items-start gap-3">
         <div class="flex items-center gap-3 min-w-0">
-          <div v-if="logoUrl" class="w-10 h-10 rounded-full bg-gray-50 border border-gray-100 overflow-hidden shrink-0 flex items-center justify-center">
-            <img :src="logoUrl" :alt="caseStudy.company ?? 'Empresa'" class="w-full h-full object-contain p-1">
+          <div v-if="logoUrl" class="size-10 rounded-full bg-muted border border-muted overflow-hidden shrink-0 flex items-center justify-center">
+            <NuxtImg :src="logoUrl" preset="avatar" :alt="caseStudy.company ?? 'Empresa'" class="size-full object-contain p-1" />
           </div>
-          <div v-else class="w-10 h-10 rounded-full shrink-0 flex items-center justify-center"
+          <div v-else class="size-10 rounded-full shrink-0 flex items-center justify-center"
             :class="getCategoryBadge(caseStudy.category)">
-            <UIcon :name="caseStudy.icon || getCaseCategoryIcon(caseStudy.category)" class="w-5 h-5" />
+            <UIcon :name="caseStudy.icon || getCaseCategoryIcon(caseStudy.category)" class="size-5" />
           </div>
-          <span v-if="caseStudy.company" class="text-xs font-semibold uppercase tracking-wider text-gray-400 truncate">
+          <span v-if="caseStudy.company" class="text-xs font-semibold uppercase tracking-wider text-muted truncate">
             {{ caseStudy.company }}
           </span>
         </div>
-        <span v-if="duration" class="text-xs text-gray-400 bg-gray-50 px-2 py-1 rounded shrink-0">
+        <span v-if="duration" class="text-xs text-muted bg-muted px-2 py-1 rounded-sm shrink-0">
           {{ duration }}
         </span>
       </div>
 
-      <h3 class="text-lg font-bold text-gray-900 leading-snug">
+      <h3 class="text-subheading text-highlighted">
         {{ caseStudy.title }}
       </h3>
 
       <div class="flex flex-wrap gap-2 mt-auto pt-2">
-        <span class="text-xs font-semibold px-2 py-1 rounded" :class="getCategoryBadge(caseStudy.category)">
+        <span class="text-xs font-semibold px-2 py-1 rounded-sm" :class="getCategoryBadge(caseStudy.category)">
           {{ getCaseCategoryLabel(caseStudy.category) }}
         </span>
-        <span v-if="caseStudy.case_type && caseStudy.category" class="text-xs font-semibold px-2 py-1 rounded bg-gray-50 text-gray-500">
+        <span v-if="caseStudy.case_type && caseStudy.category" class="text-xs font-semibold px-2 py-1 rounded-sm bg-muted text-muted">
           {{ caseStudy.case_type }}
         </span>
       </div>
-    </div>
 
-    <div class="border-t border-gray-100 p-4 flex justify-between items-center gap-2">
+    <template #footer>
+      <div class="flex items-center justify-between gap-2">
       <span v-if="caseStudy.difficulty" class="text-xs font-semibold" :class="getDifficultyText(caseStudy.difficulty)">
         Dificultad: {{ CASE_DIFFICULTY_LABELS[caseStudy.difficulty] }}
       </span>
       <span v-else />
-      <NuxtLink :to="detailLink"
-        class="text-xs font-bold flex items-center gap-1 hover:underline shrink-0"
+      <NuxtLink :to="detailLink" :aria-label="`Ver caso: ${caseStudy.title}`"
+        class="text-xs font-bold flex items-center gap-1 py-1 hover:underline shrink-0"
         :class="getCategoryText(caseStudy.category)">
         Ver caso
-        <UIcon name="i-lucide-arrow-right" class="w-3.5 h-3.5" />
+        <UIcon name="i-lucide-arrow-right" class="size-3.5" />
       </NuxtLink>
-    </div>
-  </article>
+      </div>
+    </template>
+  </UCard>
 </template>

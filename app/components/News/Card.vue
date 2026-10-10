@@ -1,18 +1,18 @@
 <template>
-  <UCard variant="soft"
-    class="flex flex-col rounded-xl bg-white/90 shadow-sm hover:shadow-lg transition-shadow relative">
-    <NuxtImg v-if="imageUrl" :src="imageUrl" alt="Cover Image" class="rounded-lg h-50 w-full object-cover"
-      sizes="500px" />
+  <UCard variant="item" class="relative flex flex-col" :ui="{ body: 'flex flex-1 flex-col' }">
+    <template v-if="imageUrl" #header>
+      <NuxtImg :src="imageUrl" preset="card" :alt="newsItem.title" class="h-48 w-full object-cover" />
+    </template>
 
-    <div class="my-4">
-      <TypeBadge v-if="newsItem.type" :type="newsItem.type" size="xs" />
+    <div class="mb-4">
+      <UBadge v-if="newsItem.type" :color="getTypeBadgeColor(newsItem.type)" :label="newsItem.type" />
     </div>
 
-    <div class="text-xl font-semibold mb-2">
+    <h3 class="mb-2 text-subheading text-highlighted">
       {{ newsItem.title }}
-    </div>
+    </h3>
 
-    <div v-if="newsItem.subtitle" class="mb-4 flex-1 text-gray-600">
+    <div v-if="newsItem.subtitle" class="mb-4 flex-1 text-toned">
       {{ newsItem.subtitle }}
     </div>
 
@@ -26,7 +26,7 @@
     </div>
 
     <div class="mt-auto">
-      <UButton :to="`/noticias/${newsItem.id}`" variant="soft" size="lg"
+      <UButton :to="`/noticias/${newsItem.id}`" size="lg" :aria-label="`Leer más sobre ${newsItem.title}`"
         class="transition-colors duration-300 rounded-lg">
         Leer más
       </UButton>
@@ -36,6 +36,8 @@
 
 <script setup lang="ts">
 import type { NewsRecord } from '~/types/content'
+
+const { getTypeBadgeColor } = useNewsTypeColor()
 
 interface Props {
   newsItem: NewsRecord

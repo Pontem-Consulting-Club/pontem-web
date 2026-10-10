@@ -2,9 +2,9 @@
   <section class="relative h-[80vh] w-full overflow-hidden">
     <!-- Slides -->
     <HomeHeroSlide v-for="(slide, index) in slides" :key="slide.id" :slide="slide"
-      :is-active="currentSlide === index" />
+      :is-active="currentSlide === index" :load="loadedSlides.has(index)" :priority="index === 0" />
 
-    <div v-if="slides.length === 0" class="absolute inset-0 bg-gray-800" />
+    <div v-if="slides.length === 0" class="absolute inset-0 bg-inverted" />
 
     <!-- Edit / create form -->
     <HomeHeroEditForm v-if="isEditing" v-model:form="form" :is-new="isCreating" :is-saving="isSaving"
@@ -17,17 +17,22 @@
         aria-label="Mover slide antes" :disabled="currentSlide === 0" @click="moveSlide(-1)" />
       <UButton v-if="currentSlideRecord" icon="i-lucide-arrow-down" size="xs" color="neutral" variant="solid"
         aria-label="Mover slide después" :disabled="currentSlide === slides.length - 1" @click="moveSlide(1)" />
-      <UButton v-if="currentSlideRecord" icon="i-lucide-pencil" size="xs" color="primary" variant="solid"
-        aria-label="Editar slide" @click="startEdit" />
-      <UButton icon="i-lucide-plus" size="xs" color="primary" variant="solid" aria-label="Agregar slide"
-        @click="startCreate" />
+      <UButton v-if="currentSlideRecord" ref="editSlideButton" icon="i-lucide-pencil" size="xs" color="primary"
+        variant="solid" aria-label="Editar slide" :disabled="otherEditorOpen" @click="startEdit" />
+      <UButton ref="addSlideButton" icon="i-lucide-plus" size="xs" color="primary" variant="solid"
+        aria-label="Agregar slide" :disabled="otherEditorOpen" @click="startCreate" />
     </div>
 
     <!-- Slide Indicators -->
-    <div v-if="!isEditing" class="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-30 flex gap-3">
-      <button v-for="(slide, index) in slides" :key="slide.id" class="w-4 h-2 rounded-lg transition-all duration-300"
-        :class="currentSlide === index ? 'bg-white scale-125' : 'bg-white/50 hover:bg-white/75'"
-        :aria-label="`Go to slide ${index + 1}`" @click="goToSlide(index)" />
+    <!-- El punto es chico; el botón alrededor mide 24 px para poder tocarlo. -->
+    <div v-if="!isEditing" class="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-30 flex gap-1">
+      <button v-for="(slide, index) in slides" :key="slide.id" type="button"
+        class="group grid size-6 place-items-center rounded-full focus-visible:outline-2 focus-visible:outline-white"
+        :aria-label="`Ir a la diapositiva ${index + 1}`" :aria-current="currentSlide === index ? 'true' : undefined"
+        @click="goToSlide(index)">
+        <span class="h-2 w-4 rounded-lg transition-all duration-300"
+          :class="currentSlide === index ? 'bg-default scale-125' : 'bg-white/50 group-hover:bg-default'" />
+      </button>
     </div>
   </section>
 </template>
@@ -50,9 +55,34 @@ const { data: slides, refresh } = await useFetch<HeroSlideRecord[]>('/api/hero-s
 const { isEditor } = useProfile()
 
 const currentSlide = ref(0)
+
+// Solo se piden las fotos de la slide actual y la siguiente; las demás, cuando
+// les toca. Antes llegaban las cuatro al entrar.
+const loadedSlides = ref(new Set<number>())
+watch([currentSlide, () => slides.value.length], ([current, total]) => {
+  loadedSlides.value.add(current)
+  if (total > 1) loadedSlides.value.add((current + 1) % total)
+}, { immediate: true })
 const isCreating = ref(false)
 const isEditing = ref(false)
 const isSaving = ref(false)
+
+const toast = useToast()
+const { confirmDelete, confirmDiscard } = useConfirm()
+// Lo que había al abrir el formulario, para saber si hay cambios sin guardar.
+const formOriginal = ref<Partial<HeroSlideRecord>>({})
+const editSlideButton = useTemplateRef('editSlideButton')
+const addSlideButton = useTemplateRef('addSlideButton')
+// Al cerrar, el foco vuelve al botón que abrió el formulario (o al de agregar, si
+// la slide se borró).
+let reopenedFromCreate = false
+const { othersOpen: otherEditorOpen } = useEditorSlot('portada', {
+  isEditing,
+  focusOnClose: () => {
+    const button = reopenedFromCreate ? addSlideButton.value : (editSlideButton.value ?? addSlideButton.value)
+    elementOf(button)?.focus()
+  }
+})
 const isDeleting = ref(false)
 const formError = ref('')
 const form = ref<Partial<HeroSlideRecord>>({})
@@ -145,7 +175,9 @@ const resolveApiError = (error: unknown, fallback: string) => {
 const startEdit = () => {
   if (!isEditor.value || !currentSlideRecord.value) return
   form.value = { ...currentSlideRecord.value }
+  formOriginal.value = { ...form.value }
   formError.value = ''
+  reopenedFromCreate = false
   isCreating.value = false
   isEditing.value = true
 }
@@ -159,12 +191,15 @@ const startCreate = () => {
     image_url: null,
     link: null
   }
+  formOriginal.value = { ...form.value }
   formError.value = ''
+  reopenedFromCreate = true
   isCreating.value = true
   isEditing.value = true
 }
 
-const cancelEdit = () => {
+const cancelEdit = async (hasPendingFile = false) => {
+  if ((hasPendingFile || formChanged(form.value, formOriginal.value)) && !(await confirmDiscard())) return
   formError.value = ''
   isEditing.value = false
   isCreating.value = false
@@ -187,6 +222,7 @@ const saveEdit = async (file?: File | null) => {
     } else {
       await $fetch(`/api/admin/hero-slides/${form.value.id}`, { method: 'PUT', body: formData })
     }
+    toast.add({ title: isCreating.value ? 'Slide agregada' : 'Slide guardada', icon: 'i-lucide-check', color: 'success' })
     isEditing.value = false
     isCreating.value = false
     await refresh()
@@ -199,17 +235,15 @@ const saveEdit = async (file?: File | null) => {
 
 const handleDelete = async () => {
   if (isCreating.value || !form.value.id) return
-  const confirmed = typeof window !== 'undefined'
-    ? window.confirm('¿Eliminar esta slide? Esta acción no se puede deshacer.')
-    : false
-
-  if (!confirmed) return
+  if (!(await confirmDelete('esta slide'))) return
 
   isDeleting.value = true
   formError.value = ''
 
   try {
     await $fetch(`/api/admin/hero-slides/${form.value.id}`, { method: 'DELETE' })
+    toast.add({ title: 'Slide eliminada', icon: 'i-lucide-check', color: 'success' })
+    reopenedFromCreate = true
     isEditing.value = false
     await refresh()
   } catch (error: unknown) {

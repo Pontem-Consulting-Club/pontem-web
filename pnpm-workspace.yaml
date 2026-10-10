@@ -19,3 +19,10 @@ onlyBuiltDependencies:
   - supabase
   - unrs-resolver
   - vue-demi
+
+# defu 6.1.6 (dependencia de Nuxt) publica tipos rotos: `Defu` no se resuelve como
+# tipo y el AppConfig generado por Nuxt queda en `unknown`, así que las variantes
+# propias del tema (app/theme) no aparecen en los tipos de los componentes.
+# 6.1.7 corrige la entrada de tipos y conserva el arreglo de seguridad de 6.1.5.
+overrides:
+  defu: ^6.1.7

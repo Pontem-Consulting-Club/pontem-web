@@ -1,38 +1,28 @@
 <template>
-  <section class="py-16 md:py-24 bg-gray-500/10  clip-path-[ellipse(150%_70%_at_40%_70%)]">
-    <div class="w-full px-4 lg:w-3/5 mx-auto lg:mt-12">
-      <div class="text-center mb-12">
-        <h2 class="text-3xl md:text-4xl font-bold mb-4">
-          Próximos Eventos
-        </h2>
-        <p class="text-lg">
-          No te pierdas nuestros próximos eventos y actividades
-        </p>
-      </div>
+  <UPageSection title="Próximos Eventos" description="No te pierdas nuestros próximos eventos y actividades"
+    class="bg-accented/60 clip-wave-top">
+    <LoadError v-if="error" title="No pudimos cargar los eventos" :retry="refresh" />
 
-      <LoadingSpinner v-if="status === 'pending'" />
+    <UEmpty v-else-if="upcomingEvents.length === 0" title="No hay eventos próximos programados" icon="i-lucide-inbox"/>
 
-      <EmptyState v-else-if="upcomingEvents.length === 0" message="No hay eventos próximos programados" />
+    <UPageGrid v-else>
+      <EventCard v-for="event in upcomingEvents" :key="event.id" :event="event" variant="compact"
+        @updated="refresh" />
+    </UPageGrid>
 
-      <div v-else class="grid md:grid-cols-3 gap-6">
-        <EventCard v-for="event in upcomingEvents" :key="event.id" :event="event" variant="compact"
-          @updated="refresh" />
-      </div>
 
-      <div class="text-center mt-10">
-        <UButton to="/eventos" size="lg" variant="soft"
-          class="font-semibold transition-colors bg-white text-gray-500 hover:bg-white hover:outline">
-          Ver todos los eventos
-        </UButton>
-      </div>
+    <div class="mt-10 text-center">
+      <UButton to="/eventos" size="lg" color="neutral" variant="outline">
+        Ver todos los eventos
+      </UButton>
     </div>
-  </section>
+  </UPageSection>
 </template>
 
 <script setup lang="ts">
 import type { EventRecord } from '~/types/content'
 
-const { data: events, status, refresh } = await useFetch<EventRecord[]>('/api/events/scheduled', {
+const { data: events, error, refresh } = await useFetch<EventRecord[]>('/api/events/scheduled', {
   default: () => []
 })
 

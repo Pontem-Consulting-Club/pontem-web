@@ -4,8 +4,9 @@ import type { CaseStudyRecord } from '~/types/content'
 import type { CaseStudyTab } from '~/constants/caseStudies'
 import { getCaseCategoryLabel } from '~/constants/caseStudies'
 
-useHead({
-  title: studyMaterials.title
+usePageMeta({
+  title: studyMaterials.title,
+  description: 'Casos de estudio, casebooks y recursos para preparar entrevistas de consultoría, ordenados por etapa de la postulación.'
 })
 
 const stages = studyMaterials.stages
@@ -13,7 +14,7 @@ const caseBooks = studyMaterials.caseBooks
 
 const { isEditor } = useProfile()
 
-const { data: caseStudies, status } = await useFetch<CaseStudyRecord[]>('/api/case-studies', {
+const { data: caseStudies, error, refresh } = await useFetch<CaseStudyRecord[]>('/api/case-studies', {
   default: () => []
 })
 
@@ -64,14 +65,14 @@ const openDrive = () => {
     <!-- Encabezado editorial -->
     <section class="flex flex-col items-center text-center gap-4 pt-4">
       <div
-        class="inline-flex items-center gap-2 bg-pontemteal-50 text-pontemteal-700 text-xs font-semibold uppercase tracking-widest px-4 py-2 rounded-full border border-pontemteal-200">
-        <span class="w-2 h-2 rounded-full bg-pontemteal-500" />
+        class="inline-flex items-center gap-2 bg-secondary-50 text-secondary-800 text-xs font-semibold uppercase tracking-widest px-4 py-2 rounded-full border border-secondary-100">
+        <span class="size-2 rounded-full bg-secondary-300" />
         Learning &amp; Development
       </div>
-      <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mt-2">
+      <h1 class="mt-2 text-display text-highlighted">
         Material de <span class="text-primary">Estudio</span>
       </h1>
-      <p class="text-lg text-gray-500 max-w-xl">
+      <p class="text-lg text-muted max-w-xl">
         Accede a nuestra biblioteca de recursos curados para dominar entrevistas estructuradas y potenciar
         tu perfil consultor.
       </p>
@@ -88,12 +89,12 @@ const openDrive = () => {
       <StudySectionLabel number="02" label="Biblioteca" />
 
       <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
-        <h2 class="text-3xl font-bold text-gray-900">Casos de Estudio</h2>
+        <h2 class="text-title text-highlighted">Casos de Estudio</h2>
         <div class="flex items-center gap-2 w-full md:w-auto">
-          <UInput v-model="search" icon="i-lucide-search" size="lg" class="w-full md:w-96"
-            placeholder="Buscar por empresa, área o palabra clave..."
-            :ui="{ base: 'text-gray-900 placeholder:text-gray-400' }" />
-          <UButton v-if="isEditor" to="/material-estudio/casos/nuevo" icon="i-lucide-plus" variant="soft"
+          <UInput v-model="search" icon="i-lucide-search" size="lg" class="md:w-96" type="search"
+            aria-label="Buscar casos de estudio"
+            placeholder="Buscar por empresa, área o palabra clave..." />
+          <UButton v-if="isEditor" to="/material-estudio/casos/nuevo" icon="i-lucide-plus"
             size="lg" class="shrink-0">
             Agregar
           </UButton>
@@ -102,16 +103,16 @@ const openDrive = () => {
 
       <CaseStudyCategoryFilter v-model="selectedCategory" :counts="tabCounts" :total="caseStudies.length" />
 
-      <LoadingSpinner v-if="status === 'pending'" />
+      <LoadError v-if="error" title="No pudimos cargar los casos de estudio" :retry="refresh" />
 
-      <EmptyState v-else-if="filteredCaseStudies.length === 0" icon="i-lucide-folder-search"
-        :message="caseStudies.length === 0
+      <UEmpty v-else-if="filteredCaseStudies.length === 0" icon="i-lucide-folder-search"
+        :title="caseStudies.length === 0
           ? 'Todavía no hay casos de estudio publicados'
           : 'Ningún caso coincide con tu búsqueda'" />
 
-      <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <UPageGrid v-else>
         <CaseStudyCard v-for="caseStudy in filteredCaseStudies" :key="caseStudy.id" :case-study="caseStudy" />
-      </div>
+      </UPageGrid>
     </section>
 
     <!-- Recurso destacado -->
@@ -122,26 +123,26 @@ const openDrive = () => {
       <StudySectionLabel number="03" label="Recursos" />
 
       <div class="grid md:grid-cols-2 gap-6">
-        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-8 flex flex-col items-center text-center gap-4">
-          <h3 class="text-xl font-bold text-gray-900">Drive de Estudio</h3>
-          <p class="text-sm text-gray-500">
+        <UCard :ui="{ body: 'flex flex-col items-center gap-4 text-center' }">
+          <h3 class="text-subheading text-highlighted">Drive de Estudio</h3>
+          <p class="text-sm text-muted">
             Solicita acceso a nuestro Drive con todo el material de estudio.
           </p>
           <button class="flex-1 w-full flex items-center justify-center cursor-pointer group" aria-label="Abrir Drive de Estudio" @click="openDrive">
             <img src="/drive-logo.png" alt="Google Drive" class="h-16 w-auto group-hover:scale-105 transition-transform">
           </button>
-        </div>
+        </UCard>
 
-        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-8 flex flex-col gap-4">
-          <h3 class="text-xl font-bold text-gray-900 text-center">Case Books Recomendados</h3>
-          <p class="text-sm text-gray-500 text-center">
+        <UCard :ui="{ body: 'flex flex-col gap-4' }">
+          <h3 class="text-center text-subheading text-highlighted">Case Books Recomendados</h3>
+          <p class="text-sm text-muted text-center">
             Recursos externos para practicar casos de consultoría.
           </p>
           <div class="flex flex-col gap-3 mt-2">
             <ResourceCard v-for="book in caseBooks" :key="book" icon="i-lucide-book-open" :title="book"
               description="Casos prácticos de entrevistas" />
           </div>
-        </div>
+        </UCard>
       </div>
     </section>
   </UContainer>

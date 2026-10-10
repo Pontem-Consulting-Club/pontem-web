@@ -1,15 +1,15 @@
 <template>
-  <div class="rounded-3xl bg-white/90 text-center p-8 shadow-sm hover:shadow-lg transition-shadow">
+  <UCard variant="feature" class="text-center">
     <div class="flex justify-center mb-4">
-      <UIcon :name="icon" class="w-12 h-12" :class="iconColor" />
+      <UIcon :name="icon" class="size-12" :class="iconColor" />
     </div>
-    <h3 class="text-xl font-semibold mb-2">
+    <h3 class="mb-2 text-subheading text-highlighted">
       {{ title }}
     </h3>
     <p>
       {{ description }}
     </p>
-  </div>
+  </UCard>
 </template>
 
 <script setup lang="ts">

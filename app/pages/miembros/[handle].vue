@@ -1,34 +1,36 @@
 <template>
   <div>
     <UContainer class="py-24 pt-32">
-      <NotFoundState v-if="error" title="Perfil no encontrado" message="No encontramos ese perfil" />
+      <!-- Un error del servidor no es "no encontrado". -->
+      <LoadError v-if="(error?.statusCode ?? 0) >= 500" title="No pudimos cargar el perfil" :retry="refresh" />
+      <NotFoundState v-else-if="error" title="Perfil no encontrado" message="No encontramos ese perfil" />
 
       <article v-else-if="member" class="mx-auto flex max-w-2xl flex-col items-center gap-6 text-center">
-        <div class="h-36 w-36 overflow-hidden rounded-full bg-gray-100">
-          <img v-if="avatarUrl" :src="avatarUrl" :alt="member.display_name ?? 'Foto de perfil'"
-            class="h-full w-full object-cover">
-          <div v-else class="flex h-full w-full items-center justify-center text-4xl font-semibold text-gray-400">
+        <div class="size-36 overflow-hidden rounded-full bg-elevated">
+          <NuxtImg v-if="avatarUrl" :src="avatarUrl" preset="avatar" :alt="member.display_name ?? 'Foto de perfil'"
+            class="size-full object-cover" />
+          <div v-else class="flex size-full items-center justify-center text-4xl font-semibold text-muted">
             {{ initials }}
           </div>
         </div>
 
         <div class="flex flex-col gap-2">
-          <h1 class="text-3xl font-bold">{{ member.display_name }}</h1>
+          <h1 class="text-title text-highlighted">{{ member.display_name }}</h1>
           <div class="flex flex-wrap items-center justify-center gap-2">
-            <UBadge v-if="member.coordination" variant="subtle" size="lg">
+            <UBadge v-if="member.coordination" size="lg">
               {{ coordinationLabels[member.coordination] }}
             </UBadge>
-            <UBadge v-if="member.generation" variant="subtle" color="neutral" size="lg">
+            <UBadge v-if="member.generation" color="neutral" size="lg">
               Generación {{ member.generation }}
             </UBadge>
           </div>
         </div>
 
-        <p v-if="member.bio" class="text-balance leading-relaxed text-gray-600">
+        <p v-if="member.bio" class="text-balance leading-relaxed text-toned">
           {{ member.bio }}
         </p>
 
-        <UButton to="/nosotros" variant="soft" icon="i-lucide-arrow-left" class="mt-4">
+        <UButton to="/nosotros" icon="i-lucide-arrow-left" class="mt-4">
           Conoce al equipo
         </UButton>
       </article>
@@ -46,7 +48,7 @@ const route = useRoute()
 const handle = computed(() => String(route.params.handle ?? '').toLowerCase())
 const coordinationLabels = TEAM_COORDINATION_LABELS
 
-const { data: member, error } = await useFetch<PublicProfile>(() => `/api/members/${handle.value}`)
+const { data: member, error, refresh } = await useFetch<PublicProfile>(() => `/api/members/${handle.value}`)
 
 // Un perfil privado, inactivo o inexistente responde 404. La API no distingue los
 // tres a proposito, y la pagina tampoco.
@@ -61,9 +63,9 @@ const initials = computed(() => (member.value?.display_name ?? '')
   .map(word => word[0]?.toUpperCase() ?? '')
   .join(''))
 
-useHead(() => ({
-  title: member.value
-    ? `${member.value.display_name} - Pontem`
-    : 'Perfil - Pontem'
-}))
+usePageMeta({
+  title: () => member.value ? `${member.value.display_name} - Pontem` : 'Perfil - Pontem',
+  description: () => member.value?.bio
+    || (member.value ? `${member.value.display_name}, miembro de Pontem Consulting Club.` : null)
+})
 </script>

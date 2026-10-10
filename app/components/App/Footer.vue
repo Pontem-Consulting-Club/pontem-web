@@ -1,77 +1,55 @@
 <template>
-  <footer class="bg-gray-600/75 mt-24 pt-24 pb-12 text-white" style="clip-path: ellipse(150% 60% at 30% 61%);">
-    <UContainer>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-        <!-- Logo Column -->
-        <div class="flex justify-center md:justify-start">
-          <img src="/LogoBlanco.png" alt="Pontem Consulting Club" class="h-24 w-auto object-contain">
-        </div>
+  <UFooter>
+    <template #top>
+      <UContainer>
+        <!-- Las columnas usan h3: este h2 evita el salto desde el h1 en páginas cortas. -->
+        <h2 class="sr-only">Pie de página</h2>
+        <UFooterColumns :columns="columns" aria-label="Pie de página">
+          <template #link-label="{ link }">
+            {{ link.label }}<span v-if="link.target === '_blank'" class="sr-only"> (se abre en otra pestaña)</span>
+          </template>
+          <template #left>
+            <img src="/LogoBlanco.png" alt="Pontem Consulting Club" class="mx-auto h-24 w-auto lg:mx-0">
+          </template>
+        </UFooterColumns>
+      </UContainer>
+    </template>
 
-        <!-- Navigation Column -->
-        <div class="text-center md:text-left">
-          <h5 class="font-semibold mb-4 text-lg">Pontem</h5>
-          <nav class="flex flex-col gap-2">
-            <NuxtLink v-for="item in navigationWithAdmin" :key="item.to" :to="item.to"
-              class="text-white/80 hover:text-white hover:font-bold transition-all text-sm">
-              {{ item.label }}
-            </NuxtLink>
-          </nav>
-        </div>
-
-        <!-- Contact Column -->
-        <div class="text-center md:text-left">
-          <h5 class="font-semibold mb-4 text-lg">Contacto</h5>
-          <nav class="flex flex-col gap-2">
-            <a v-for="link in socialLinks" :key="link.href" :href="link.href" target="_blank" rel="noopener noreferrer"
-              :class="[
-                'text-white/80 hover:text-white transition-all text-sm flex items-center gap-2 justify-center md:justify-start rounded px-2 py-1',
-                link.hoverClass
-              ]">
-              <UIcon :name="link.icon" class="w-4 h-4" />
-              {{ link.label }}
-            </a>
-          </nav>
-        </div>
-      </div>
-
-      <!-- Copyright -->
-      <div class="border-t border-white/20 pt-8 text-center text-white/80 text-sm">
-        <p class="mb-2">&copy; {{ new Date().getFullYear() }} Pontem Consulting Club. Todos los derechos reservados.</p>
+    <template #left>
+      <div class="flex flex-col gap-2 text-center lg:text-left">
+        <p>&copy; {{ new Date().getFullYear() }} Pontem Consulting Club. Todos los derechos reservados.</p>
         <p>
           Desarrollado por
-          <a href="https://www.linkedin.com/in/santiago-ernst/" target="_blank" rel="noopener noreferrer"
-            class="text-secondary hover:text-white transition-colors">
-            Santiago Ernst y Carlos Cruz
-          </a>
+          <ULink to="https://www.linkedin.com/in/santiago-ernst/" target="_blank"
+            class="text-secondary-300 hover:text-white">
+            Santiago Ernst y Carlos Cruz<span class="sr-only"> (se abre en otra pestaña)</span>
+          </ULink>
         </p>
       </div>
-    </UContainer>
-  </footer>
+    </template>
+  </UFooter>
 </template>
 
 <script setup lang="ts">
+import type { FooterColumn } from '@nuxt/ui'
+
 const { navigation } = useNavigation()
+const { isAuthenticated } = useAuth()
 
-const navigationWithAdmin = [...navigation, { label: 'Admin', to: '/login' }]
-
-const socialLinks = [
+// La entrada para miembros solo se muestra sin sesión; con sesión, la cabecera ya
+// tiene sus enlaces.
+const columns = computed<FooterColumn[]>(() => [
   {
-    label: 'Email',
-    href: 'mailto:clubconsultoria.uc@gmail.com',
-    icon: 'i-lucide-mail',
-    hoverClass: 'hover:text-white'
+    label: 'Pontem',
+    children: isAuthenticated.value ? navigation : [...navigation, { label: 'Acceso miembros', to: '/login' }]
   },
   {
-    label: 'LinkedIn',
-    href: 'https://www.linkedin.com/company/pontemcc/mycompany/',
-    icon: 'i-simple-icons-linkedin',
-    hoverClass: 'hover:text-white'
-  },
-  {
-    label: 'Instagram',
-    href: 'https://www.instagram.com/pontemconsultingclub/',
-    icon: 'i-simple-icons-instagram',
-    hoverClass: 'hover:text-white'
+    label: 'Contacto',
+    children: [
+      { label: 'Email', to: 'mailto:clubconsultoria.uc@gmail.com', icon: 'i-lucide-mail' },
+      { label: 'LinkedIn', to: 'https://www.linkedin.com/company/pontemcc/mycompany/', target: '_blank', icon: 'i-simple-icons-linkedin' },
+      { label: 'Instagram', to: 'https://www.instagram.com/pontemconsultingclub/', target: '_blank', icon: 'i-simple-icons-instagram' }
+    ]
   }
-]
+])
 </script>

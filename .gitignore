@@ -29,3 +29,8 @@ logs
 .claude/
 
 docs-local/
+
+# Capturas de revisión de estilos (se generan en cada máquina, ver docs/estilos.md)
+test/visual/__capturas__/
+test/visual/resultados/
+test/visual/informe/

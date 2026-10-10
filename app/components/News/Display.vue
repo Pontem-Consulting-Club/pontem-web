@@ -1,25 +1,26 @@
 <template>
-    <article class="bg-white rounded-lg px-12 py-6 shadow-sm">
+    <UCard as="article" :ui="{ body: 'sm:px-12' }">
         <div class="flex items-center justify-between mb-6">
-            <UButton to="/noticias" variant="soft" size="md" icon="i-lucide-arrow-left">
+            <UButton to="/noticias" size="md" icon="i-lucide-arrow-left">
                 Volver a noticias
             </UButton>
-            <UButton v-if="canEdit" icon="i-lucide-pencil" size="md" color="primary" variant="soft"
+            <UButton v-if="canEdit" icon="i-lucide-pencil" size="md" color="primary"
                 :to="`/noticias/${idParam}?edit=1`">
                 Editar
             </UButton>
         </div>
-        <NuxtImg v-if="articleImageUrl" :src="articleImageUrl" alt="Cover Image"
+        <!-- Decorativa: el título de la noticia es el h1. -->
+        <NuxtImg v-if="articleImageUrl" :src="articleImageUrl" alt=""
             class="rounded-xl h-72 w-full object-cover mb-6" sizes="800px" />
 
-        <header class=" flex flex-col mb-8">
+        <header class="flex flex-col mb-8">
             <div v-if="headerType" class="mb-4">
-                <TypeBadge :type="headerType" size="base" />
+                <UBadge :color="getTypeBadgeColor(headerType)" :label="headerType" size="lg" />
             </div>
-            <h1 class="text-3xl md:text-3xl font-bold mb-4 text-primary">
+            <h1 class="mb-4 text-title text-highlighted">
                 {{ newsItem.title }}
             </h1>
-            <p v-if="headerSubtitle" class=" font-semibold text-lg mb-6">
+            <p v-if="headerSubtitle" class="font-semibold text-lg mb-6">
                 {{ headerSubtitle }}
             </p>
             <div class="flex items-center gap-4">
@@ -30,13 +31,15 @@
         </header>
 
         <!-- eslint-disable vue/no-v-html -->
-        <div v-if="rawContent" class="prose prose-md max-w-none text-justify pb-3" v-html="rawContent" />
+        <div v-if="rawContent" class="prose max-w-none pb-3 text-justify" v-html="rawContent" />
         <!-- eslint-enable vue/no-v-html -->
-    </article>
+    </UCard>
 </template>
 
 <script setup lang="ts">
 import type { NewsRecord } from '~/types/content'
+
+const { getTypeBadgeColor } = useNewsTypeColor()
 
 const props = defineProps<{
     newsItem: NewsRecord

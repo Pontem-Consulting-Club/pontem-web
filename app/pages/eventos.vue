@@ -1,11 +1,15 @@
 <script setup lang="ts">
 import type { EventRecord } from '~/types/content'
 
-useHead({
-  title: 'Eventos - Pontem'
+usePageMeta({
+  title: 'Eventos - Pontem',
+  description: 'Charlas, talleres y actividades de Pontem con consultoras y organizaciones. Revisa las próximas fechas e inscríbete.'
 })
 
-const { data: events, status, refresh } = await useFetch<EventRecord[]>('/api/events/scheduled', {
+// Mientras hay un formulario abierto, "Agregar" queda desactivado.
+const { anyOpen: editorOpen } = useEditorSlot()
+
+const { data: events, error, refresh } = await useFetch<EventRecord[]>('/api/events/scheduled', {
   default: () => []
 })
 
@@ -55,19 +59,19 @@ const pastEvents = computed(() => {
 
 <template>
   <div>
-    <PageHeader title="Nuestros Eventos" background-image="/BTGDay.jpeg" />
+    <PageBanner title="Nuestros Eventos" image="/BTGDay.jpeg" />
 
     <UContainer class="py-16">
       <div v-if="isEditor" class="flex justify-end mb-6">
-        <UButton icon="i-lucide-plus" variant="soft" color="primary" size="md" :disabled="isCreating" @click="startCreate">
+        <UButton icon="i-lucide-plus" color="primary" size="md" :disabled="editorOpen" @click="startCreate">
           Agregar
         </UButton>
       </div>
-      <LoadingSpinner v-if="status === 'pending'" />
+      <LoadError v-if="error" title="No pudimos cargar los eventos" :retry="refresh" />
 
       <template v-else>
         <section v-if="isCreating && draftEvent" class="mb-16">
-          <SectionHeaderWithIcon title="Nuevo evento" icon="i-lucide-plus" icon-color="text-primary-600" />
+          <SectionTitle class="mb-8" title="Nuevo evento" icon="i-lucide-plus" />
           <div class="space-y-8">
             <EventCard :event="draftEvent" :is-new="true" variant="full" @created="handleCreated"
               @cancel-create="cancelCreate" @updated="refresh" />
@@ -76,7 +80,7 @@ const pastEvents = computed(() => {
 
         <!-- Future Events -->
         <section v-if="futureEvents.length > 0" class="mb-16">
-          <SectionHeaderWithIcon title="Próximos Eventos" icon="i-lucide-calendar" icon-color="text-primary-600" />
+          <SectionTitle class="mb-8" title="Próximos Eventos" icon="i-lucide-calendar" />
 
           <div class="space-y-8">
             <EventCard v-for="event in futureEvents" :key="event.id" :event="event" variant="full" @updated="refresh" />
@@ -85,7 +89,7 @@ const pastEvents = computed(() => {
 
         <!-- Past Events -->
         <section v-if="pastEvents.length > 0">
-          <SectionHeaderWithIcon title="Eventos Pasados" icon="i-lucide-history" icon-color="" />
+          <SectionTitle class="mb-8" title="Eventos Pasados" icon="i-lucide-history" />
 
           <div class="space-y-4">
             <EventCard v-for="event in pastEvents" :key="event.id" :event="event" variant="past" @updated="refresh" />
@@ -93,8 +97,8 @@ const pastEvents = computed(() => {
         </section>
 
         <!-- No Events -->
-        <EmptyState v-if="futureEvents.length === 0 && pastEvents.length === 0" icon="i-lucide-calendar-x"
-          message="No hay eventos disponibles" />
+        <UEmpty v-if="futureEvents.length === 0 && pastEvents.length === 0" icon="i-lucide-calendar-x"
+          title="No hay eventos disponibles" />
       </template>
     </UContainer>
   </div>

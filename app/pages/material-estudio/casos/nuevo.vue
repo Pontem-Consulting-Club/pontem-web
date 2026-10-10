@@ -8,7 +8,7 @@ useHead({
 const router = useRouter()
 const { isEditor, ready: profileReady } = useProfile()
 
-const { form, formError, isSaving, emptyCaseStudy, create } = useCaseStudyForm()
+const { form, formError, isSaving, emptyCaseStudy, create, canLeave } = useCaseStudyForm()
 
 form.value = emptyCaseStudy()
 
@@ -31,7 +31,8 @@ const handleSubmit = async (files: CaseStudyFiles) => {
   }
 }
 
-const handleCancel = () => {
+const handleCancel = async (hasPendingFile = false) => {
+  if (!(await canLeave(emptyCaseStudy(), hasPendingFile))) return
   router.push('/material-estudio')
 }
 </script>
@@ -39,7 +40,7 @@ const handleCancel = () => {
 <template>
   <UContainer v-if="isEditor" class="py-16">
     <div class="max-w-3xl mx-auto mb-6">
-      <UButton to="/material-estudio" variant="soft" icon="i-lucide-arrow-left" size="md">
+      <UButton to="/material-estudio" icon="i-lucide-arrow-left" size="md">
         Volver a Material de Estudio
       </UButton>
     </div>

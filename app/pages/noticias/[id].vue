@@ -1,6 +1,8 @@
 <template>
   <UContainer class="py-16 max-w-4xl">
     <LoadingSpinner v-if="isLoading" />
+    <!-- Un error del servidor no es "no encontrada". -->
+    <LoadError v-else-if="(error?.statusCode ?? 0) >= 500" title="No pudimos cargar la noticia" :retry="refresh" />
     <NotFoundState v-else-if="showNotFound" icon="i-lucide-file-x" title="Noticia no encontrada"
       button-text="Volver a noticias" button-link="/noticias" />
 
@@ -41,7 +43,8 @@ const { data: newsItem, status, error, refresh } = await useFetch<NewsRecord>(`/
   immediate: !isNew && isValidId
 })
 
-useHead({
+usePageMeta({
+  description: () => newsItem.value?.subtitle,
   title: computed(() => {
     if (isEditMode.value) {
       return isNew ? 'Nueva noticia - Pontem' : 'Editar noticia - Pontem'
@@ -73,7 +76,8 @@ const editNews = computed<NewsRecord | null>(() => {
   return newsItem.value ?? null
 })
 
-const isLoading = computed(() => !isNew && status.value === 'pending')
+// Solo en la primera carga: al refrescar tras guardar, la noticia sigue a la vista.
+const isLoading = computed(() => !isNew && status.value === 'pending' && !newsItem.value)
 
 const showNotFound = computed(() => {
   if (isNew) return false
@@ -95,7 +99,11 @@ watchEffect(() => {
   }
 })
 
-const handleCancel = () => {
+const toast = useToast()
+const { confirmDelete, confirmDiscard } = useConfirm()
+
+const handleCancel = async (hasPendingFile = false) => {
+  if ((hasPendingFile || formChanged(form.value, editNews.value ?? {})) && !(await confirmDiscard())) return
   if (isNew) {
     router.push('/noticias')
     return
@@ -114,17 +122,14 @@ const handleCreated = () => {
 
 const handleDelete = async () => {
   if (isNew || !editNews.value) return
-  const confirmed = typeof window !== 'undefined'
-    ? window.confirm('¿Eliminar esta noticia? Esta acción no se puede deshacer.')
-    : false
-
-  if (!confirmed) return
+  if (!(await confirmDelete('esta noticia'))) return
 
   isDeleting.value = true
   formError.value = ''
 
   try {
     await $fetch(`/api/admin/news/${editNews.value.id}`, { method: 'DELETE' })
+    toast.add({ title: 'Noticia eliminada', icon: 'i-lucide-check', color: 'success' })
     router.push('/noticias')
   } catch (error: unknown) {
     const apiError = typeof error === 'object' && error !== null && 'data' in error
@@ -201,9 +206,11 @@ const saveEdit = async (file?: File | null) => {
     const formData = buildFormData(payload, file)
     if (isNew) {
       await $fetch('/api/admin/news', { method: 'POST', body: formData })
+      toast.add({ title: 'Noticia publicada', icon: 'i-lucide-check', color: 'success' })
       handleCreated()
     } else if (editNews.value) {
       await $fetch(`/api/admin/news/${editNews.value.id}`, { method: 'PUT', body: formData })
+      toast.add({ title: 'Noticia guardada', icon: 'i-lucide-check', color: 'success' })
       await handleUpdated()
     }
   } catch (error: unknown) {

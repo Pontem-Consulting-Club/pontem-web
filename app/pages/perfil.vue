@@ -1,6 +1,6 @@
 <template>
   <div>
-    <PageHeader title="Mi Perfil" background-image="/LugarEstudio.jpg" />
+    <PageBanner title="Mi Perfil" image="/LugarEstudio.jpg" />
 
     <UContainer class="py-16">
       <UAlert v-if="needsOnboarding" icon="i-lucide-hand" color="primary" variant="soft" class="mb-8"
@@ -14,70 +14,64 @@
       <div v-else class="grid gap-8 lg:grid-cols-[280px_minmax(0,1fr)]">
         <!-- Identidad -->
         <aside class="flex flex-col gap-4">
-          <div class="relative mx-auto h-40 w-40 overflow-hidden rounded-full bg-gray-100">
-            <img v-if="avatarUrl" :src="avatarUrl" :alt="form.display_name || 'Foto de perfil'"
-              class="h-full w-full object-cover">
-            <div v-else class="flex h-full w-full items-center justify-center text-4xl font-semibold text-gray-400">
+          <div class="relative mx-auto size-40 overflow-hidden rounded-full bg-elevated">
+            <NuxtImg v-if="avatarUrl" :src="avatarUrl" preset="avatar" :alt="form.display_name || 'Foto de perfil'"
+              class="size-full object-cover" />
+            <div v-else class="flex size-full items-center justify-center text-4xl font-semibold text-muted">
               {{ initials }}
             </div>
           </div>
 
-          <UFileUpload :model-value="null" accept="image/jpeg,image/png,image/webp,image/avif" :preview="false"
-            :interactive="false" :disabled="isUploading"
-            :ui="{ files: 'hidden', label: 'hidden', description: 'hidden' }" @update:model-value="uploadAvatar">
-            <template #default="{ open }">
-              <UButton block variant="soft" icon="i-lucide-camera" :loading="isUploading" @click="open()">
-                {{ profile.avatar_path ? 'Cambiar foto' : 'Subir foto' }}
-              </UButton>
-            </template>
-          </UFileUpload>
+          <ImagePicker :model-value="null" :current="profile.avatar_path" mode="button" block icon="i-lucide-camera"
+            accept="image/jpeg,image/png,image/webp,image/avif" :labels="['Subir foto', 'Cambiar foto']"
+            :loading="isUploading" @update:model-value="uploadAvatar" />
 
-          <dl class="rounded-lg border border-gray-200 divide-y divide-gray-200 text-sm">
+          <dl class="rounded-lg border border-default divide-y divide-default text-sm">
             <div class="flex items-center justify-between px-4 py-3">
-              <dt class="text-gray-500">Rol</dt>
+              <dt class="text-muted">Rol</dt>
               <dd class="font-medium">{{ roleLabel }}</dd>
             </div>
             <div class="flex items-center justify-between px-4 py-3">
-              <dt class="text-gray-500">Estado</dt>
+              <dt class="text-muted">Estado</dt>
               <dd class="font-medium">{{ stateLabel }}</dd>
             </div>
             <div v-if="profile.handle" class="flex items-center justify-between gap-2 px-4 py-3">
-              <dt class="text-gray-500">Enlace</dt>
+              <dt class="text-muted">Enlace</dt>
               <dd class="truncate font-mono text-xs">
-                <NuxtLink v-if="profile.is_public" :to="`/miembros/${profile.handle}`" class="text-primary-600">
+                <NuxtLink v-if="profile.is_public" :to="`/miembros/${profile.handle}`" class="text-primary">
                   /miembros/{{ profile.handle }}
                 </NuxtLink>
-                <span v-else class="text-gray-400">/miembros/{{ profile.handle }}</span>
+                <span v-else class="text-muted">/miembros/{{ profile.handle }}</span>
               </dd>
             </div>
           </dl>
 
-          <p class="px-1 text-xs text-gray-500">
+          <p class="px-1 text-xs text-muted">
             El rol y el estado los administra la coordinación. Tu enlace público se genera a partir de tu nombre.
           </p>
         </aside>
 
         <!-- Datos editables -->
-        <UCard variant="soft" class="bg-white rounded-lg shadow-sm">
+        <UCard>
           <UForm :state="form" class="flex flex-col gap-5" @submit.prevent="save">
             <UFormField label="Nombre para mostrar" required>
-              <UInput v-model="form.display_name" size="lg" class="w-full" placeholder="Cómo quieres que te vean" />
+              <UInput v-model="form.display_name" size="lg" placeholder="Cómo quieres que te vean" />
             </UFormField>
 
             <UFormField label="Biografía"
               description="Se muestra en tu perfil público, si decides publicarlo.">
-              <UTextarea v-model.nullable="form.bio" :rows="4" autoresize class="w-full"
+              <UTextarea v-model.nullable="form.bio" :rows="4" autoresize
                 placeholder="En qué estás, qué te interesa" />
             </UFormField>
 
             <div class="grid gap-5 sm:grid-cols-2">
               <UFormField label="Coordinación">
                 <USelectMenu v-model.nullable="form.coordination" :items="coordinationOptions" value-key="value"
-                  label-key="label" class="w-full" placeholder="Sin coordinación" />
+                  label-key="label" placeholder="Sin coordinación" />
               </UFormField>
 
               <UFormField label="Generación" description="El año en que entraste al club.">
-                <UInput v-model="form.generation" type="number" min="1990" max="2100" class="w-full"
+                <UInput v-model="form.generation" type="number" min="1990" max="2100"
                   placeholder="2024" />
               </UFormField>
             </div>
@@ -93,44 +87,43 @@
             <UAlert v-if="savedMessage" color="success" icon="i-lucide-check" :description="savedMessage" />
 
             <div class="flex justify-end">
-              <UButton type="submit" size="lg" :loading="isSaving">Guardar</UButton>
+              <UButton variant="solid" type="submit" size="lg" :loading="isSaving">Guardar</UButton>
             </div>
           </UForm>
         </UCard>
 
         <!-- MEM-5: números pequeños y honestos, no una capa de gamificación. -->
         <section class="lg:col-span-2">
-          <SectionHeaderWithIcon title="Mi participación" icon="i-lucide-calendar-check"
-            icon-color="text-primary-600" />
+          <SectionTitle class="mb-8" title="Mi participación" icon="i-lucide-calendar-check" />
 
           <div class="mb-6 grid gap-4 sm:grid-cols-3">
             <div v-for="tile in statTiles" :key="tile.label"
-              class="rounded-lg border border-gray-200 bg-white px-5 py-4">
+              class="rounded-lg border border-default bg-default px-5 py-4">
               <div class="text-3xl font-semibold tabular-nums">{{ tile.value }}</div>
-              <div class="text-sm text-gray-500">{{ tile.label }}</div>
+              <div class="text-sm text-muted">{{ tile.label }}</div>
             </div>
           </div>
 
           <div v-if="registrations.length === 0">
-            <EmptyState icon="i-lucide-calendar-x"
-              message="Todavía no te has inscrito en ninguna actividad" />
+            <UEmpty icon="i-lucide-calendar-x"
+              title="Todavía no te has inscrito en ninguna actividad" />
           </div>
 
-          <ul v-else class="divide-y divide-gray-200 rounded-lg border border-gray-200 bg-white">
+          <ul v-else class="divide-y divide-default rounded-lg border border-default bg-default">
             <li v-for="row in registrations" :key="row.id"
               class="flex flex-wrap items-center gap-3 px-5 py-3">
               <div class="flex-1">
                 <div class="font-medium">{{ row.event?.title ?? 'Actividad' }}</div>
-                <div class="text-xs text-gray-500">
+                <div class="text-xs text-muted">
                   {{ row.event?.date ? formatDate(row.event.date) : 'Sin fecha' }}
                   <span v-if="row.event?.location"> · {{ row.event.location }}</span>
                 </div>
               </div>
-              <UBadge v-if="row.attended" color="success" variant="subtle" size="sm">Asististe</UBadge>
-              <UBadge v-else-if="row.status === 'cancelled'" color="neutral" variant="subtle" size="sm">
+              <UBadge v-if="row.attended" color="success" size="sm">Asististe</UBadge>
+              <UBadge v-else-if="row.status === 'cancelled'" color="neutral" size="sm">
                 Cancelada
               </UBadge>
-              <UBadge v-else color="primary" variant="subtle" size="sm">Inscrito</UBadge>
+              <UBadge v-else color="primary" size="sm">Inscrito</UBadge>
             </li>
           </ul>
         </section>

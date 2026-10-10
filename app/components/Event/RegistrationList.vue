@@ -1,19 +1,21 @@
 <template>
-  <div class="mt-4 border-t border-gray-200 pt-4">
+  <div class="mt-4 border-t border-default pt-4">
     <UButton variant="ghost" size="xs" :icon="isOpen ? 'i-lucide-chevron-down' : 'i-lucide-chevron-right'"
       @click="toggle">
       Inscritos<span v-if="rows.length"> ({{ activeCount }})</span>
     </UButton>
 
     <div v-if="isOpen" class="mt-3">
-      <LoadingSpinner v-if="status === 'pending'" />
+      <LoadingSpinner v-if="status === 'pending' && rows.length === 0" />
 
-      <EmptyState v-else-if="rows.length === 0" icon="i-lucide-user-x"
-        message="Todavía no hay nadie inscrito" />
+      <LoadError v-else-if="loadError" title="No pudimos cargar los inscritos" :retry="refresh" />
 
-      <div v-else class="overflow-x-auto rounded-lg border border-gray-200">
+      <UEmpty v-else-if="rows.length === 0" icon="i-lucide-user-x"
+        title="Todavía no hay nadie inscrito" />
+
+      <div v-else class="overflow-x-auto rounded-lg border border-default">
         <table class="w-full text-sm">
-          <thead class="bg-gray-50 text-left text-xs uppercase tracking-wide text-gray-500">
+          <thead class="bg-muted text-left text-xs uppercase tracking-wide text-muted">
             <tr>
               <th class="px-3 py-2 font-medium">Persona</th>
               <th class="px-3 py-2 font-medium">Detalle</th>
@@ -21,17 +23,17 @@
               <th class="px-3 py-2 font-medium">Asistió</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-gray-200">
+          <tbody class="divide-y divide-default">
             <tr v-for="row in rows" :key="row.id">
               <td class="px-3 py-2">
                 <span class="font-medium">{{ row.name }}</span>
-                <UBadge v-if="row.is_guest" size="sm" variant="subtle" color="neutral" class="ml-2">
+                <UBadge v-if="row.is_guest" size="sm" color="neutral" class="ml-2">
                   Invitado
                 </UBadge>
               </td>
-              <td class="px-3 py-2 text-gray-500">{{ detailLabel(row) }}</td>
+              <td class="px-3 py-2 text-muted">{{ detailLabel(row) }}</td>
               <td class="px-3 py-2">
-                <UBadge :color="row.status === 'cancelled' ? 'neutral' : 'primary'" variant="subtle" size="sm">
+                <UBadge :color="row.status === 'cancelled' ? 'neutral' : 'primary'" size="sm">
                   {{ row.status === 'cancelled' ? 'Cancelada' : 'Inscrito' }}
                 </UBadge>
               </td>
@@ -70,7 +72,7 @@ const error = ref('')
 
 // Se pide solo al desplegar: la lista de un evento no le interesa a quien está
 // mirando la página de eventos de pasada.
-const { data, status, refresh } = await useAsyncData(
+const { data, status, error: loadError, refresh } = await useAsyncData(
   () => `event-registrations-${props.eventId}`,
   () => $fetch<RegistrationRow[]>(`/api/events/${props.eventId}/registrations`),
   { immediate: false, default: () => [] }

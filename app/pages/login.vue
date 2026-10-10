@@ -1,33 +1,33 @@
 <template>
   <UContainer class="py-16 flex items-center justify-center min-h-[calc(100vh-4rem)]">
-    <UCard class="w-full max-w-md bg-white rounded-lg p-6 shadow-sm" variant="soft">
+    <UCard class="w-full max-w-md">
       <template #header>
-        <h2 class="text-2xl font-bold text-center">
+        <h1 class="text-center text-heading text-highlighted">
           Iniciar Sesión
-        </h2>
+        </h1>
       </template>
 
       <form method="post" class="space-y-6" autocomplete="on" @submit.prevent="handleSubmit">
         <UAlert v-if="error" icon="i-lucide-alert-circle" :description="error" />
 
         <UFormField label="Correo electrónico">
-          <UInput v-model="email" type="email" name="email" autocomplete="email" class="w-full"
-            :ui="{ base: 'text-gray-900 placeholder-gray-400' }" placeholder="Ingresa tu correo" size="lg"
+          <UInput v-model="email" type="email" name="email" autocomplete="email" placeholder="Ingresa tu correo" size="lg"
             icon="i-lucide-mail" />
         </UFormField>
 
         <UFormField label="Contraseña">
           <UInput v-model="password" name="password" autocomplete="current-password"
             :type="showPassword ? 'text' : 'password'" placeholder="Ingresa tu contraseña" size="lg"
-            icon="i-lucide-lock" class="w-full" :ui="{ base: 'text-gray-900 placeholder-gray-400' }">
+            icon="i-lucide-lock">
             <template #trailing>
-              <UButton variant="ghost" size="xs" :icon="showPassword ? 'i-lucide-eye-off' : 'i-lucide-eye'"
+              <UButton variant="ghost" color="neutral" size="sm" :icon="showPassword ? 'i-lucide-eye-off' : 'i-lucide-eye'"
+                :aria-label="showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'" :aria-pressed="showPassword"
                 @click="showPassword = !showPassword" />
             </template>
           </UInput>
         </UFormField>
 
-        <UButton type="submit" block size="lg" :loading="isLoading" :disabled="!isHydrated">
+        <UButton variant="solid" type="submit" block size="lg" :loading="isLoading" :disabled="!isHydrated">
           Entrar
         </UButton>
 
@@ -40,8 +40,9 @@
 </template>
 
 <script setup lang="ts">
-useHead({
-  title: 'Iniciar Sesión - Pontem'
+usePageMeta({
+  title: 'Iniciar sesión - Pontem',
+  description: 'Acceso para miembros de Pontem Consulting Club.'
 })
 
 const { login, isAuthenticated } = useAuth()
