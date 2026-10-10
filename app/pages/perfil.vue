@@ -15,8 +15,8 @@
         <!-- Identidad -->
         <aside class="flex flex-col gap-4">
           <div class="relative mx-auto size-40 overflow-hidden rounded-full bg-elevated">
-            <img v-if="avatarUrl" :src="avatarUrl" :alt="form.display_name || 'Foto de perfil'"
-              class="size-full object-cover">
+            <NuxtImg v-if="avatarUrl" :src="avatarUrl" preset="avatar" :alt="form.display_name || 'Foto de perfil'"
+              class="size-full object-cover" />
             <div v-else class="flex size-full items-center justify-center text-4xl font-semibold text-muted">
               {{ initials }}
             </div>

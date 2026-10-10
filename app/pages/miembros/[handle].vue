@@ -7,8 +7,8 @@
 
       <article v-else-if="member" class="mx-auto flex max-w-2xl flex-col items-center gap-6 text-center">
         <div class="size-36 overflow-hidden rounded-full bg-elevated">
-          <img v-if="avatarUrl" :src="avatarUrl" :alt="member.display_name ?? 'Foto de perfil'"
-            class="size-full object-cover">
+          <NuxtImg v-if="avatarUrl" :src="avatarUrl" preset="avatar" :alt="member.display_name ?? 'Foto de perfil'"
+            class="size-full object-cover" />
           <div v-else class="flex size-full items-center justify-center text-4xl font-semibold text-muted">
             {{ initials }}
           </div>

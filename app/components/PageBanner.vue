@@ -16,7 +16,9 @@ defineProps<{
   <UTheme :ui="onImage">
     <UPageHero :title="title" :description="description" :ui="{ container: 'py-20 sm:py-24 lg:py-28' }">
       <template #top>
-        <NuxtImg v-if="image" :src="image"
+        <!-- Es lo primero que se ve: va con prioridad. Sin `preload`: NuxtImg precarga
+             la variante más grande (3072 px) aunque la pantalla pida otra. -->
+        <NuxtImg v-if="image" :src="image" preset="banner" fetchpriority="high"
           alt="" class="absolute inset-0 -z-10 size-full object-cover" />
         <div aria-hidden="true" class="absolute inset-0 -z-10 bg-black/50" />
       </template>

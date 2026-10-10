@@ -1,7 +1,7 @@
 <template>
   <UCard variant="item" class="relative flex flex-col" :ui="{ body: 'flex flex-1 flex-col' }">
     <template v-if="imageUrl" #header>
-      <NuxtImg :src="imageUrl" :alt="newsItem.title" class="h-48 w-full object-cover" sizes="500px" />
+      <NuxtImg :src="imageUrl" preset="card" :alt="newsItem.title" class="h-48 w-full object-cover" />
     </template>
 
     <div class="mb-4">

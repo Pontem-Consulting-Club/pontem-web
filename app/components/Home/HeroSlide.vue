@@ -1,8 +1,12 @@
 <template>
-  <div class="absolute inset-0 transition-opacity duration-1000" :class="isActive ? 'opacity-100 z-10' : 'opacity-0 z-0'">
-    <!-- Background Image with Grayscale -->
-    <div v-if="imageUrl" class="absolute inset-0 bg-cover bg-center grayscale"
-      :style="{ backgroundImage: `url(${imageUrl})` }" />
+  <!-- inert: los enlaces de las slides ocultas no reciben el foco del teclado. -->
+  <div class="absolute inset-0 transition-opacity duration-1000" :class="isActive ? 'opacity-100 z-10' : 'opacity-0 z-0'"
+    :inert="!isActive">
+    <!-- La foto pasa por el optimizador. Antes era un fondo CSS: las cuatro se
+         descargaban enteras al entrar, también en celular. -->
+    <NuxtImg v-if="imageUrl && load" :src="imageUrl" preset="banner" alt=""
+      :fetchpriority="priority ? 'high' : undefined" :loading="priority ? 'eager' : 'lazy'"
+      class="absolute inset-0 size-full object-cover grayscale" />
     <div v-else class="absolute inset-0 bg-inverted" />
 
     <!-- Dark Overlay -->
@@ -35,10 +39,17 @@
 <script setup lang="ts">
 import type { HeroSlideRecord } from '~/types/content'
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   slide: HeroSlideRecord
   isActive: boolean
-}>()
+  /** Si ya se puede pedir la foto: la actual y la siguiente (Hero decide). */
+  load?: boolean
+  /** La primera slide: se pide antes que todo lo demás. */
+  priority?: boolean
+}>(), {
+  load: true,
+  priority: false
+})
 
 const { url: imageUrl } = useStorageImage(computed(() => props.slide.image_url ?? null))
 

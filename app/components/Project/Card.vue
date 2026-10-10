@@ -19,7 +19,7 @@
       <ContentEditButton v-if="isEditor" ref="editButton" label="Editar proyecto" :disabled="otherEditorOpen"
         @click="startEdit" />
 
-      <NuxtImg v-if="imageUrl" :src="imageUrl" :alt="project.title" class="h-44 w-full object-cover" />
+      <NuxtImg v-if="imageUrl" :src="imageUrl" preset="card" :alt="project.title" class="h-44 w-full object-cover" />
       <!-- Sin imagen: el logo completo, no recortado por object-cover. -->
       <NuxtImg v-else src="/LogoColorSolo.png" alt="" class="h-44 w-full bg-muted object-contain p-8" />
     </template>

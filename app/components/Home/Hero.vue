@@ -2,7 +2,7 @@
   <section class="relative h-[80vh] w-full overflow-hidden">
     <!-- Slides -->
     <HomeHeroSlide v-for="(slide, index) in slides" :key="slide.id" :slide="slide"
-      :is-active="currentSlide === index" />
+      :is-active="currentSlide === index" :load="loadedSlides.has(index)" :priority="index === 0" />
 
     <div v-if="slides.length === 0" class="absolute inset-0 bg-inverted" />
 
@@ -55,6 +55,14 @@ const { data: slides, refresh } = await useFetch<HeroSlideRecord[]>('/api/hero-s
 const { isEditor } = useProfile()
 
 const currentSlide = ref(0)
+
+// Solo se piden las fotos de la slide actual y la siguiente; las demás, cuando
+// les toca. Antes llegaban las cuatro al entrar.
+const loadedSlides = ref(new Set<number>())
+watch([currentSlide, () => slides.value.length], ([current, total]) => {
+  loadedSlides.value.add(current)
+  if (total > 1) loadedSlides.value.add((current + 1) % total)
+}, { immediate: true })
 const isCreating = ref(false)
 const isEditing = ref(false)
 const isSaving = ref(false)

@@ -3,6 +3,11 @@ import tailwindcss from "@tailwindcss/vite";
 
 // Para las vistas previas al compartir: og:image tiene que ser una URL absoluta.
 const siteUrl = process.env.NUXT_PUBLIC_SITE_URL ?? 'https://www.pontemcc.cl'
+// Las fotos que suben los editores viven en Supabase Storage: su host tiene que estar
+// en image.domains para que el optimizador (ipx en local, Vercel en producción) las
+// redimensione. Sin él, se servían en su tamaño original.
+const supabaseHost = process.env.SUPABASE_URL ? new URL(process.env.SUPABASE_URL).host : undefined
+
 const siteDescription = 'Club de consultoría de estudiantes: proyectos de consultoría social, '
   + 'eventos con consultoras y material para preparar entrevistas.'
 
@@ -58,6 +63,23 @@ export default defineNuxtConfig({
       styles: ['normal', 'italic'],
       subsets: ['latin', 'latin-ext']
     }]
+  },
+
+  // Tamaños de imagen con nombre, como el tema de estilos: cada componente elige un
+  // preset en vez de escribir su propio `sizes`. Las claves de `sizes` son
+  // pantallas (xs 320, sm 640, md 768, lg 1024, xl 1280, 2xl 1536): un valor sin
+  // clave ("100vw") se interpreta como pantalla de 1 px y genera imágenes de 1–2 px.
+  image: {
+    quality: 75,
+    domains: supabaseHost ? [supabaseHost] : [],
+    presets: {
+      // Fotos a todo el ancho: portada del inicio y banners de página.
+      banner: { sizes: 'xs:100vw sm:100vw md:100vw lg:100vw xl:100vw 2xl:100vw' },
+      // Fotos de tarjeta en UPageGrid: una columna, dos desde sm, tres desde lg.
+      card: { sizes: 'xs:100vw sm:100vw md:50vw lg:50vw xl:400px' },
+      // Fotos de perfil y logos chicos, en círculo.
+      avatar: { sizes: '160px' }
+    }
   },
 
   supabase: {

@@ -9,7 +9,8 @@
                 Editar
             </UButton>
         </div>
-        <NuxtImg v-if="articleImageUrl" :src="articleImageUrl" alt="Cover Image"
+        <!-- Decorativa: el título de la noticia es el h1. -->
+        <NuxtImg v-if="articleImageUrl" :src="articleImageUrl" alt=""
             class="rounded-xl h-72 w-full object-cover mb-6" sizes="800px" />
 
         <header class="flex flex-col mb-8">

@@ -32,7 +32,7 @@ const duration = computed(() => {
       <div class="flex justify-between items-start gap-3">
         <div class="flex items-center gap-3 min-w-0">
           <div v-if="logoUrl" class="size-10 rounded-full bg-muted border border-muted overflow-hidden shrink-0 flex items-center justify-center">
-            <img :src="logoUrl" :alt="caseStudy.company ?? 'Empresa'" class="size-full object-contain p-1">
+            <NuxtImg :src="logoUrl" preset="avatar" :alt="caseStudy.company ?? 'Empresa'" class="size-full object-contain p-1" />
           </div>
           <div v-else class="size-10 rounded-full shrink-0 flex items-center justify-center"
             :class="getCategoryBadge(caseStudy.category)">

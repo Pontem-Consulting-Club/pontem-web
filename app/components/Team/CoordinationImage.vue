@@ -2,7 +2,7 @@
   <div class="relative h-full bg-elevated">
     <!-- Imagen o placeholder -->
     <!-- Decorativa: la tarjeta ya nombra la coordinación. -->
-    <img v-if="imageUrl" :src="imageUrl" alt="" class="size-full object-cover" >
+    <NuxtImg v-if="imageUrl" :src="imageUrl" preset="card" alt="" class="size-full object-cover" />
     <div v-else class="size-full bg-linear-to-r from-primary-100 to-secondary-50 flex items-center justify-center">
       <UIcon :name="icon" class="size-12 text-primary-400" />
     </div>
