@@ -1,7 +1,9 @@
 <template>
   <div>
     <UContainer class="py-24 pt-32">
-      <NotFoundState v-if="error" title="Perfil no encontrado" message="No encontramos ese perfil" />
+      <!-- Un error del servidor no es "no encontrado". -->
+      <LoadError v-if="(error?.statusCode ?? 0) >= 500" title="No pudimos cargar el perfil" :retry="refresh" />
+      <NotFoundState v-else-if="error" title="Perfil no encontrado" message="No encontramos ese perfil" />
 
       <article v-else-if="member" class="mx-auto flex max-w-2xl flex-col items-center gap-6 text-center">
         <div class="size-36 overflow-hidden rounded-full bg-elevated">
@@ -46,7 +48,7 @@ const route = useRoute()
 const handle = computed(() => String(route.params.handle ?? '').toLowerCase())
 const coordinationLabels = TEAM_COORDINATION_LABELS
 
-const { data: member, error } = await useFetch<PublicProfile>(() => `/api/members/${handle.value}`)
+const { data: member, error, refresh } = await useFetch<PublicProfile>(() => `/api/members/${handle.value}`)
 
 // Un perfil privado, inactivo o inexistente responde 404. La API no distingue los
 // tres a proposito, y la pagina tampoco.

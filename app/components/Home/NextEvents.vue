@@ -1,7 +1,7 @@
 <template>
   <UPageSection title="Próximos Eventos" description="No te pierdas nuestros próximos eventos y actividades"
     class="bg-accented/60 clip-wave-top">
-    <LoadingSpinner v-if="status === 'pending'" />
+    <LoadError v-if="error" title="No pudimos cargar los eventos" :retry="refresh" />
 
     <UEmpty v-else-if="upcomingEvents.length === 0" title="No hay eventos próximos programados" icon="i-lucide-inbox"/>
 
@@ -22,7 +22,7 @@
 <script setup lang="ts">
 import type { EventRecord } from '~/types/content'
 
-const { data: events, status, refresh } = await useFetch<EventRecord[]>('/api/events/scheduled', {
+const { data: events, error, refresh } = await useFetch<EventRecord[]>('/api/events/scheduled', {
   default: () => []
 })
 

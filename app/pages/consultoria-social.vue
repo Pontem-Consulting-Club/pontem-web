@@ -17,7 +17,7 @@
     <!-- Proyectos activos -->
     <div class="bg-muted py-16">
       <UContainer>
-        <LoadingSpinner v-if="status === 'pending'" />
+        <LoadError v-if="error" title="No pudimos cargar los proyectos" :retry="refresh" />
         <template v-else>
           <div class="flex items-center justify-between gap-4 mb-10">
             <div class="flex flex-wrap items-center gap-x-3 gap-y-2">
@@ -46,7 +46,7 @@
     </div>
 
     <!-- Historial -->
-    <div class="bg-default py-12">
+    <div v-if="!error" class="bg-default py-12">
       <UContainer>
         <h2 class="mb-6 text-heading text-muted">Proyectos anteriores</h2>
         <div class="flex flex-col divide-y divide-muted">
@@ -68,7 +68,7 @@ usePageMeta({
   description: 'Proyectos de consultoría que equipos de estudiantes de Pontem desarrollan con fundaciones y organizaciones sociales.'
 })
 
-const { data, status, refresh } = await useFetch<{ active: ProjectRecord[], past: ProjectRecord[] }>(
+const { data, error, refresh } = await useFetch<{ active: ProjectRecord[], past: ProjectRecord[] }>(
   '/api/projects/social-consulting',
   { default: () => ({ active: [], past: [] }) }
 )

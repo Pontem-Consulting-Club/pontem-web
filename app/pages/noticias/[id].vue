@@ -1,6 +1,8 @@
 <template>
   <UContainer class="py-16 max-w-4xl">
     <LoadingSpinner v-if="isLoading" />
+    <!-- Un error del servidor no es "no encontrada". -->
+    <LoadError v-else-if="(error?.statusCode ?? 0) >= 500" title="No pudimos cargar la noticia" :retry="refresh" />
     <NotFoundState v-else-if="showNotFound" icon="i-lucide-file-x" title="Noticia no encontrada"
       button-text="Volver a noticias" button-link="/noticias" />
 
@@ -74,7 +76,8 @@ const editNews = computed<NewsRecord | null>(() => {
   return newsItem.value ?? null
 })
 
-const isLoading = computed(() => !isNew && status.value === 'pending')
+// Solo en la primera carga: al refrescar tras guardar, la noticia sigue a la vista.
+const isLoading = computed(() => !isNew && status.value === 'pending' && !newsItem.value)
 
 const showNotFound = computed(() => {
   if (isNew) return false

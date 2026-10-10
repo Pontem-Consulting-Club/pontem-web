@@ -10,7 +10,7 @@ usePageMeta({
 
 const history = about.history
 
-const { data: teamData, status, refresh } = await useFetch<{ members: TeamRecord[], coordinations: TeamCoordinationRecord[] }>('/api/team', {
+const { data: teamData, error, refresh } = await useFetch<{ members: TeamRecord[], coordinations: TeamCoordinationRecord[] }>('/api/team', {
   default: () => ({ members: [], coordinations: [] })
 })
 
@@ -105,9 +105,9 @@ const teamByRole = computed(() => {
           </UButton>
         </div>
  
-        <LoadingSpinner v-if="status === 'pending'" />
- 
-        <div v-if="isCreating && draftMember" class="mb-6">
+        <LoadError v-if="error" title="No pudimos cargar el equipo" :retry="refresh" />
+
+        <div v-else-if="isCreating && draftMember" class="mb-6">
           <TeamCard :member="draftMember" :is-new="true" @created="handleCreated" @cancel-create="cancelCreate" @updated="refresh" />
         </div>
 
@@ -117,7 +117,7 @@ const teamByRole = computed(() => {
  
         <UEmpty v-else-if="teamByRole.length === 0" title="No hay integrantes disponibles" icon="i-lucide-inbox"/>
 
-        <div v-if="teamByRole.length > 0" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div v-if="!error && teamByRole.length > 0" class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <!-- Foto a la izquierda y nombres a la derecha, sin el relleno de la tarjeta -->
           <UCard v-for="dept in teamByRole" :key="dept.key" class="h-56"
             :ui="{ body: 'flex h-full p-0 sm:p-0' }">

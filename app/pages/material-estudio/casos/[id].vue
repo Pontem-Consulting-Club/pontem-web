@@ -91,7 +91,11 @@ const handleDelete = async () => {
 
 <template>
   <UContainer class="py-16">
-    <LoadingSpinner v-if="status === 'pending'" />
+    <!-- Solo en la primera carga: al refrescar tras guardar, el caso sigue a la vista. -->
+    <LoadingSpinner v-if="status === 'pending' && !caseStudy" />
+
+    <!-- Un error del servidor no es "no encontrado". -->
+    <LoadError v-else-if="(error?.statusCode ?? 0) >= 500" title="No pudimos cargar el caso de estudio" :retry="refresh" />
 
     <NotFoundState v-else-if="error || !caseStudy" icon="i-lucide-file-x" title="Caso de estudio no encontrado"
       button-text="Volver a Material de Estudio" button-link="/material-estudio" />

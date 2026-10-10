@@ -1,6 +1,6 @@
 <template>
   <UPageSection title="Noticias y Blog" description="Mantente al día con las últimas novedades">
-    <LoadingSpinner v-if="status === 'pending'" />
+    <LoadError v-if="error" title="No pudimos cargar las noticias" :retry="refresh" />
 
     <UEmpty v-else-if="latestNews.length === 0" title="No hay noticias disponibles" icon="i-lucide-inbox"/>
 
@@ -20,7 +20,7 @@
 <script setup lang="ts">
 import type { NewsRecord } from '~/types/content'
 
-const { data: news, status } = await useFetch<NewsRecord[]>('/api/news', {
+const { data: news, error, refresh } = await useFetch<NewsRecord[]>('/api/news', {
   default: () => []
 })
 

@@ -14,7 +14,7 @@ const caseBooks = studyMaterials.caseBooks
 
 const { isEditor } = useProfile()
 
-const { data: caseStudies, status } = await useFetch<CaseStudyRecord[]>('/api/case-studies', {
+const { data: caseStudies, error, refresh } = await useFetch<CaseStudyRecord[]>('/api/case-studies', {
   default: () => []
 })
 
@@ -103,7 +103,7 @@ const openDrive = () => {
 
       <CaseStudyCategoryFilter v-model="selectedCategory" :counts="tabCounts" :total="caseStudies.length" />
 
-      <LoadingSpinner v-if="status === 'pending'" />
+      <LoadError v-if="error" title="No pudimos cargar los casos de estudio" :retry="refresh" />
 
       <UEmpty v-else-if="filteredCaseStudies.length === 0" icon="i-lucide-folder-search"
         :title="caseStudies.length === 0

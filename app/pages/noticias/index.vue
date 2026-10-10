@@ -10,13 +10,10 @@
       </UButton>
       </div>
 
-      <LoadingSpinner v-if="status === 'pending'" />
-
       <h2 class="sr-only">Todas las noticias</h2>
-      <div v-if="paginatedNews.length === 0" class="text-center">
-        <UIcon name="i-lucide-inbox" class="size-16 mx-auto mb-4" />
-        <p>No hay noticias disponibles</p>
-      </div>
+      <LoadError v-if="error" title="No pudimos cargar las noticias" :retry="refresh" />
+
+      <UEmpty v-else-if="paginatedNews.length === 0" icon="i-lucide-inbox" title="No hay noticias disponibles" />
 
       <UPageGrid v-else>
         <NewsCard v-for="newsItem in paginatedNews" :key="newsItem.id" :news-item="newsItem"/>
@@ -37,7 +34,7 @@ usePageMeta({
   description: 'Noticias, anuncios y artículos de Pontem Consulting Club.'
 })
 
-const { data: news, status } = await useFetch<NewsRecord[]>('/api/news', {
+const { data: news, error, refresh } = await useFetch<NewsRecord[]>('/api/news', {
   default: () => []
 })
 

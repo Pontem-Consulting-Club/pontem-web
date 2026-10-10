@@ -40,7 +40,7 @@
         <span class="ml-auto text-sm text-muted">{{ filtered.length }} de {{ users.length }}</span>
       </div>
 
-      <LoadingSpinner v-if="status === 'pending'" />
+      <LoadError v-if="error" title="No pudimos cargar las personas" :retry="refresh" />
 
       <div v-else-if="filtered.length === 0">
         <UEmpty icon="i-lucide-users" title="No hay personas que coincidan" />
@@ -121,7 +121,7 @@ const stateLabels = PROFILE_STATE_LABELS
 const roleOptions = USER_ROLES.map(role => ({ label: ROLE_LABELS[role], value: role }))
 const roleFilterOptions = [{ label: 'Todos los roles', value: 'all' }, ...roleOptions]
 
-const { data: users, status, refresh } = await useFetch<DirectoryEntry[]>('/api/admin/users', {
+const { data: users, error, refresh } = await useFetch<DirectoryEntry[]>('/api/admin/users', {
   default: () => []
 })
 

@@ -6,7 +6,7 @@ usePageMeta({
   description: 'Charlas, talleres y actividades de Pontem con consultoras y organizaciones. Revisa las próximas fechas e inscríbete.'
 })
 
-const { data: events, status, refresh } = await useFetch<EventRecord[]>('/api/events/scheduled', {
+const { data: events, error, refresh } = await useFetch<EventRecord[]>('/api/events/scheduled', {
   default: () => []
 })
 
@@ -64,7 +64,7 @@ const pastEvents = computed(() => {
           Agregar
         </UButton>
       </div>
-      <LoadingSpinner v-if="status === 'pending'" />
+      <LoadError v-if="error" title="No pudimos cargar los eventos" :retry="refresh" />
 
       <template v-else>
         <section v-if="isCreating && draftEvent" class="mb-16">

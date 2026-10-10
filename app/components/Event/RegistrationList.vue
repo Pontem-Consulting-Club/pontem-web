@@ -6,7 +6,9 @@
     </UButton>
 
     <div v-if="isOpen" class="mt-3">
-      <LoadingSpinner v-if="status === 'pending'" />
+      <LoadingSpinner v-if="status === 'pending' && rows.length === 0" />
+
+      <LoadError v-else-if="loadError" title="No pudimos cargar los inscritos" :retry="refresh" />
 
       <UEmpty v-else-if="rows.length === 0" icon="i-lucide-user-x"
         title="Todavía no hay nadie inscrito" />
@@ -70,7 +72,7 @@ const error = ref('')
 
 // Se pide solo al desplegar: la lista de un evento no le interesa a quien está
 // mirando la página de eventos de pasada.
-const { data, status, refresh } = await useAsyncData(
+const { data, status, error: loadError, refresh } = await useAsyncData(
   () => `event-registrations-${props.eventId}`,
   () => $fetch<RegistrationRow[]>(`/api/events/${props.eventId}/registrations`),
   { immediate: false, default: () => [] }
