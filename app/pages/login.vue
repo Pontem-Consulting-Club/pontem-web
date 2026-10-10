@@ -20,7 +20,8 @@
             :type="showPassword ? 'text' : 'password'" placeholder="Ingresa tu contraseña" size="lg"
             icon="i-lucide-lock">
             <template #trailing>
-              <UButton variant="ghost" size="xs" :icon="showPassword ? 'i-lucide-eye-off' : 'i-lucide-eye'"
+              <UButton variant="ghost" color="neutral" size="sm" :icon="showPassword ? 'i-lucide-eye-off' : 'i-lucide-eye'"
+                :aria-label="showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'" :aria-pressed="showPassword"
                 @click="showPassword = !showPassword" />
             </template>
           </UInput>
@@ -39,8 +40,9 @@
 </template>
 
 <script setup lang="ts">
-useHead({
-  title: 'Iniciar Sesión - Pontem'
+usePageMeta({
+  title: 'Iniciar sesión - Pontem',
+  description: 'Acceso para miembros de Pontem Consulting Club.'
 })
 
 const { login, isAuthenticated } = useAuth()

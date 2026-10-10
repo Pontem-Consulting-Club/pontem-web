@@ -41,7 +41,8 @@ const { data: newsItem, status, error, refresh } = await useFetch<NewsRecord>(`/
   immediate: !isNew && isValidId
 })
 
-useHead({
+usePageMeta({
+  description: () => newsItem.value?.subtitle,
   title: computed(() => {
     if (isEditMode.value) {
       return isNew ? 'Nueva noticia - Pontem' : 'Editar noticia - Pontem'

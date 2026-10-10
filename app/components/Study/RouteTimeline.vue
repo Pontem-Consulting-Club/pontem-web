@@ -17,7 +17,8 @@ const nodeStyles = [
 </script>
 
 <template>
-  <div class="relative w-full overflow-x-auto pb-4">
+  <!-- En celular se desplaza de lado: tabindex para poder hacerlo con el teclado. -->
+  <div class="relative w-full overflow-x-auto pb-4" tabindex="0" role="region" aria-label="Ruta de postulación">
     <div class="min-w-[760px] relative flex justify-between items-start px-8 py-4">
       <!-- Línea punteada de fondo, alineada con el centro de los nodos (h-15 => 30px) -->
       <div class="absolute inset-x-20 top-[46px] h-px border-t-2 border-dashed border-default" />

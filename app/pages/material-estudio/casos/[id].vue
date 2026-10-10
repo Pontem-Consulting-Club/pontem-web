@@ -26,7 +26,8 @@ const { data: caseStudy, status, error, refresh } = await useFetch<CaseStudyDeta
 // invalido ya se redirigio arriba.
 useNotFoundStatus({ found: () => !isValidId || Boolean(caseStudy.value), error })
 
-useHead({
+usePageMeta({
+  description: () => caseStudy.value?.summary,
   title: computed(() => caseStudy.value?.title
     ? `${caseStudy.value.title} - Pontem`
     : 'Caso de estudio - Pontem')

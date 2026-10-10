@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import type { EventRecord } from '~/types/content'
 
-useHead({
-  title: 'Eventos - Pontem'
+usePageMeta({
+  title: 'Eventos - Pontem',
+  description: 'Charlas, talleres y actividades de Pontem con consultoras y organizaciones. Revisa las próximas fechas e inscríbete.'
 })
 
 const { data: events, status, refresh } = await useFetch<EventRecord[]>('/api/events/scheduled', {

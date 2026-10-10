@@ -4,8 +4,9 @@ import type { CaseStudyRecord } from '~/types/content'
 import type { CaseStudyTab } from '~/constants/caseStudies'
 import { getCaseCategoryLabel } from '~/constants/caseStudies'
 
-useHead({
-  title: studyMaterials.title
+usePageMeta({
+  title: studyMaterials.title,
+  description: 'Casos de estudio, casebooks y recursos para preparar entrevistas de consultoría, ordenados por etapa de la postulación.'
 })
 
 const stages = studyMaterials.stages
@@ -90,7 +91,8 @@ const openDrive = () => {
       <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
         <h2 class="text-title text-highlighted">Casos de Estudio</h2>
         <div class="flex items-center gap-2 w-full md:w-auto">
-          <UInput v-model="search" icon="i-lucide-search" size="lg" class="md:w-96"
+          <UInput v-model="search" icon="i-lucide-search" size="lg" class="md:w-96" type="search"
+            aria-label="Buscar casos de estudio"
             placeholder="Buscar por empresa, área o palabra clave..." />
           <UButton v-if="isEditor" to="/material-estudio/casos/nuevo" icon="i-lucide-plus"
             size="lg" class="shrink-0">

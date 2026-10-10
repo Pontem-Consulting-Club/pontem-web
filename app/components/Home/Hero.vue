@@ -24,10 +24,15 @@
     </div>
 
     <!-- Slide Indicators -->
-    <div v-if="!isEditing" class="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-30 flex gap-3">
-      <button v-for="(slide, index) in slides" :key="slide.id" class="w-4 h-2 rounded-lg transition-all duration-300"
-        :class="currentSlide === index ? 'bg-default scale-125' : 'bg-white/50 hover:bg-default'"
-        :aria-label="`Go to slide ${index + 1}`" @click="goToSlide(index)" />
+    <!-- El punto es chico; el botón alrededor mide 24 px para poder tocarlo. -->
+    <div v-if="!isEditing" class="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-30 flex gap-1">
+      <button v-for="(slide, index) in slides" :key="slide.id" type="button"
+        class="group grid size-6 place-items-center rounded-full focus-visible:outline-2 focus-visible:outline-white"
+        :aria-label="`Ir a la diapositiva ${index + 1}`" :aria-current="currentSlide === index ? 'true' : undefined"
+        @click="goToSlide(index)">
+        <span class="h-2 w-4 rounded-lg transition-all duration-300"
+          :class="currentSlide === index ? 'bg-default scale-125' : 'bg-white/50 group-hover:bg-default'" />
+      </button>
     </div>
   </section>
 </template>

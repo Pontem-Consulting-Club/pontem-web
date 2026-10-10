@@ -25,14 +25,14 @@ const { getCategoryBadge, getCategoryBorder } = useCaseStudyColors()
 </script>
 
 <template>
-  <div class="flex flex-wrap gap-2">
-    <button type="button" class="px-4 py-2 rounded-full text-xs font-semibold border transition-colors" :class="modelValue === null
+  <div class="flex flex-wrap gap-2" role="group" aria-label="Filtrar por categoría">
+    <button type="button" :aria-pressed="modelValue === null" class="px-4 py-2 rounded-full text-xs font-semibold border transition-colors" :class="modelValue === null
       ? 'bg-primary text-white border-primary'
       : 'bg-default text-muted border-default hover:bg-muted'" @click="modelValue = null">
       Todas · {{ total }}
     </button>
 
-    <button v-for="category in visibleCategories" :key="category" type="button"
+    <button v-for="category in visibleCategories" :key="category" type="button" :aria-pressed="modelValue === category"
       class="px-4 py-2 rounded-full text-xs font-semibold border transition-colors" :class="modelValue === category
         ? `${getCategoryBadge(category)} ${getCategoryBorder(category)}`
         : 'bg-default text-muted border-default hover:bg-muted'"

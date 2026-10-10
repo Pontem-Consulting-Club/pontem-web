@@ -66,8 +66,8 @@ const duration = computed(() => {
         Dificultad: {{ CASE_DIFFICULTY_LABELS[caseStudy.difficulty] }}
       </span>
       <span v-else />
-      <NuxtLink :to="detailLink"
-        class="text-xs font-bold flex items-center gap-1 hover:underline shrink-0"
+      <NuxtLink :to="detailLink" :aria-label="`Ver caso: ${caseStudy.title}`"
+        class="text-xs font-bold flex items-center gap-1 py-1 hover:underline shrink-0"
         :class="getCategoryText(caseStudy.category)">
         Ver caso
         <UIcon name="i-lucide-arrow-right" class="size-3.5" />

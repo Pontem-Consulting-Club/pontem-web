@@ -14,7 +14,8 @@
 <script setup lang="ts">
 import logosForSlider from '~/assets/data/logos.json'
 
-useHead({
-  title: 'Pontem - Inicio'
+usePageMeta({
+  title: 'Pontem Consulting Club',
+  description: 'Club de consultoría de estudiantes: proyectos de consultoría social con organizaciones, eventos con consultoras y material para preparar entrevistas.'
 })
 </script>

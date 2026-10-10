@@ -1,8 +1,8 @@
 <template>
   <div class="mb-8">
     <p v-if="label" class="mb-4">{{ label }}</p>
-    <div class="flex flex-wrap gap-2">
-      <button v-for="option in options" :key="option" :class="[
+    <div class="flex flex-wrap gap-2" role="group" :aria-label="label || 'Filtrar por tipo'">
+      <button v-for="option in options" :key="option" type="button" :aria-pressed="modelValue.includes(option)" :class="[
         'px-4 py-2 rounded-full text-sm font-medium transition-colors',
         modelValue.includes(option)
           ? `${getTypeColor(option)} border ${getTypeBorder(option)} ring-2`

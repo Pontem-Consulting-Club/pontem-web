@@ -121,7 +121,9 @@ lugar (como el fondo de la portada) está `useImagePreview`.
 ## Capturas de revisión
 
 `test/visual` toma capturas de cada página para revisar los PRs de estilos. No es un
-control de paridad: muestra qué cambió.
+control de paridad: muestra qué cambió. También revisa que cada página tenga un solo
+`h1` sin saltos de nivel, que nada se anime con movimiento reducido y que axe no
+encuentre problemas de accesibilidad serios ni críticos.
 
 1. Supabase local sembrado (`supabase db reset`) y la app corriendo contra él.
    **Nunca con el `.env` del repo, que apunta a producción.**

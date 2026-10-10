@@ -32,8 +32,9 @@
 <script setup lang="ts">
 import type { NewsRecord } from '~/types/content'
 
-useHead({
-  title: 'Noticias y Blog - Pontem'
+usePageMeta({
+  title: 'Noticias y Blog - Pontem',
+  description: 'Noticias, anuncios y artículos de Pontem Consulting Club.'
 })
 
 const { data: news, status } = await useFetch<NewsRecord[]>('/api/news', {

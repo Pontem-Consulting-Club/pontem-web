@@ -63,7 +63,10 @@
 <script setup lang="ts">
 import type { ProjectRecord } from '~/types/content'
 
-useHead({ title: 'Consultoría Social - Pontem' })
+usePageMeta({
+  title: 'Consultoría Social - Pontem',
+  description: 'Proyectos de consultoría que equipos de estudiantes de Pontem desarrollan con fundaciones y organizaciones sociales.'
+})
 
 const { data, status, refresh } = await useFetch<{ active: ProjectRecord[], past: ProjectRecord[] }>(
   '/api/projects/social-consulting',

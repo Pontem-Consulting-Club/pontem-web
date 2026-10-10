@@ -32,7 +32,9 @@
       <div v-if="project.description" class="text-sm/relaxed text-muted flex-1">
         {{ project.description }}
       </div>
-      <UButton v-if="project.link" class="max-w-fit mt-4" :href="project.link" target="_blank" size="sm">
+      <UButton v-if="project.link" class="max-w-fit mt-4" :href="project.link" target="_blank"
+        trailing-icon="i-lucide-external-link"
+        :aria-label="`${project.link_text || 'Ver más'}: ${project.title} (se abre en otra pestaña)`">
         {{ project.link_text || 'Ver más' }}
       </UButton>
   </UCard>

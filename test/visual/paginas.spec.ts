@@ -1,3 +1,4 @@
+import AxeBuilder from '@axe-core/playwright'
 import { expect, test, type Page } from '@playwright/test'
 
 /**
@@ -105,6 +106,18 @@ test.describe('estructura', () => {
     }
   })
 
+  test('sin problemas de accesibilidad serios ni críticos', async ({ page }) => {
+    for (const ruta of ['/', '/consultoria-social', '/eventos', '/noticias', '/material-estudio', '/nosotros', '/login', '/recuperar-clave']) {
+      await abrir(page, ruta)
+      const { violations } = await new AxeBuilder({ page })
+        .withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa', 'best-practice'])
+        .analyze()
+      const graves = violations
+        .filter(v => v.impact === 'serious' || v.impact === 'critical')
+        .map(v => `${v.id} (${v.nodes.length}): ${v.nodes[0]?.target.join(' ')}`)
+      expect.soft(graves, `${ruta}: axe`).toEqual([])
+    }
+  })
 })
 
 test.describe('movimiento reducido', () => {

@@ -61,9 +61,9 @@ const initials = computed(() => (member.value?.display_name ?? '')
   .map(word => word[0]?.toUpperCase() ?? '')
   .join(''))
 
-useHead(() => ({
-  title: member.value
-    ? `${member.value.display_name} - Pontem`
-    : 'Perfil - Pontem'
-}))
+usePageMeta({
+  title: () => member.value ? `${member.value.display_name} - Pontem` : 'Perfil - Pontem',
+  description: () => member.value?.bio
+    || (member.value ? `${member.value.display_name}, miembro de Pontem Consulting Club.` : null)
+})
 </script>

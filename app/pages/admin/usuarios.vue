@@ -54,7 +54,7 @@
               <th class="px-4 py-3 font-medium">Coordinación</th>
               <th class="px-4 py-3 font-medium">Rol</th>
               <th class="px-4 py-3 font-medium">Estado</th>
-              <th class="px-4 py-3" />
+              <th class="px-4 py-3"><span class="sr-only">Acciones</span></th>
             </tr>
           </thead>
           <tbody class="divide-y divide-default">

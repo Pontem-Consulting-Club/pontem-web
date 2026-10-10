@@ -35,7 +35,7 @@ withDefaults(defineProps<Props>(), {
 
     <UButton variant="solid" :to="href" target="_blank" rel="noopener" trailing-icon="i-lucide-download" size="xl" color="neutral"
       class="z-10 bg-default text-highlighted hover:bg-elevated rounded-full font-semibold whitespace-nowrap">
-      Descargar Casebook
+      Descargar Casebook<span class="sr-only"> (PDF, se abre en otra pestaña)</span>
     </UButton>
   </UCard>
 </template>

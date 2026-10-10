@@ -3,8 +3,9 @@ import about from '~/assets/data/about.json'
 import { TEAM_COORDINATIONS, TEAM_COORDINATION_ICONS, TEAM_COORDINATION_LABELS } from '~/constants/teamRoles'
 import type { TeamRecord, TeamCoordinationRecord } from '~/types/content'
 
-useHead({
-  title: about.title
+usePageMeta({
+  title: about.title,
+  description: 'Quiénes somos: misión, pilares, historia y equipo de Pontem Consulting Club.'
 })
 
 const history = about.history

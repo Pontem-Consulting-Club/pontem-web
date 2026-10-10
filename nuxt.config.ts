@@ -1,10 +1,35 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import tailwindcss from "@tailwindcss/vite";
 
+// Para las vistas previas al compartir: og:image tiene que ser una URL absoluta.
+const siteUrl = process.env.NUXT_PUBLIC_SITE_URL ?? 'https://www.pontemcc.cl'
+const siteDescription = 'Club de consultoría de estudiantes: proyectos de consultoría social, '
+  + 'eventos con consultoras y material para preparar entrevistas.'
+
 export default defineNuxtConfig({
   css: ['~/assets/css/main.css'],
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
+
+  // Valores por defecto de todas las páginas; cada página pone su título y su
+  // descripción con usePageMeta.
+  app: {
+    head: {
+      htmlAttrs: { lang: 'es' },
+      meta: [
+        { name: 'description', content: siteDescription },
+        { property: 'og:site_name', content: 'Pontem Consulting Club' },
+        { property: 'og:type', content: 'website' },
+        { property: 'og:locale', content: 'es_CL' },
+        { property: 'og:description', content: siteDescription },
+        { property: 'og:image', content: `${siteUrl}/og-pontem.png` },
+        { property: 'og:image:width', content: '1200' },
+        { property: 'og:image:height', content: '630' },
+        { property: 'og:image:alt', content: 'Logo de Pontem Consulting Club' },
+        { name: 'twitter:card', content: 'summary_large_image' }
+      ]
+    }
+  },
   modules: [
     '@nuxt/ui',
     '@nuxtjs/supabase',

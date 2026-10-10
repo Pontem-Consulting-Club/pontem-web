@@ -1,5 +1,5 @@
 <template>
-  <UHeader title="Pontem Consulting Club">
+  <UHeader title="Pontem Consulting Club" :toggle="{ size: 'xl' }">
     <template #title>
       <img src="/pontemog_optimized_.png" alt="Pontem Consulting Club" class="h-12 w-auto">
     </template>

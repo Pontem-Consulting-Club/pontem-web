@@ -26,7 +26,7 @@
     </div>
 
     <div class="mt-auto">
-      <UButton :to="`/noticias/${newsItem.id}`" size="lg"
+      <UButton :to="`/noticias/${newsItem.id}`" size="lg" :aria-label="`Leer más sobre ${newsItem.title}`"
         class="transition-colors duration-300 rounded-lg">
         Leer más
       </UButton>
