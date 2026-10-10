@@ -50,7 +50,7 @@ export default defineEventHandler(async (event) => {
   if (!body.title) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'Title is required'
+      statusMessage: 'El título es obligatorio.'
     })
   }
 

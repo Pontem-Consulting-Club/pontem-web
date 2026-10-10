@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
     if (!body?.name || !body?.coordination) {
         throw createError({
             statusCode: 400,
-            statusMessage: 'Name and coordination are required'
+            statusMessage: 'El nombre y la coordinación son obligatorios.'
         })
     }
 

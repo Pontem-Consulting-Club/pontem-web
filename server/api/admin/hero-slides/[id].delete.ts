@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
   if (!idParam || Number.isNaN(id)) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'Hero slide ID is required'
+      statusMessage: 'Falta el identificador de la slide.'
     })
   }
 

@@ -55,8 +55,17 @@ const filteredCaseStudies = computed(() => {
   })
 })
 
-const openDrive = () => {
-  window.open(studyMaterials.driveLink, '_blank')
+// Se muestran de a 12: con los 50 casos de una vez, el casebook destacado y los
+// recursos quedaban al fondo de una lista muy larga. Al filtrar se vuelve a 12.
+const PAGE_SIZE = 12
+const visibleCount = ref(PAGE_SIZE)
+watch([search, selectedCategory], () => { visibleCount.value = PAGE_SIZE })
+const visibleCaseStudies = computed(() => filteredCaseStudies.value.slice(0, visibleCount.value))
+const remaining = computed(() => filteredCaseStudies.value.length - visibleCaseStudies.value.length)
+
+const clearFilters = () => {
+  search.value = ''
+  selectedCategory.value = null
 }
 </script>
 
@@ -105,14 +114,29 @@ const openDrive = () => {
 
       <LoadError v-if="error" title="No pudimos cargar los casos de estudio" :retry="refresh" />
 
-      <UEmpty v-else-if="filteredCaseStudies.length === 0" icon="i-lucide-folder-search"
-        :title="caseStudies.length === 0
-          ? 'Todavía no hay casos de estudio publicados'
-          : 'Ningún caso coincide con tu búsqueda'" />
+      <UEmpty v-else-if="caseStudies.length === 0" icon="i-lucide-folder-search"
+        title="Todavía no hay casos de estudio publicados" />
 
-      <UPageGrid v-else>
-        <CaseStudyCard v-for="caseStudy in filteredCaseStudies" :key="caseStudy.id" :case-study="caseStudy" />
-      </UPageGrid>
+      <UEmpty v-else-if="filteredCaseStudies.length === 0" icon="i-lucide-folder-search"
+        title="Ningún caso coincide con tu búsqueda"
+        description="Prueba con otra palabra o mira todas las categorías."
+        :actions="[{ label: 'Limpiar búsqueda', icon: 'i-lucide-x', onClick: clearFilters }]" />
+
+      <template v-else>
+        <UPageGrid>
+          <CaseStudyCard v-for="caseStudy in visibleCaseStudies" :key="caseStudy.id" :case-study="caseStudy" />
+        </UPageGrid>
+
+        <div class="flex flex-col items-center gap-3">
+          <p class="text-sm text-muted" aria-live="polite">
+            Mostrando {{ visibleCaseStudies.length }} de {{ filteredCaseStudies.length }} casos
+          </p>
+          <UButton v-if="remaining > 0" color="neutral" variant="outline" icon="i-lucide-chevron-down"
+            @click="visibleCount += PAGE_SIZE">
+            Mostrar {{ Math.min(remaining, PAGE_SIZE) }} más
+          </UButton>
+        </div>
+      </template>
     </section>
 
     <!-- Recurso destacado -->
@@ -128,9 +152,12 @@ const openDrive = () => {
           <p class="text-sm text-muted">
             Solicita acceso a nuestro Drive con todo el material de estudio.
           </p>
-          <button class="flex-1 w-full flex items-center justify-center cursor-pointer group" aria-label="Abrir Drive de Estudio" @click="openDrive">
-            <img src="/drive-logo.png" alt="Google Drive" class="h-16 w-auto group-hover:scale-105 transition-transform">
-          </button>
+          <img src="/drive-logo.png" alt="" class="h-16 w-auto">
+          <!-- Antes el único control era el logo, sin texto. -->
+          <UButton :to="studyMaterials.driveLink" target="_blank" variant="solid" trailing-icon="i-lucide-external-link"
+            aria-label="Abrir el Drive de estudio (se abre en otra pestaña)">
+            Abrir el Drive
+          </UButton>
         </UCard>
 
         <UCard :ui="{ body: 'flex flex-col gap-4' }">

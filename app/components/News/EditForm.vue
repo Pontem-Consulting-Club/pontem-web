@@ -18,7 +18,7 @@
                 <UFormField>
                     <!-- Imita el título de la noticia -->
                     <UInput v-model="form.title" placeholder="Título" variant="ghost" autofocus
-                        :ui="{ base: 'text-heading text-primary placeholder:text-primary/50 md:text-heading' }" />
+                        :ui="{ base: [inlineEditField, 'text-heading text-primary-700 md:text-heading'] }" />
                 </UFormField>
 
                 <UFormField>
@@ -28,7 +28,7 @@
 
                 <UFormField>
                     <UTextarea v-model.nullable="form.content" :rows="10" placeholder="Descripción" variant="ghost" autoresize
-                        :ui="{ base: [inlineEditField, 'text-justify'] }" />
+                        />
                 </UFormField>
 
                 <div class="mb-4 flex items-center justify-between gap-2 text-sm">

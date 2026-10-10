@@ -17,7 +17,7 @@ export default defineEventHandler(async (event) => {
     if (!caseStudyId || Number.isNaN(caseStudyId)) {
         throw createError({
             statusCode: 400,
-            statusMessage: 'A case study ID is required'
+            statusMessage: 'Falta el identificador del caso.'
         })
     }
 
@@ -25,7 +25,7 @@ export default defineEventHandler(async (event) => {
     if (!title) {
         throw createError({
             statusCode: 400,
-            statusMessage: 'Title is required'
+            statusMessage: 'El título es obligatorio.'
         })
     }
 
@@ -33,7 +33,7 @@ export default defineEventHandler(async (event) => {
     if (!isValidCaseResourceKind(kind)) {
         throw createError({
             statusCode: 400,
-            statusMessage: 'A valid resource kind is required'
+            statusMessage: 'Elige un tipo de recurso válido.'
         })
     }
 

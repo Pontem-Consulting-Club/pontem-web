@@ -173,14 +173,7 @@ const buildFormData = (payload: ReturnType<typeof buildPayload>, file?: File | n
   return formData
 }
 
-const resolveApiError = (error: unknown, fallback: string) => {
-  const apiError = typeof error === 'object' && error !== null && 'data' in error
-    ? (error as { data?: { statusMessage?: string, message?: string } })
-    : null
-  return apiError?.data?.statusMessage
-    || apiError?.data?.message
-    || (error instanceof Error ? error.message : fallback)
-}
+const resolveApiError = apiErrorMessage
 
 const startEdit = () => {
   if (!isEditor.value || !currentSlideRecord.value) return
@@ -237,7 +230,7 @@ const saveEdit = async (file?: File | null) => {
     isCreating.value = false
     await refresh()
   } catch (error: unknown) {
-    formError.value = resolveApiError(error, 'Error al guardar los cambios')
+    formError.value = resolveApiError(error, 'No pudimos guardar los cambios. Inténtalo de nuevo.')
   } finally {
     isSaving.value = false
   }
@@ -257,7 +250,7 @@ const handleDelete = async () => {
     isEditing.value = false
     await refresh()
   } catch (error: unknown) {
-    formError.value = resolveApiError(error, 'Error al eliminar la slide')
+    formError.value = resolveApiError(error, 'No pudimos eliminar la slide. Inténtalo de nuevo.')
   } finally {
     isDeleting.value = false
   }
@@ -279,7 +272,7 @@ const moveSlide = async (direction: -1 | 1) => {
     await refresh()
     currentSlide.value = targetIndex
   } catch (error: unknown) {
-    formError.value = resolveApiError(error, 'Error al reordenar las slides')
+    formError.value = resolveApiError(error, 'No pudimos cambiar el orden de las slides. Inténtalo de nuevo.')
   }
 }
 

@@ -17,7 +17,7 @@ export default defineEventHandler(async (event) => {
     if (Number.isNaN(registrationId) || Number.isNaN(eventId)) {
         throw createError({
             statusCode: 400,
-            statusMessage: 'Falta el identificador de la inscripcion.'
+            statusMessage: 'Falta el identificador de la inscripción.'
         })
     }
 
@@ -26,7 +26,7 @@ export default defineEventHandler(async (event) => {
     if (typeof body?.attended !== 'boolean') {
         throw createError({
             statusCode: 400,
-            statusMessage: 'Indica si la persona asistio o no.'
+            statusMessage: 'Indica si la persona asistió o no.'
         })
     }
 
@@ -43,7 +43,7 @@ export default defineEventHandler(async (event) => {
     if (error) {
         throw createError({
             statusCode: 500,
-            statusMessage: 'No pudimos guardar la asistencia',
+            statusMessage: 'No pudimos guardar la asistencia.',
             message: error.message
         })
     }
@@ -51,7 +51,7 @@ export default defineEventHandler(async (event) => {
     if (!data) {
         throw createError({
             statusCode: 404,
-            statusMessage: 'Esa inscripcion no existe.'
+            statusMessage: 'Esa inscripción no existe.'
         })
     }
 

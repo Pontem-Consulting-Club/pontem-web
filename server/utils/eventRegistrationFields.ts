@@ -26,7 +26,7 @@ export const parseEventRegistrationFields = (body: Record<string, unknown>) => {
         if (!Number.isInteger(capacity) || capacity < 1) {
             throw createError({
                 statusCode: 400,
-                statusMessage: 'El cupo tiene que ser un numero entero mayor que cero.'
+                statusMessage: 'El cupo tiene que ser un número entero mayor que cero.'
             })
         }
     }

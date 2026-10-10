@@ -113,7 +113,7 @@ const submit = async () => {
   isLoading.value = false
 
   if (authError) {
-    error.value = authError.message
+    error.value = authErrorMessage(authError, 'No pudimos cambiar la contraseña. Inténtalo de nuevo.')
     return
   }
 

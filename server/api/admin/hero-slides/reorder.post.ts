@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
   if (ids.length === 0 || ids.some(id => Number.isNaN(id))) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'A list of hero slide IDs is required'
+      statusMessage: 'Falta el orden de las slides.'
     })
   }
 

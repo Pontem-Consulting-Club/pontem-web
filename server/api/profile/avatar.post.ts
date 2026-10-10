@@ -20,7 +20,7 @@ export default defineEventHandler(async (event) => {
         throw createError({
             statusCode: 401,
             statusMessage: 'Unauthorized',
-            message: 'Necesitas iniciar sesion.'
+            message: 'Necesitas iniciar sesión.'
         })
     }
 
@@ -30,7 +30,7 @@ export default defineEventHandler(async (event) => {
     if (!file) {
         throw createError({
             statusCode: 400,
-            statusMessage: 'No llego ningun archivo.'
+            statusMessage: 'No llegó ningún archivo.'
         })
     }
 

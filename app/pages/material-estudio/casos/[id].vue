@@ -164,10 +164,10 @@ const handleDelete = async () => {
             <UIcon name="i-lucide-lightbulb" :class="getCategoryText(caseStudy.category)" class="size-5" />
             Planteamiento del Problema
           </h3>
-          <p v-if="caseStudy.summary" class="text-base/relaxed text-toned mb-4 text-justify">
+          <p v-if="caseStudy.summary" class="text-base/relaxed text-toned mb-4">
             {{ caseStudy.summary }}
           </p>
-          <p v-if="caseStudy.problem_statement" class="text-sm/relaxed text-muted text-justify">
+          <p v-if="caseStudy.problem_statement" class="text-sm/relaxed text-muted">
             {{ caseStudy.problem_statement }}
           </p>
         </UCard>

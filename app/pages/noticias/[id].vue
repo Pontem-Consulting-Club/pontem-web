@@ -132,12 +132,7 @@ const handleDelete = async () => {
     toast.add({ title: 'Noticia eliminada', icon: 'i-lucide-check', color: 'success' })
     router.push('/noticias')
   } catch (error: unknown) {
-    const apiError = typeof error === 'object' && error !== null && 'data' in error
-      ? (error as { data?: { statusMessage?: string; message?: string } })
-      : null
-    formError.value = apiError?.data?.statusMessage
-      || apiError?.data?.message
-      || (error instanceof Error ? error.message : 'Error al eliminar la noticia')
+    formError.value = apiErrorMessage(error, 'No pudimos eliminar la noticia. Inténtalo de nuevo.')
   } finally {
     isDeleting.value = false
   }
@@ -214,12 +209,7 @@ const saveEdit = async (file?: File | null) => {
       await handleUpdated()
     }
   } catch (error: unknown) {
-    const apiError = typeof error === 'object' && error !== null && 'data' in error
-      ? (error as { data?: { statusMessage?: string; message?: string } })
-      : null
-    formError.value = apiError?.data?.statusMessage
-      || apiError?.data?.message
-      || (error instanceof Error ? error.message : 'Error al guardar los cambios')
+    formError.value = apiErrorMessage(error, 'No pudimos guardar los cambios. Inténtalo de nuevo.')
   } finally {
     isSaving.value = false
   }

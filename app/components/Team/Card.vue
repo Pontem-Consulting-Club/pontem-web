@@ -118,12 +118,7 @@ const saveEdit = async () => {
         emit('updated')
         if (!_props.isNew) emit('closed')
     } catch (error: unknown) {
-        const apiError = typeof error === 'object' && error !== null && 'data' in error
-            ? (error as { data?: { statusMessage?: string; message?: string } })
-            : null
-        formError.value = apiError?.data?.statusMessage
-            || apiError?.data?.message
-            || (error instanceof Error ? error.message : 'Error al guardar los cambios')
+        formError.value = apiErrorMessage(error, 'No pudimos guardar los cambios. Inténtalo de nuevo.')
     } finally {
         isSaving.value = false
     }
@@ -143,12 +138,7 @@ const handleDelete = async () => {
         emit('updated')
         emit('closed')
     } catch (error: unknown) {
-        const apiError = typeof error === 'object' && error !== null && 'data' in error
-            ? (error as { data?: { statusMessage?: string; message?: string } })
-            : null
-        formError.value = apiError?.data?.statusMessage
-            || apiError?.data?.message
-            || (error instanceof Error ? error.message : 'Error al eliminar el integrante')
+        formError.value = apiErrorMessage(error, 'No pudimos eliminar al integrante. Inténtalo de nuevo.')
     } finally {
         isDeleting.value = false
     }

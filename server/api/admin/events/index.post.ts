@@ -52,7 +52,7 @@ export default defineEventHandler(async (event) => {
   if (!body.title || !body.date) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'Title and date are required'
+      statusMessage: 'El título y la fecha son obligatorios.'
     })
   }
 

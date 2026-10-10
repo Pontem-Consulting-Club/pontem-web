@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
         throw createError({
             statusCode: 401,
             statusMessage: 'Unauthorized',
-            message: 'Necesitas iniciar sesion.'
+            message: 'Necesitas iniciar sesión.'
         })
     }
 
@@ -43,7 +43,7 @@ export default defineEventHandler(async (event) => {
     if (coordination && !isValidTeamCoordination(coordination)) {
         throw createError({
             statusCode: 400,
-            statusMessage: 'Coordinacion invalida.'
+            statusMessage: 'Coordinación inválida.'
         })
     }
 
@@ -53,7 +53,7 @@ export default defineEventHandler(async (event) => {
         if (Number.isNaN(generation) || generation < 1990 || generation > 2100) {
             throw createError({
                 statusCode: 400,
-                statusMessage: 'El anio de generacion no parece valido.'
+                statusMessage: 'El año de generación no parece válido.'
             })
         }
     }

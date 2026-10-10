@@ -17,26 +17,29 @@ const nodeStyles = [
 </script>
 
 <template>
-  <!-- En celular se desplaza de lado: tabindex para poder hacerlo con el teclado. -->
-  <div class="relative w-full overflow-x-auto pb-4" tabindex="0" role="region" aria-label="Ruta de postulación">
-    <div class="min-w-[760px] relative flex justify-between items-start px-8 py-4">
-      <!-- Línea punteada de fondo, alineada con el centro de los nodos (h-15 => 30px) -->
-      <div class="absolute inset-x-20 top-[46px] h-px border-t-2 border-dashed border-default" />
+  <!-- Es una secuencia: lista ordenada. En celular y tablet va en columna (antes se
+       desplazaba de lado y cortaba las etapas); desde lg, en fila. -->
+  <ol class="relative flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between lg:gap-4 lg:px-8 lg:py-4">
+    <!-- Línea punteada por el centro de los nodos (size-15 => 30 px): vertical, y
+         horizontal desde lg. -->
+    <div aria-hidden="true"
+      class="absolute inset-y-8 left-[29px] border-l-2 border-dashed border-default lg:inset-x-20 lg:top-[46px] lg:bottom-auto lg:border-t-2 lg:border-l-0" />
 
-      <div v-for="(stage, index) in stages" :key="stage.title"
-        class="flex flex-col items-center gap-3 w-36 relative z-10 group">
-        <div
-          class="size-15 rounded-full bg-default border-2 text-xl font-bold flex items-center justify-center shadow-sm transition-transform group-hover:-translate-y-1"
-          :class="nodeStyles[index % nodeStyles.length]">
-          {{ index + 1 }}
-        </div>
-        <span class="text-xs font-semibold uppercase tracking-wider text-center text-default">
+    <li v-for="(stage, index) in stages" :key="stage.title"
+      class="relative z-10 flex items-start gap-4 lg:w-36 lg:flex-col lg:items-center lg:gap-3">
+      <div aria-hidden="true"
+        class="size-15 shrink-0 rounded-full bg-default border-2 text-xl font-bold flex items-center justify-center shadow-sm"
+        :class="nodeStyles[index % nodeStyles.length]">
+        {{ index + 1 }}
+      </div>
+      <div class="flex flex-col gap-1 pt-2 lg:items-center lg:pt-0 lg:text-center">
+        <span class="text-xs font-semibold uppercase tracking-wider text-default">
           {{ stage.title }}
         </span>
-        <span class="text-xs/relaxed text-muted text-center">
+        <span class="text-xs/relaxed text-muted">
           {{ stage.description }}
         </span>
       </div>
-    </div>
-  </div>
+    </li>
+  </ol>
 </template>

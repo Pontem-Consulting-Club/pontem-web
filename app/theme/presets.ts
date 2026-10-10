@@ -6,7 +6,9 @@
 // Clases de campo de cada preset, para componerlas cuando un campo necesita además
 // su propia `ui` (una prop `ui` reemplaza, no suma, lo que pone el preset).
 export const onImageField = 'rounded-lg bg-white/10 text-white ring-1 ring-white/25 placeholder:text-white/60 focus:ring-white/60'
-export const inlineEditField = 'text-toned placeholder:text-muted'
+// El contorno gris en reposo dice "esto se edita": sin él, los campos ghost se veían
+// como texto común hasta hacer clic. Al enfocar, el anillo pasa a primary (forms.ts).
+export const inlineEditField = 'text-toned placeholder:text-muted ring-1 ring-inset ring-default'
 
 /** Sobre una foto oscura (portadas, banners): texto y controles en blanco. */
 export const onImage = {
@@ -29,5 +31,5 @@ export const onImage = {
 export const inlineEdit = {
   input: { base: inlineEditField },
   textarea: { base: inlineEditField },
-  select: { base: 'text-toned', placeholder: 'text-muted' }
+  select: { base: 'text-toned ring-1 ring-inset ring-default', placeholder: 'text-muted' }
 }

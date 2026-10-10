@@ -24,7 +24,7 @@ export default defineEventHandler(async (event) => {
     if (!profile) {
         throw createError({
             statusCode: 401,
-            statusMessage: 'Necesitas iniciar sesion.'
+            statusMessage: 'Necesitas iniciar sesión.'
         })
     }
 
@@ -43,7 +43,7 @@ export default defineEventHandler(async (event) => {
     if (error) {
         throw createError({
             statusCode: 500,
-            statusMessage: 'No pudimos cancelar la inscripcion',
+            statusMessage: 'No pudimos cancelar la inscripción.',
             message: error.message
         })
     }
@@ -55,5 +55,5 @@ export default defineEventHandler(async (event) => {
         })
     }
 
-    return { message: 'Inscripcion cancelada' }
+    return { message: 'Inscripción cancelada' }
 })

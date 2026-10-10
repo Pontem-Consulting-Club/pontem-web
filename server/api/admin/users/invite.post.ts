@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
         throw createError({
             statusCode: 400,
-            statusMessage: 'Escribe un correo valido.'
+            statusMessage: 'Escribe un correo válido.'
         })
     }
 
@@ -58,11 +58,11 @@ export default defineEventHandler(async (event) => {
         if (roleError) {
             throw createError({
                 statusCode: 500,
-                statusMessage: 'La invitacion se envio, pero no se pudo asignar el rol',
+                statusMessage: 'La invitación se envió, pero no se pudo asignar el rol.',
                 message: roleError.message
             })
         }
     }
 
-    return { message: 'Invitacion enviada', id: data.user?.id ?? null }
+    return { message: 'Invitación enviada', id: data.user?.id ?? null }
 })

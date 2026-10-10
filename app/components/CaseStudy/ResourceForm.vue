@@ -68,12 +68,7 @@ const handleSubmit = async () => {
     close()
     emit('created')
   } catch (err: unknown) {
-    const apiError = typeof err === 'object' && err !== null && 'data' in err
-      ? (err as { data?: { statusMessage?: string, message?: string } })
-      : null
-    error.value = apiError?.data?.statusMessage
-      || apiError?.data?.message
-      || (err instanceof Error ? err.message : 'Error al agregar el recurso')
+    error.value = apiErrorMessage(err, 'No pudimos agregar el recurso. Inténtalo de nuevo.')
   } finally {
     isSaving.value = false
   }
