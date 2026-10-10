@@ -1,6 +1,9 @@
 <template>
   <div>
-    <PageBanner title="Personas" image="/Equipo2024.jpeg" />
+    <!-- Página de trabajo, no de presentación: encabezado simple, sin foto. -->
+    <UContainer>
+      <UPageHeader title="Personas" />
+    </UContainer>
 
     <UContainer class="py-16">
       <!-- Invitar -->
@@ -48,7 +51,7 @@
 
       <div v-else class="overflow-x-auto rounded-lg border border-default bg-default">
         <table class="w-full text-sm">
-          <thead class="bg-muted text-left text-xs uppercase tracking-wide text-muted">
+          <thead class="bg-muted text-left text-xs text-muted">
             <tr>
               <th class="px-4 py-3 font-medium">Persona</th>
               <th class="px-4 py-3 font-medium">Coordinación</th>

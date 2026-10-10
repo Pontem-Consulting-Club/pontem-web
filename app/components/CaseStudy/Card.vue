@@ -38,7 +38,7 @@ const duration = computed(() => {
             :class="getCategoryBadge(caseStudy.category)">
             <UIcon :name="caseStudy.icon || getCaseCategoryIcon(caseStudy.category)" class="size-5" />
           </div>
-          <span v-if="caseStudy.company" class="text-xs font-semibold uppercase tracking-wider text-muted truncate">
+          <span v-if="caseStudy.company" class="text-xs font-medium text-muted truncate">
             {{ caseStudy.company }}
           </span>
         </div>
@@ -70,7 +70,6 @@ const duration = computed(() => {
         class="text-xs font-bold flex items-center gap-1 py-1 hover:underline shrink-0"
         :class="getCategoryText(caseStudy.category)">
         Ver caso
-        <UIcon name="i-lucide-arrow-right" class="size-3.5" />
       </NuxtLink>
       </div>
     </template>

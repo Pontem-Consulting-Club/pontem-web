@@ -1,46 +1,27 @@
 <template>
   <section>
-    <SectionTitle title="Misión & Visión" centered class="mb-14" />
+    <SectionTitle title="Misión & Visión" class="mb-14" />
 
     <div class="grid md:grid-cols-2 gap-8">
-      <UCard variant="feature" class="relative">
-        <div class="absolute top-0 inset-x-0 h-1 rounded-t-3xl bg-linear-to-r from-primary-500 to-primary-400" />
-        <div class="absolute -bottom-12 -right-12 size-48 rounded-full bg-primary-50 pointer-events-none" />
-
-        <div class="relative z-10">
-          <div class="flex items-center gap-4 mb-6">
-            <div class="size-12 rounded-2xl bg-primary-100 flex items-center justify-center shrink-0">
-              <UIcon name="i-lucide-target" class="size-6 text-primary-500" />
-            </div>
-            <div>
-              <h3 class="text-heading text-highlighted">Misión</h3>
-              <div class="h-0.5 w-8 rounded-full bg-primary-500 mt-1" />
-            </div>
-          </div>
-          <p class="text-toned text-base/relaxed">
-            Ofrecer a los estudiantes la oportunidad de aplicar sus conocimientos en proyectos reales de consultoría, colaborando con empresas y organizaciones sociales para generar un impacto positivo.
-          </p>
-        </div>
+      <!-- Sin barras, manchas ni subrayados decorativos: el texto es lo importante. -->
+      <UCard>
+        <h3 class="flex items-center gap-3 mb-4 text-heading text-highlighted">
+          <UIcon name="i-lucide-target" class="size-6 shrink-0 text-primary-500" />
+          Misión
+        </h3>
+        <p class="text-toned text-base/relaxed">
+          Ofrecer a los estudiantes la oportunidad de aplicar sus conocimientos en proyectos reales de consultoría, colaborando con empresas y organizaciones sociales para generar un impacto positivo.
+        </p>
       </UCard>
 
-      <UCard variant="feature" class="relative">
-        <div class="absolute top-0 inset-x-0 h-1 rounded-t-3xl bg-linear-to-r from-secondary-300 to-secondary-200" />
-        <div class="absolute -bottom-12 -right-12 size-48 rounded-full bg-secondary-50 pointer-events-none" />
-
-        <div class="relative z-10">
-          <div class="flex items-center gap-4 mb-6">
-            <div class="size-12 rounded-2xl bg-secondary-50 flex items-center justify-center shrink-0">
-              <UIcon name="i-lucide-eye" class="size-6 text-secondary-300" />
-            </div>
-            <div>
-              <h3 class="text-heading text-highlighted">Visión</h3>
-              <div class="h-0.5 w-8 rounded-full bg-secondary-200 mt-1" />
-            </div>
-          </div>
-          <p class="text-toned text-base/relaxed">
-            Ser el club de consultoría líder en la formación de futuros consultores, ofreciendo oportunidades de aprendizaje y desarrollo en la resolución de problemas estratégicos para empresas y organizaciones.
-          </p>
-        </div>
+      <UCard>
+        <h3 class="flex items-center gap-3 mb-4 text-heading text-highlighted">
+          <UIcon name="i-lucide-eye" class="size-6 shrink-0 text-secondary-700" />
+          Visión
+        </h3>
+        <p class="text-toned text-base/relaxed">
+          Ser el club de consultoría líder en la formación de futuros consultores, ofreciendo oportunidades de aprendizaje y desarrollo en la resolución de problemas estratégicos para empresas y organizaciones.
+        </p>
       </UCard>
     </div>
   </section>

@@ -71,6 +71,7 @@ end $$;
 -- limpian antes. Los perfiles se van solos por el ON DELETE CASCADE desde auth.users.
 delete from public."News" where content is null
    and title in ('hackeo', 'nota de marketing', 'sigo entrando', 'vuelvo');
+delete from public."Projects" where title = 'consultoria social' and description is null and image_url is null;
 delete from auth.users where id in (
     '11111111-1111-1111-1111-111111111111',
     '22222222-2222-2222-2222-222222222222',
@@ -404,3 +405,4 @@ select pg_temp.check('FR-09 un miembro no sube al bucket documents',
 -- ============================================================
 delete from public."News" where content is null
    and title in ('hackeo', 'nota de marketing', 'sigo entrando', 'vuelvo');
+delete from public."Projects" where title = 'consultoria social' and description is null and image_url is null;

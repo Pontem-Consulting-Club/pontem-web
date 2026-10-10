@@ -124,11 +124,6 @@
 }
 
 /* Fondo del sitio: un velo de marca, quieto. */
-@utility bg-brand-wash {
-  background: radial-gradient(circle,
-    color-mix(in oklab, var(--color-pontemred-500) 15%, transparent) 0%,
-    color-mix(in oklab, var(--color-pontemteal-300) 10%, transparent) 100%);
-}
 
 /* Bordes curvos de las franjas (motivo de marca). */
 @utility clip-wave-top {

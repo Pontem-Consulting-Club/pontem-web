@@ -37,32 +37,15 @@ const pillars: Pillar[] = [
 
 <template>
   <section>
-    <SectionTitle title="Nuestros Pilares" centered class="mb-14" />
+    <SectionTitle title="Nuestros Pilares" class="mb-14" />
 
     <div class="grid md:grid-cols-2 gap-10">
-      <UCard v-for="pillar in pillars" :key="pillar.title" variant="feature" class="group"
-        :ui="{ body: 'flex flex-col gap-6' }">
-        <div class="flex items-start gap-4">
-          <div
-            :class="[
-              'size-14 rounded-2xl flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-110',
-              pillar.color === 'pontemteal'
-                ? 'bg-secondary-50 text-secondary-300'
-                : 'bg-primary-100 text-primary-500'
-            ]"
-          >
-            <UIcon :name="pillar.icon" class="size-7" />
-          </div>
-          <div>
-            <h3 class="mb-1 text-subheading text-highlighted">{{ pillar.title }}</h3>
-            <div
-              :class="[
-                'h-1 w-10 rounded-full transition-all duration-300 group-hover:w-16',
-                pillar.color === 'pontemteal' ? 'bg-secondary-200' : 'bg-primary-500'
-              ]"
-            />
-          </div>
-        </div>
+      <UCard v-for="pillar in pillars" :key="pillar.title" :ui="{ body: 'flex flex-col gap-6' }">
+        <h3 class="flex items-center gap-3 text-heading text-highlighted">
+          <UIcon :name="pillar.icon" class="size-6 shrink-0"
+            :class="pillar.color === 'pontemteal' ? 'text-secondary-700' : 'text-primary-500'" />
+          {{ pillar.title }}
+        </h3>
 
         <p class="text-toned text-sm/relaxed">{{ pillar.description }}</p>
 
@@ -76,7 +59,7 @@ const pillars: Pillar[] = [
               name="i-lucide-check-circle-2"
               :class="[
                 'size-4 mt-0.5 shrink-0',
-                pillar.color === 'pontemteal' ? 'text-secondary-300' : 'text-primary-500'
+                pillar.color === 'pontemteal' ? 'text-secondary-700' : 'text-primary-500'
               ]"
             />
             {{ item }}

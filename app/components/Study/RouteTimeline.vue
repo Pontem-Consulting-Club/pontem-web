@@ -33,7 +33,7 @@ const nodeStyles = [
         {{ index + 1 }}
       </div>
       <div class="flex flex-col gap-1 pt-2 lg:items-center lg:pt-0 lg:text-center">
-        <span class="text-xs font-semibold uppercase tracking-wider text-default">
+        <span class="text-sm font-semibold text-highlighted">
           {{ stage.title }}
         </span>
         <span class="text-xs/relaxed text-muted">

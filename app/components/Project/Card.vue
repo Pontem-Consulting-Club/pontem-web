@@ -14,7 +14,7 @@
     </template>
 
       <UBadge v-if="showSemester && project.semester" color="neutral" class="mb-1 self-start">
-        {{ project.semester }}
+        {{ semesterLabel(project.semester) }}
       </UBadge>
       <h3 class="text-subheading text-highlighted">
         {{ project.title }}

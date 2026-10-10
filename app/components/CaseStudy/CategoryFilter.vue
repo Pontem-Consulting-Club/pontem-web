@@ -29,7 +29,7 @@ const { getCategoryBadge, getCategoryBorder } = useCaseStudyColors()
     <button type="button" :aria-pressed="modelValue === null" class="px-4 py-2 rounded-full text-xs font-semibold border transition-colors" :class="modelValue === null
       ? 'bg-primary text-white border-primary'
       : 'bg-default text-muted border-default hover:bg-muted'" @click="modelValue = null">
-      Todas · {{ total }}
+      Todas ({{ total }})
     </button>
 
     <button v-for="category in visibleCategories" :key="category" type="button" :aria-pressed="modelValue === category"
@@ -37,7 +37,7 @@ const { getCategoryBadge, getCategoryBorder } = useCaseStudyColors()
         ? `${getCategoryBadge(category)} ${getCategoryBorder(category)}`
         : 'bg-default text-muted border-default hover:bg-muted'"
       @click="modelValue = category">
-      {{ CASE_CATEGORY_LABELS[category] }} · {{ counts[category] }}
+      {{ CASE_CATEGORY_LABELS[category] }} ({{ counts[category] }})
     </button>
 
     <button v-if="counts.casebooks" type="button"
@@ -45,7 +45,7 @@ const { getCategoryBadge, getCategoryBorder } = useCaseStudyColors()
         ? `${getCategoryBadge(null)} ${getCategoryBorder(null)}`
         : 'bg-default text-muted border-default hover:bg-muted'"
       @click="modelValue = 'casebooks'">
-      {{ CASEBOOK_LABEL }} · {{ counts.casebooks }}
+      {{ CASEBOOK_LABEL }} ({{ counts.casebooks }})
     </button>
   </div>
 </template>

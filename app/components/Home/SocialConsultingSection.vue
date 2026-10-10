@@ -1,4 +1,3 @@
-import { HomeFeatureCard } from '../../../.nuxt/components';
 <template>
   <UPageSection title="Consultoría Social"
     description="Aplicamos nuestras habilidades de consultoría para generar impacto social positivo, trabajando con organizaciones sin fines de lucro y proyectos comunitarios.">

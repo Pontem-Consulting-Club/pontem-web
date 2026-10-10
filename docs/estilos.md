@@ -63,6 +63,24 @@ y etiquetas con fondo teñido (`soft`, `subtle`...) usan `text-primary-700`: el 
 no llega sobre su propio tinte. Si agregas un color de texto sobre un fondo
 de color, mídelo.
 
+## Composición
+
+- **Fondo blanco.** Las secciones que alternan usan una banda gris (`bg-elevated`); en
+  el inicio las bandas llevan las olas (`clip-wave-top`/`clip-wave-bottom`). Sin
+  degradados de fondo.
+- **Todo alineado a la izquierda,** títulos incluidos: el tema ya lo hace en
+  `UPageSection`, `UPageHero` y `SectionTitle`. Centrado solo donde no hay contenido
+  con el que alinear (estados vacíos, la página de error).
+- **Los banners (`PageBanner`) llevan solo el título.** La introducción y los llamados
+  a la acción van debajo, en la página. Las páginas de trabajo (perfil, Personas)
+  usan `UPageHeader`, sin foto.
+- **Menú principal:** sin pastillas de fondo; el activo es texto en color con una
+  barra fina debajo. La cabecera es de vidrio (`bg-default/85` con desenfoque).
+- **Sin adornos que no informan:** etiquetas en mayúsculas sobre los títulos, números
+  en secciones que no son una secuencia, "·" o "—" como separadores, flechas
+  pegadas al texto de un enlace, una palabra del título en otro color, íconos como
+  marcadores de sección, manchas o halos decorativos.
+
 ## Tarjetas
 
 `UCard` tiene cuatro variantes propias, además de las de Nuxt UI:

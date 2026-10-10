@@ -1,19 +1,15 @@
 <template>
-  <section class="py-16 md:py-24">
-    <UContainer>
-      <h2 class="mt-20 mb-8 text-center text-heading">
-        Conéctate con nosotros y no te pierdas nuestros eventos
-      </h2>
-
-      <div class="mb-10 flex justify-center gap-10">
-        <ULink v-for="link in socialLinks" :key="link.href" :to="link.href" target="_blank"
-          :aria-label="`${link.label} de Pontem (se abre en otra pestaña)`"
-          class="rounded-lg text-highlighted transition-colors hover:text-primary">
-          <UIcon :name="link.icon" class="size-14" />
-        </ULink>
-      </div>
-    </UContainer>
-  </section>
+  <!-- Una sección como las demás: título a la izquierda y dos botones con nombre, en
+       vez de íconos sueltos bajo un título centrado. -->
+  <UPageSection title="Síguenos" description="Publicamos las actividades, convocatorias y novedades del club en Instagram y LinkedIn.">
+    <div class="flex flex-wrap gap-3">
+      <UButton v-for="link in socialLinks" :key="link.href" :to="link.href" target="_blank" :icon="link.icon"
+        color="neutral" variant="outline" size="lg"
+        :aria-label="`${link.label} de Pontem (se abre en otra pestaña)`">
+        {{ link.label }}
+      </UButton>
+    </div>
+  </UPageSection>
 </template>
 
 <script setup lang="ts">
