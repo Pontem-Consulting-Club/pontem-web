@@ -20,7 +20,7 @@
       </div>
 
       <div class="text-center mt-10">
-        <UButton to="/eventos" size="lg" variant="soft"
+        <UButton to="/eventos" size="lg"
           class="font-semibold transition-colors bg-default text-muted hover:bg-default hover:outline">
           Ver todos los eventos
         </UButton>

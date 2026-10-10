@@ -39,7 +39,7 @@ const handleCancel = () => {
 <template>
   <UContainer v-if="isEditor" class="py-16">
     <div class="max-w-3xl mx-auto mb-6">
-      <UButton to="/material-estudio" variant="soft" icon="i-lucide-arrow-left" size="md">
+      <UButton to="/material-estudio" icon="i-lucide-arrow-left" size="md">
         Volver a Material de Estudio
       </UButton>
     </div>

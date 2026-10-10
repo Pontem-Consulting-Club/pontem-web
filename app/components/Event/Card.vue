@@ -173,8 +173,7 @@ const handleDelete = async () => {
     :is-saving="isSaving" :is-deleting="isDeleting" :form-error="formError" @submit="saveEdit" @cancel="cancelEdit"
     @delete="handleDelete" />
 
-  <UCard v-else-if="variant === 'full'"
-    class="rounded-3xl bg-default shadow-sm hover:shadow-lg transition-shadow relative">
+  <UCard v-else-if="variant === 'full'" variant="item" class="relative">
     <UButton v-if="isEditor" icon="i-lucide-pencil" size="xs" color="primary" variant="ghost"
       class="absolute top-3 right-3 z-10" @click="startEdit" />
 
@@ -225,7 +224,7 @@ const handleDelete = async () => {
     </div>
   </UCard>
 
-  <UCard v-else-if="variant === 'past'" class="rounded-2xl opacity-75 bg-default shadow-sm relative">
+  <UCard v-else-if="variant === 'past'" class="relative opacity-75">
     <UButton v-if="isEditor" icon="i-lucide-pencil" size="xs" color="primary" variant="ghost"
       class="absolute top-3 right-3 z-10" @click="startEdit" />
     <div class="flex flex-col md:flex-row gap-4 items-start md:items-center">
@@ -243,13 +242,15 @@ const handleDelete = async () => {
     </div>
   </UCard>
 
-  <div v-else class="rounded-3xl bg-default hover:shadow-lg transition-shadow overflow-hidden shadow-sm">
-    <div class="bg-linear-to-r from-primary/10 to-secondary/10 px-4 py-3">
-      <span class="text-sm font-medium text-primary">
-        {{ formatDate(event.date) }}
-      </span>
-    </div>
-    <div class="p-6">
+  <UCard v-else variant="item">
+    <template #header>
+      <div class="bg-linear-to-r from-primary/10 to-secondary/10 px-4 py-3">
+        <span class="text-sm font-medium text-primary">
+          {{ formatDate(event.date) }}
+        </span>
+      </div>
+    </template>
+
       <h3 class="text-xl font-semibold mb-2">
         {{ event.title }}
       </h3>
@@ -260,6 +261,5 @@ const handleDelete = async () => {
         <UIcon name="i-lucide-map-pin" class="size-4" />
         {{ event.location }}
       </p>
-    </div>
-  </div>
+  </UCard>
 </template>

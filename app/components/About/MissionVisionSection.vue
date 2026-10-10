@@ -3,7 +3,7 @@
     <SectionHeader title="Misión & Visión" centered class="mb-14" />
 
     <div class="grid md:grid-cols-2 gap-8">
-      <div class="relative overflow-hidden rounded-3xl bg-default border border-muted p-10 shadow-lg hover:shadow-xl transition-shadow duration-300">
+      <UCard variant="feature" class="relative">
         <div class="absolute top-0 inset-x-0 h-1 rounded-t-3xl bg-linear-to-r from-primary-500 to-primary-400" />
         <div class="absolute -bottom-12 -right-12 size-48 rounded-full bg-primary-50 pointer-events-none" />
 
@@ -21,9 +21,9 @@
             Ofrecer a los estudiantes la oportunidad de aplicar sus conocimientos en proyectos reales de consultoría, colaborando con empresas y organizaciones sociales para generar un impacto positivo.
           </p>
         </div>
-      </div>
+      </UCard>
 
-      <div class="relative overflow-hidden rounded-3xl bg-default border border-muted p-10 shadow-lg hover:shadow-xl transition-shadow duration-300">
+      <UCard variant="feature" class="relative">
         <div class="absolute top-0 inset-x-0 h-1 rounded-t-3xl bg-linear-to-r from-secondary-300 to-secondary-200" />
         <div class="absolute -bottom-12 -right-12 size-48 rounded-full bg-secondary-50 pointer-events-none" />
 
@@ -41,7 +41,7 @@
             Ser el club de consultoría líder en la formación de futuros consultores, ofreciendo oportunidades de aprendizaje y desarrollo en la resolución de problemas estratégicos para empresas y organizaciones.
           </p>
         </div>
-      </div>
+      </UCard>
     </div>
   </section>
 </template>

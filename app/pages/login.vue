@@ -1,6 +1,6 @@
 <template>
   <UContainer class="py-16 flex items-center justify-center min-h-[calc(100vh-4rem)]">
-    <UCard class="w-full max-w-md bg-default rounded-lg p-6 shadow-sm" variant="soft">
+    <UCard class="w-full max-w-md">
       <template #header>
         <h2 class="text-2xl font-bold text-center">
           Iniciar Sesión
@@ -11,15 +11,14 @@
         <UAlert v-if="error" icon="i-lucide-alert-circle" :description="error" />
 
         <UFormField label="Correo electrónico">
-          <UInput v-model="email" type="email" name="email" autocomplete="email" class="w-full"
-            :ui="{ base: 'text-gray-900 placeholder-gray-400' }" placeholder="Ingresa tu correo" size="lg"
+          <UInput v-model="email" type="email" name="email" autocomplete="email" placeholder="Ingresa tu correo" size="lg"
             icon="i-lucide-mail" />
         </UFormField>
 
         <UFormField label="Contraseña">
           <UInput v-model="password" name="password" autocomplete="current-password"
             :type="showPassword ? 'text' : 'password'" placeholder="Ingresa tu contraseña" size="lg"
-            icon="i-lucide-lock" class="w-full" :ui="{ base: 'text-gray-900 placeholder-gray-400' }">
+            icon="i-lucide-lock">
             <template #trailing>
               <UButton variant="ghost" size="xs" :icon="showPassword ? 'i-lucide-eye-off' : 'i-lucide-eye'"
                 @click="showPassword = !showPassword" />
@@ -27,7 +26,7 @@
           </UInput>
         </UFormField>
 
-        <UButton type="submit" block size="lg" :loading="isLoading" :disabled="!isHydrated">
+        <UButton variant="solid" type="submit" block size="lg" :loading="isLoading" :disabled="!isHydrated">
           Entrar
         </UButton>
 

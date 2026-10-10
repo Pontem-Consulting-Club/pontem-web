@@ -40,11 +40,8 @@ const pillars: Pillar[] = [
     <SectionHeader title="Nuestros Pilares" centered class="mb-14" />
 
     <div class="grid md:grid-cols-2 gap-10">
-      <div
-        v-for="pillar in pillars"
-        :key="pillar.title"
-        class="group rounded-3xl p-8 border border-muted bg-default shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 flex flex-col gap-6"
-      >
+      <UCard v-for="pillar in pillars" :key="pillar.title" variant="feature" class="group"
+        :ui="{ body: 'flex flex-col gap-6' }">
         <div class="flex items-start gap-4">
           <div
             :class="[
@@ -85,7 +82,7 @@ const pillars: Pillar[] = [
             {{ item }}
           </li>
         </ul>
-      </div>
+      </UCard>
     </div>
   </section>
 </template>

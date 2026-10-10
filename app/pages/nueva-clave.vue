@@ -1,6 +1,6 @@
 <template>
   <UContainer class="flex min-h-[calc(100vh-4rem)] items-center justify-center py-16">
-    <UCard class="w-full max-w-md rounded-lg bg-default p-6 shadow-sm" variant="soft">
+    <UCard class="w-full max-w-md">
       <template #header>
         <h2 class="text-center text-2xl font-bold">{{ heading }}</h2>
       </template>
@@ -13,7 +13,7 @@
           Este enlace ya no sirve. Los enlaces de recuperación caducan al usarse o
           después de un rato.
         </p>
-        <UButton to="/recuperar-clave" variant="soft" block>Pedir uno nuevo</UButton>
+        <UButton to="/recuperar-clave" block>Pedir uno nuevo</UButton>
       </div>
 
       <form v-else class="flex flex-col gap-6" @submit.prevent="submit">
@@ -25,7 +25,7 @@
 
         <UFormField label="Nueva contraseña" :description="`Al menos ${MIN_LENGTH} caracteres.`">
           <UInput v-model="password" :type="show ? 'text' : 'password'" autocomplete="new-password" size="lg"
-            icon="i-lucide-lock" class="w-full" placeholder="Escribe tu nueva contraseña">
+            icon="i-lucide-lock" placeholder="Escribe tu nueva contraseña">
             <template #trailing>
               <UButton variant="ghost" size="xs" :icon="show ? 'i-lucide-eye-off' : 'i-lucide-eye'"
                 @click="show = !show" />
@@ -35,10 +35,10 @@
 
         <UFormField label="Repítela">
           <UInput v-model="confirmation" :type="show ? 'text' : 'password'" autocomplete="new-password" size="lg"
-            icon="i-lucide-lock" class="w-full" placeholder="Escríbela otra vez" />
+            icon="i-lucide-lock" placeholder="Escríbela otra vez" />
         </UFormField>
 
-        <UButton type="submit" block size="lg" :loading="isLoading">Guardar</UButton>
+        <UButton variant="solid" type="submit" block size="lg" :loading="isLoading">Guardar</UButton>
       </form>
     </UCard>
   </UContainer>

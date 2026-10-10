@@ -1,10 +1,10 @@
 <template>
-  <UCard variant="soft"
-    class="flex flex-col rounded-xl bg-default shadow-sm hover:shadow-lg transition-shadow relative">
-    <NuxtImg v-if="imageUrl" :src="imageUrl" alt="Cover Image" class="rounded-lg h-50 w-full object-cover"
-      sizes="500px" />
+  <UCard variant="item" class="relative flex flex-col" :ui="{ body: 'flex flex-1 flex-col' }">
+    <template v-if="imageUrl" #header>
+      <NuxtImg :src="imageUrl" :alt="newsItem.title" class="h-48 w-full object-cover" sizes="500px" />
+    </template>
 
-    <div class="my-4">
+    <div class="mb-4">
       <TypeBadge v-if="newsItem.type" :type="newsItem.type" size="xs" />
     </div>
 
@@ -26,7 +26,7 @@
     </div>
 
     <div class="mt-auto">
-      <UButton :to="`/noticias/${newsItem.id}`" variant="soft" size="lg"
+      <UButton :to="`/noticias/${newsItem.id}`" size="lg"
         class="transition-colors duration-300 rounded-lg">
         Leer más
       </UButton>

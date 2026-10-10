@@ -1,4 +1,8 @@
+import { badge, button } from './theme/actions'
 import { colors, tv } from './theme/colors'
+import { input, select, selectMenu, textarea } from './theme/forms'
+import { footer, footerColumns, header, marquee, pageHeader, pageHero, pageSection } from './theme/page'
+import { card, pageCard } from './theme/surfaces'
 
 /**
  * Tema de Nuxt UI. Cada parte vive en app/theme; aquí solo se reúnen.
@@ -7,6 +11,21 @@ import { colors, tv } from './theme/colors'
 export default defineAppConfig({
   ui: {
     colors,
-    tv
+    tv,
+    card,
+    pageCard,
+    button,
+    badge,
+    input,
+    textarea,
+    select,
+    selectMenu,
+    pageHero,
+    pageHeader,
+    pageSection,
+    header,
+    footer,
+    footerColumns,
+    marquee
   }
 })

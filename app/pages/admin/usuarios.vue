@@ -4,7 +4,7 @@
 
     <UContainer class="py-16">
       <!-- Invitar -->
-      <UCard variant="soft" class="mb-10 bg-default rounded-lg shadow-sm">
+      <UCard class="mb-10">
         <template #header>
           <div class="flex items-center gap-2">
             <UIcon name="i-lucide-user-plus" class="text-primary" />
@@ -15,13 +15,13 @@
         <UForm :state="invite" class="grid gap-4 sm:grid-cols-[minmax(0,1fr)_200px_auto] sm:items-end"
           @submit.prevent="sendInvite">
           <UFormField label="Correo" required>
-            <UInput v-model="invite.email" type="email" placeholder="nombre@ejemplo.cl" class="w-full" />
+            <UInput v-model="invite.email" type="email" placeholder="nombre@ejemplo.cl" />
           </UFormField>
           <UFormField label="Rol inicial">
             <USelectMenu v-model="invite.role" :items="roleOptions" value-key="value" label-key="label"
-              class="w-full" />
+              />
           </UFormField>
-          <UButton type="submit" size="lg" :loading="isInviting">Enviar</UButton>
+          <UButton variant="solid" type="submit" size="lg" :loading="isInviting">Enviar</UButton>
         </UForm>
 
         <p class="mt-3 text-xs text-muted">
@@ -72,16 +72,16 @@
                   @update:model-value="(role: string) => updateUser(person, { role })" />
               </td>
               <td class="px-4 py-3">
-                <UBadge :color="stateColor(person.state)" variant="subtle" size="sm">
+                <UBadge :color="stateColor(person.state)" size="sm">
                   {{ stateLabels[person.state] }}
                 </UBadge>
               </td>
               <td class="px-4 py-3 text-right">
-                <UButton v-if="person.state === 'inactive'" size="xs" variant="soft" icon="i-lucide-rotate-ccw"
+                <UButton v-if="person.state === 'inactive'" size="xs" icon="i-lucide-rotate-ccw"
                   :loading="busyId === person.id" @click="updateUser(person, { state: 'active' })">
                   Reactivar
                 </UButton>
-                <UButton v-else size="xs" variant="soft" color="error" icon="i-lucide-user-minus"
+                <UButton v-else size="xs" color="error" icon="i-lucide-user-minus"
                   :loading="busyId === person.id" @click="updateUser(person, { state: 'inactive' })">
                   Desactivar
                 </UButton>

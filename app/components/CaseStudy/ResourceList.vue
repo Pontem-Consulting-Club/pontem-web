@@ -52,7 +52,7 @@ const handleDelete = async (resource: CaseStudyResourceRecord) => {
 </script>
 
 <template>
-  <div class="bg-default border border-muted rounded-2xl p-6 shadow-sm flex flex-col gap-4">
+  <UCard :ui="{ body: 'flex flex-col gap-4' }">
     <h3 class="text-lg font-bold text-highlighted flex items-center gap-2 border-b border-muted pb-3">
       <UIcon name="i-lucide-library" class="size-5 text-tertiary-900" />
       Recursos Relacionados
@@ -84,5 +84,5 @@ const handleDelete = async (resource: CaseStudyResourceRecord) => {
           @click.prevent.stop="handleDelete(resource)" />
       </component>
     </div>
-  </div>
+  </UCard>
 </template>

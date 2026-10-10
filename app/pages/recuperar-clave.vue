@@ -1,6 +1,6 @@
 <template>
   <UContainer class="flex min-h-[calc(100vh-4rem)] items-center justify-center py-16">
-    <UCard class="w-full max-w-md rounded-lg bg-default p-6 shadow-sm" variant="soft">
+    <UCard class="w-full max-w-md">
       <template #header>
         <h2 class="text-center text-2xl font-bold">Recuperar contraseña</h2>
       </template>
@@ -11,7 +11,7 @@
           Si <strong>{{ email }}</strong> tiene una cuenta, le llegará un enlace para elegir una
           contraseña nueva. Revisa también la carpeta de spam.
         </p>
-        <UButton to="/login" variant="soft" block>Volver a iniciar sesión</UButton>
+        <UButton to="/login" block>Volver a iniciar sesión</UButton>
       </div>
 
       <form v-else class="flex flex-col gap-6" @submit.prevent="submit">
@@ -23,10 +23,10 @@
 
         <UFormField label="Correo electrónico">
           <UInput v-model="email" type="email" autocomplete="email" size="lg" icon="i-lucide-mail"
-            placeholder="Ingresa tu correo" class="w-full" />
+            placeholder="Ingresa tu correo" />
         </UFormField>
 
-        <UButton type="submit" block size="lg" :loading="isLoading">Enviar enlace</UButton>
+        <UButton variant="solid" type="submit" block size="lg" :loading="isLoading">Enviar enlace</UButton>
         <UButton to="/login" variant="ghost" block size="sm">Volver</UButton>
       </form>
     </UCard>

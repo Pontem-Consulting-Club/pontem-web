@@ -90,10 +90,9 @@ const openDrive = () => {
       <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
         <h2 class="text-3xl font-bold text-highlighted">Casos de Estudio</h2>
         <div class="flex items-center gap-2 w-full md:w-auto">
-          <UInput v-model="search" icon="i-lucide-search" size="lg" class="w-full md:w-96"
-            placeholder="Buscar por empresa, área o palabra clave..."
-            :ui="{ base: 'text-gray-900 placeholder:text-gray-400' }" />
-          <UButton v-if="isEditor" to="/material-estudio/casos/nuevo" icon="i-lucide-plus" variant="soft"
+          <UInput v-model="search" icon="i-lucide-search" size="lg" class="md:w-96"
+            placeholder="Buscar por empresa, área o palabra clave..." />
+          <UButton v-if="isEditor" to="/material-estudio/casos/nuevo" icon="i-lucide-plus"
             size="lg" class="shrink-0">
             Agregar
           </UButton>
@@ -122,7 +121,7 @@ const openDrive = () => {
       <StudySectionLabel number="03" label="Recursos" />
 
       <div class="grid md:grid-cols-2 gap-6">
-        <div class="bg-default rounded-2xl border border-muted shadow-sm p-8 flex flex-col items-center text-center gap-4">
+        <UCard :ui="{ body: 'flex flex-col items-center gap-4 text-center' }">
           <h3 class="text-xl font-bold text-highlighted">Drive de Estudio</h3>
           <p class="text-sm text-muted">
             Solicita acceso a nuestro Drive con todo el material de estudio.
@@ -130,9 +129,9 @@ const openDrive = () => {
           <button class="flex-1 w-full flex items-center justify-center cursor-pointer group" aria-label="Abrir Drive de Estudio" @click="openDrive">
             <img src="/drive-logo.png" alt="Google Drive" class="h-16 w-auto group-hover:scale-105 transition-transform">
           </button>
-        </div>
+        </UCard>
 
-        <div class="bg-default rounded-2xl border border-muted shadow-sm p-8 flex flex-col gap-4">
+        <UCard :ui="{ body: 'flex flex-col gap-4' }">
           <h3 class="text-xl font-bold text-highlighted text-center">Case Books Recomendados</h3>
           <p class="text-sm text-muted text-center">
             Recursos externos para practicar casos de consultoría.
@@ -141,7 +140,7 @@ const openDrive = () => {
             <ResourceCard v-for="book in caseBooks" :key="book" icon="i-lucide-book-open" :title="book"
               description="Casos prácticos de entrevistas" />
           </div>
-        </div>
+        </UCard>
       </div>
     </section>
   </UContainer>

@@ -113,7 +113,7 @@ const handleDelete = async () => {
             <h1 class="text-3xl/tight md:text-4xl font-bold text-highlighted">
               {{ caseStudy.title }}
             </h1>
-            <UButton v-if="isEditor" icon="i-lucide-pencil" size="md" color="primary" variant="soft"
+            <UButton v-if="isEditor" icon="i-lucide-pencil" size="md" color="primary"
               class="shrink-0" :to="`/material-estudio/casos/${idParam}?edit=1`">
               Editar
             </UButton>
@@ -151,8 +151,7 @@ const handleDelete = async () => {
         </div>
 
         <!-- Planteamiento -->
-        <div v-if="caseStudy.summary || caseStudy.problem_statement"
-          class="bg-default border border-muted rounded-2xl p-8 shadow-sm relative overflow-hidden">
+        <UCard v-if="caseStudy.summary || caseStudy.problem_statement" class="relative">
           <div class="absolute top-0 left-0 w-1 h-full" :class="getCategoryBadge(caseStudy.category)" />
           <h3 class="text-xl font-bold text-highlighted mb-4 flex items-center gap-2">
             <UIcon name="i-lucide-lightbulb" :class="getCategoryText(caseStudy.category)" class="size-5" />
@@ -164,15 +163,14 @@ const handleDelete = async () => {
           <p v-if="caseStudy.problem_statement" class="text-sm/relaxed text-muted text-justify">
             {{ caseStudy.problem_statement }}
           </p>
-        </div>
+        </UCard>
 
         <CaseStudyPdfViewer :document-path="caseStudy.document_url" :document-name="caseStudy.document_name" />
       </div>
 
       <!-- Barra lateral -->
       <aside class="lg:col-span-4 flex flex-col gap-6">
-        <div v-if="documentUrl"
-          class="bg-default border border-muted rounded-2xl p-6 shadow-sm flex flex-col items-center text-center gap-4">
+        <UCard v-if="documentUrl" :ui="{ body: 'flex flex-col items-center gap-4 text-center' }">
           <div class="size-16 bg-primary-50 rounded-full flex items-center justify-center">
             <UIcon name="i-lucide-download" class="size-7 text-primary" />
           </div>
@@ -182,11 +180,11 @@ const handleDelete = async () => {
               Descarga el documento para revisarlo con calma o imprimirlo.
             </p>
           </div>
-          <UButton :to="documentUrl" target="_blank" rel="noopener" external download block size="lg"
+          <UButton variant="solid" :to="documentUrl" target="_blank" rel="noopener" external download block size="lg"
             trailing-icon="i-lucide-arrow-right" class="mt-2">
             Descargar PDF{{ documentSize ? ` (${documentSize})` : '' }}
           </UButton>
-        </div>
+        </UCard>
 
         <CaseStudyResourceList :resources="caseStudy.resources ?? []" @deleted="refresh" />
 

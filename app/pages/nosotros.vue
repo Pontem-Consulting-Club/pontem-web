@@ -99,7 +99,7 @@ const teamByRole = computed(() => {
         <SectionHeader title="Nuestro Equipo" centered class="mb-12" />
  
         <div v-if="isEditor" class="flex justify-end mb-6">
-          <UButton icon="i-lucide-plus" variant="soft" color="primary" size="md" :disabled="isCreating" @click="startCreate">
+          <UButton icon="i-lucide-plus" color="primary" size="md" :disabled="isCreating" @click="startCreate">
             Agregar
           </UButton>
         </div>
@@ -117,8 +117,9 @@ const teamByRole = computed(() => {
         <EmptyState v-else-if="teamByRole.length === 0" message="No hay integrantes disponibles" />
 
         <div v-if="teamByRole.length > 0" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div v-for="dept in teamByRole" :key="dept.key"
-            class="bg-default rounded-2xl overflow-hidden shadow-sm border border-muted flex h-56">
+          <!-- Foto a la izquierda y nombres a la derecha, sin el relleno de la tarjeta -->
+          <UCard v-for="dept in teamByRole" :key="dept.key" class="h-56"
+            :ui="{ body: 'flex h-full p-0 sm:p-0' }">
 
             <!-- Imagen: 75% -->
             <div class="w-3/4 shrink-0">
@@ -142,12 +143,12 @@ const teamByRole = computed(() => {
               <div class="flex flex-col gap-1 overflow-hidden">
                 <template v-for="member in dept.members" :key="member.id">
                   <button v-if="isEditor" type="button" :aria-label="`Editar a ${member.name}`"
-                    class="group flex min-w-0 items-center gap-1 text-left text-xs/snug text-dimmed hover:text-primary"
+                    class="group flex min-w-0 items-center gap-1 text-left text-xs/snug text-muted hover:text-primary"
                     @click="startEdit(member)">
                     <span class="truncate">{{ member.name }}</span>
                     <UIcon name="i-lucide-pencil" class="size-3 shrink-0 text-dimmed group-hover:text-primary" />
                   </button>
-                  <p v-else class="text-xs/snug text-dimmed truncate">
+                  <p v-else class="text-xs/snug text-muted truncate">
                     {{ member.name }}
                   </p>
                 </template>
@@ -155,11 +156,11 @@ const teamByRole = computed(() => {
               </div>
 
               <!-- Contador abajo -->
-              <p class="mt-auto text-xs text-dimmed shrink-0 pt-2">
+              <p class="mt-auto text-xs text-muted shrink-0 pt-2">
                 {{ dept.members.length }} {{ dept.members.length === 1 ? 'integrante' : 'integrantes' }}
               </p>
             </div>
-          </div>
+          </UCard>
         </div>
       </section>
  

@@ -1,26 +1,26 @@
 <template>
-    <UCard variant="soft" class="text-center bg-default">
+    <UCard class="text-center">
         <UForm class="flex flex-col items-center gap-4" @submit.prevent="handleSubmit">
-            <UInput v-model="form.name" placeholder="Nombre" class="w-full" variant="none"
-                :ui="{ base: 'text-center text-lg font-semibold text-primary placeholder:text-primary/50' }" />
+            <!-- Imita el nombre de la tarjeta del integrante -->
+            <UInput v-model="form.name" placeholder="Nombre" variant="ghost"
+                :ui="{ base: 'text-center text-lg font-semibold text-primary placeholder:text-primary/50 md:text-lg' }" />
 
             <USelect v-model="form.coordination" :items="TEAM_COORDINATION_OPTIONS" placeholder="Selecciona una coordinación"
-                value-key="value" class="w-full" :disabled="isSaving || !!isDeleting"
-                :ui="{ base: 'text-gray-700', content: 'text-gray-700' }" />
+                value-key="value" :disabled="isSaving || !!isDeleting" />
 
             <UAlert v-if="displayError" color="error" icon="i-lucide-alert-circle" :description="displayError"
                 class="w-full" />
 
             <div class="flex justify-between w-full">
-                <UButton v-if="!isNew" type="button" color="error" variant="soft" size="md" icon="i-lucide-trash-2"
+                <UButton v-if="!isNew" type="button" color="error" icon="i-lucide-trash-2"
                     :loading="!!isDeleting" :disabled="isSaving || !!isDeleting" @click="emit('delete')">
                     Eliminar
                 </UButton>
-                <UButton variant="soft" icon="i-lucide-x" size="sm" :disabled="isSaving || !!isDeleting"
+                <UButton color="neutral" icon="i-lucide-x" :disabled="isSaving || !!isDeleting"
                     @click="emit('cancel')">
                     Cancelar
                 </UButton>
-                <UButton type="submit" color="primary" size="md" variant="soft" :loading="isSaving"
+                <UButton type="submit" variant="solid" :loading="isSaving"
                     :disabled="!!isDeleting">
                     Guardar
                 </UButton>

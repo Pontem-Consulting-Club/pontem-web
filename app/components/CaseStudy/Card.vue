@@ -20,15 +20,16 @@ const duration = computed(() => {
 </script>
 
 <template>
-  <article
-    class="bg-default rounded-2xl border border-muted shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden flex flex-col relative">
-    <!-- Barra de acento segun categoria -->
-    <div class="h-1.5 w-full" :class="getCategoryAccent(caseStudy.category)" />
+  <UCard as="article" variant="item" class="relative flex flex-col" :ui="{ body: 'flex flex-1 flex-col gap-4' }">
+    <template #header>
+      <!-- Barra de acento segun categoria -->
+      <div class="h-1.5 w-full" :class="getCategoryAccent(caseStudy.category)" />
 
-    <UButton v-if="isEditor" icon="i-lucide-pencil" size="xs" color="primary" variant="ghost"
-      class="absolute top-4 right-3 z-10" aria-label="Editar caso" :to="`${detailLink}?edit=1`" />
+      <UButton v-if="isEditor" icon="i-lucide-pencil" size="xs" color="primary" variant="ghost"
+        class="absolute top-4 right-3 z-10" aria-label="Editar caso" :to="`${detailLink}?edit=1`" />
+    </template>
 
-    <div class="p-6 flex flex-col gap-4 flex-1">
+
       <div class="flex justify-between items-start gap-3">
         <div class="flex items-center gap-3 min-w-0">
           <div v-if="logoUrl" class="size-10 rounded-full bg-muted border border-muted overflow-hidden shrink-0 flex items-center justify-center">
@@ -59,9 +60,9 @@ const duration = computed(() => {
           {{ caseStudy.case_type }}
         </span>
       </div>
-    </div>
 
-    <div class="border-t border-muted p-4 flex justify-between items-center gap-2">
+    <template #footer>
+      <div class="flex items-center justify-between gap-2">
       <span v-if="caseStudy.difficulty" class="text-xs font-semibold" :class="getDifficultyText(caseStudy.difficulty)">
         Dificultad: {{ CASE_DIFFICULTY_LABELS[caseStudy.difficulty] }}
       </span>
@@ -72,6 +73,7 @@ const duration = computed(() => {
         Ver caso
         <UIcon name="i-lucide-arrow-right" class="size-3.5" />
       </NuxtLink>
-    </div>
-  </article>
+      </div>
+    </template>
+  </UCard>
 </template>

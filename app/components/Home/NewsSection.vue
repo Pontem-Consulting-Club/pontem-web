@@ -19,7 +19,7 @@
       </div>
 
       <div class="text-center mt-10">
-        <UButton to="/noticias" size="lg" variant="soft"
+        <UButton to="/noticias" size="lg"
           class="font-semibold transition-colors bg-default text-muted hover:bg-default hover:outline">
           Ver todas las noticias
         </UButton>

@@ -12,7 +12,7 @@ withDefaults(defineProps<Props>(), {
 </script>
 
 <template>
-  <UCard class="hover:shadow-lg transition-shadow bg-default">
+  <UCard variant="item">
     <div class="flex items-center gap-4">
       <UIcon :name="icon" :class="['size-10', iconColor]" />
       <div class="text-left">

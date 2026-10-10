@@ -1,10 +1,10 @@
 <template>
-    <article class="bg-default rounded-lg px-12 py-6 shadow-sm">
+    <UCard as="article" :ui="{ body: 'sm:px-12' }">
         <div class="flex items-center justify-between mb-6">
-            <UButton to="/noticias" variant="soft" size="md" icon="i-lucide-arrow-left">
+            <UButton to="/noticias" size="md" icon="i-lucide-arrow-left">
                 Volver a noticias
             </UButton>
-            <UButton v-if="canEdit" icon="i-lucide-pencil" size="md" color="primary" variant="soft"
+            <UButton v-if="canEdit" icon="i-lucide-pencil" size="md" color="primary"
                 :to="`/noticias/${idParam}?edit=1`">
                 Editar
             </UButton>
@@ -32,7 +32,7 @@
         <!-- eslint-disable vue/no-v-html -->
         <div v-if="rawContent" class="prose max-w-none pb-3 text-justify" v-html="rawContent" />
         <!-- eslint-enable vue/no-v-html -->
-    </article>
+    </UCard>
 </template>
 
 <script setup lang="ts">

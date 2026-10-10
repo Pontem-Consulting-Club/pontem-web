@@ -23,7 +23,6 @@ const emit = defineEmits<{
 
 const form = defineModel<Partial<CaseStudyRecord>>('form', { required: true })
 
-const inputUi = { base: 'text-highlighted placeholder:text-dimmed' }
 
 /* ── Logo de la empresa ─────────────────────────────────────── */
 
@@ -119,7 +118,7 @@ onBeforeUnmount(revokeLogoPreview)
 </script>
 
 <template>
-  <div class="bg-default rounded-2xl shadow-sm border border-muted w-full max-w-3xl mx-auto p-6 md:p-10">
+  <UCard class="mx-auto w-full max-w-3xl">
     <div class="mb-8">
       <h1 class="text-2xl font-bold text-highlighted mb-2">
         {{ props.isNew ? 'Subir Nuevo Caso' : 'Editar Caso' }}
@@ -132,53 +131,49 @@ onBeforeUnmount(revokeLogoPreview)
 
     <form class="space-y-6" @submit.prevent="handleSubmit">
       <UFormField label="Título del caso" required>
-        <UInput v-model="form.title" placeholder="Ej. Transformación Digital en Retail" size="lg" class="w-full"
-          :ui="inputUi" />
+        <UInput v-model="form.title" placeholder="Ej. Transformación Digital en Retail" size="lg" />
       </UFormField>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <UFormField label="Categoría" help="Según la pregunta del cliente, no la herramienta de análisis. Los casebooks van sin categoría.">
           <USelectMenu v-model.nullable="form.category" :items="CASE_CATEGORY_OPTIONS" value-key="value" label-key="label"
-            placeholder="Selecciona una categoría" size="lg" class="w-full" />
+            placeholder="Selecciona una categoría" size="lg" />
         </UFormField>
 
         <UFormField label="Empresa / Consultora">
-          <UInput v-model.nullable="form.company" placeholder="Ej. McKinsey, BCG, Bain..." size="lg" class="w-full"
-            :ui="inputUi" />
+          <UInput v-model.nullable="form.company" placeholder="Ej. McKinsey, BCG, Bain..." size="lg" />
         </UFormField>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <UFormField label="Dificultad">
           <USelectMenu v-model.nullable="form.difficulty" :items="CASE_DIFFICULTY_OPTIONS" value-key="value" label-key="label"
-            placeholder="Selecciona dificultad" size="lg" class="w-full" />
+            placeholder="Selecciona dificultad" size="lg" />
         </UFormField>
 
         <UFormField label="Tiempo estimado (minutos)">
-          <UInput v-model.nullable="form.duration_minutes" type="number" min="0" placeholder="Ej. 45" size="lg" class="w-full"
-            :ui="inputUi" />
+          <UInput v-model.nullable="form.duration_minutes" type="number" min="0" placeholder="Ej. 45" size="lg" />
         </UFormField>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <UFormField label="Tipo de caso">
-          <UInput v-model.nullable="form.case_type" placeholder="Ej. Case Interview, Frameworks" size="lg" class="w-full"
-            :ui="inputUi" />
+          <UInput v-model.nullable="form.case_type" placeholder="Ej. Case Interview, Frameworks" size="lg" />
         </UFormField>
 
         <UFormField label="Fecha de publicación">
-          <UInput v-model.nullable="form.published_date" type="date" size="lg" class="w-full" :ui="inputUi" />
+          <UInput v-model.nullable="form.published_date" type="date" size="lg" />
         </UFormField>
       </div>
 
       <UFormField label="Planteamiento del problema">
         <UTextarea v-model.nullable="form.summary" :rows="4" autoresize
-          placeholder="Describe el contexto y el desafío del caso" class="w-full" :ui="inputUi" />
+          placeholder="Describe el contexto y el desafío del caso" />
       </UFormField>
 
       <UFormField label="Encargo al equipo consultor">
         <UTextarea v-model.nullable="form.problem_statement" :rows="3" autoresize
-          placeholder="Qué se le pide resolver al equipo" class="w-full" :ui="inputUi" />
+          placeholder="Qué se le pide resolver al equipo" />
       </UFormField>
 
       <UFormField label="Logo de la empresa">
@@ -188,7 +183,7 @@ onBeforeUnmount(revokeLogoPreview)
             <img v-if="logoUrl" :src="logoUrl" alt="Logo de la empresa" class="size-full object-contain p-1">
             <UIcon v-else name="i-lucide-building-2" class="size-6 text-dimmed" />
           </div>
-          <UButton icon="i-lucide-image" variant="soft" size="sm" @click="logoInput?.click()">
+          <UButton icon="i-lucide-image" size="sm" @click="logoInput?.click()">
             {{ logoUrl ? 'Cambiar logo' : 'Subir logo' }}
           </UButton>
           <input ref="logoInput" type="file" accept="image/*" class="hidden" @change="handleLogoChange">
@@ -206,8 +201,7 @@ onBeforeUnmount(revokeLogoPreview)
           <p class="text-xs text-dimmed">o haz clic para explorar</p>
         </div>
 
-        <div v-else
-          class="w-full rounded-lg border border-default bg-muted p-4 flex items-center justify-between gap-3">
+        <UCard v-else variant="inset" :ui="{ body: 'flex items-center justify-between gap-3' }">
           <div class="flex items-center gap-3 min-w-0">
             <div class="size-10 rounded-full bg-tertiary-50 flex items-center justify-center shrink-0">
               <UIcon name="i-lucide-file-text" class="size-5 text-tertiary-600" />
@@ -219,7 +213,7 @@ onBeforeUnmount(revokeLogoPreview)
           </div>
           <UButton icon="i-lucide-x" size="xs" color="neutral" variant="ghost" aria-label="Quitar archivo"
             @click="clearDocument" />
-        </div>
+        </UCard>
 
         <input ref="documentInput" type="file" accept="application/pdf,.pdf" class="hidden"
           @change="handleDocumentChange">
@@ -228,17 +222,17 @@ onBeforeUnmount(revokeLogoPreview)
       <UAlert v-if="displayError" color="error" icon="i-lucide-alert-circle" :description="displayError" />
 
       <div class="flex flex-col-reverse sm:flex-row justify-end gap-3 pt-6 border-t border-muted">
-        <UButton v-if="!props.isNew" color="error" variant="soft" icon="i-lucide-trash-2" :loading="props.isDeleting"
+        <UButton v-if="!props.isNew" color="error" icon="i-lucide-trash-2" :loading="props.isDeleting"
           @click="emit('delete')">
           Eliminar
         </UButton>
-        <UButton color="neutral" variant="soft" :disabled="props.isSaving" @click="emit('cancel')">
+        <UButton color="neutral" :disabled="props.isSaving" @click="emit('cancel')">
           Cancelar
         </UButton>
-        <UButton type="submit" icon="i-lucide-upload" :loading="props.isSaving">
+        <UButton variant="solid" type="submit" icon="i-lucide-upload" :loading="props.isSaving">
           {{ props.isNew ? 'Publicar Caso' : 'Guardar cambios' }}
         </UButton>
       </div>
     </form>
-  </div>
+  </UCard>
 </template>

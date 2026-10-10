@@ -1,5 +1,5 @@
 <template>
-  <div class="rounded-3xl bg-default text-center p-8 shadow-sm hover:shadow-lg transition-shadow">
+  <UCard variant="feature" class="text-center">
     <div class="flex justify-center mb-4">
       <UIcon :name="icon" class="size-12" :class="iconColor" />
     </div>
@@ -9,7 +9,7 @@
     <p>
       {{ description }}
     </p>
-  </div>
+  </UCard>
 </template>
 
 <script setup lang="ts">

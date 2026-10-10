@@ -2,7 +2,7 @@
   <div v-if="mode !== 'none'" class="mt-4 border-t border-default pt-4">
     <!-- Ya inscrito -->
     <div v-if="isRegistered" class="flex flex-wrap items-center gap-3">
-      <UBadge color="success" variant="subtle" icon="i-lucide-check">Estás inscrito</UBadge>
+      <UBadge color="success" icon="i-lucide-check">Estás inscrito</UBadge>
       <UButton size="xs" variant="ghost" color="error" :loading="isBusy" @click="cancel">
         Cancelar inscripción
       </UButton>
@@ -16,7 +16,7 @@
 
     <!-- Miembro con sesión -->
     <div v-else-if="isAuthenticated" class="flex flex-wrap items-center gap-3">
-      <UButton icon="i-lucide-calendar-check" :loading="isBusy" @click="register">
+      <UButton variant="solid" icon="i-lucide-calendar-check" :loading="isBusy" @click="register">
         Inscribirme
       </UButton>
       <span v-if="spotsLabel" class="text-sm text-muted">{{ spotsLabel }}</span>
@@ -30,7 +30,7 @@
       <form class="flex flex-col gap-3 sm:flex-row sm:items-start" @submit.prevent="register">
         <UInput v-model="guest.name" placeholder="Tu nombre" autocomplete="name" class="sm:flex-1" />
         <UInput v-model="guest.email" type="email" placeholder="Tu correo" autocomplete="email" class="sm:flex-1" />
-        <UButton type="submit" :loading="isBusy">Inscribirme</UButton>
+        <UButton variant="solid" type="submit" :loading="isBusy">Inscribirme</UButton>
       </form>
     </div>
 
@@ -38,7 +38,7 @@
     <div v-else class="flex flex-wrap items-center gap-3 text-sm text-toned">
       <UIcon name="i-lucide-users" />
       <span>Esta actividad es solo para miembros.</span>
-      <UButton :to="{ path: '/login', query: { redirect: route.fullPath } }" size="xs" variant="soft">
+      <UButton :to="{ path: '/login', query: { redirect: route.fullPath } }" size="xs">
         Iniciar sesión
       </UButton>
     </div>

@@ -25,13 +25,13 @@
             <tr v-for="row in rows" :key="row.id">
               <td class="px-3 py-2">
                 <span class="font-medium">{{ row.name }}</span>
-                <UBadge v-if="row.is_guest" size="sm" variant="subtle" color="neutral" class="ml-2">
+                <UBadge v-if="row.is_guest" size="sm" color="neutral" class="ml-2">
                   Invitado
                 </UBadge>
               </td>
               <td class="px-3 py-2 text-muted">{{ detailLabel(row) }}</td>
               <td class="px-3 py-2">
-                <UBadge :color="row.status === 'cancelled' ? 'neutral' : 'primary'" variant="subtle" size="sm">
+                <UBadge :color="row.status === 'cancelled' ? 'neutral' : 'primary'" size="sm">
                   {{ row.status === 'cancelled' ? 'Cancelada' : 'Inscrito' }}
                 </UBadge>
               </td>

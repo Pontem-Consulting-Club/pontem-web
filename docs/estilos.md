@@ -10,7 +10,7 @@ al componente.
 ## Dónde vive cada cosa
 
 | Qué | Dónde |
-|---|---|
+| --- | --- |
 | Paletas de marca, escala tipográfica, variables de Nuxt UI, movimiento | `app/assets/css/main.css` |
 | Colores del tema (`primary`, `secondary`, `tertiary`, `neutral`) | `app/theme/colors.ts` |
 | Aspecto de los componentes de Nuxt UI | `app/theme/*.ts`, reunidos en `app/app.config.ts` |
@@ -43,7 +43,7 @@ clases prohibidas y `eslint --fix` las reemplaza solas.
 ## Vocabulario
 
 | Rol | Clase |
-|---|---|
+| --- | --- |
 | Texto destacado (títulos) | `text-highlighted` |
 | Texto normal | `text-default` (se hereda del `body`) |
 | Texto secundario | `text-toned`, `text-muted` |
@@ -62,13 +62,39 @@ agregar `font-bold`.
 `UCard` tiene cuatro variantes propias, además de las de Nuxt UI:
 
 | Variante | Para |
-|---|---|
+| --- | --- |
 | `panel` (por defecto) | Paneles de contenido, formularios, cuentas, administración |
 | `item` | Tarjetas de un listado (noticias, eventos, proyectos, casos); la imagen va en `#header` y llega al borde |
 | `feature` | Bloques destacados (misión, pilares) |
 | `inset` | Recuadros dentro de un formulario |
 
-Las tarjetas que son un enlace usan `UPageCard` con `to`.
+Las tarjetas que son un enlace usan `UPageCard` con `to`. El borde de una lista o de
+una tabla (`rounded-lg border border-default`) no es una tarjeta y se queda como clase.
+
+## Zonas con otro aspecto
+
+Para cambiar varios componentes a la vez dentro de una zona se usa `UTheme` con un
+preset de `app/theme/presets.ts`, no una prop `ui` en cada uno:
+
+- `onImage`: sobre una foto oscura (portada, banner). Botones y campos en blanco
+  translúcido.
+- `inlineEdit`: formularios que imitan la tarjeta que editan. Los campos van con
+  `variant="ghost"` y el color del texto que reemplazan.
+
+Dos detalles de Nuxt UI que conviene saber:
+
+- La prop `ui` de un componente **reemplaza** lo que el preset pone en ese mismo slot;
+  no lo suma. Si un campo dentro de una zona necesita su propia `ui`, se compone con
+  la constante del preset: `:ui="{ base: [onImageField, 'text-title md:text-title'] }"`.
+- Los campos de texto llevan `md:text-sm` (en celular quedan en 16px para que iOS no
+  haga zoom). Un tamaño propio en un campo necesita también su versión `md:`.
+
+## Subir imágenes
+
+`ImagePicker` (en `app/components`) es el único selector de imágenes: `mode="area"`
+muestra la imagen y se hace clic encima, `mode="button"` es un botón. El archivo queda
+en `v-model`; `current` es la imagen ya guardada. Para mostrar la vista previa en otro
+lugar (como el fondo de la portada) está `useImagePreview`.
 
 ## Cómo agregar algo al tema
 

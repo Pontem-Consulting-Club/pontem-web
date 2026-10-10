@@ -17,8 +17,14 @@ const selectors = [
   },
   {
     kind: SelectorKind.Variable,
-    name: `^(\\w*(Classes|Colors|Class)|${themeVariables.join('|')})$`,
+    name: '^\\w*(Classes|Colors|Class)$',
     match: [{ type: MatcherType.String }, { type: MatcherType.ObjectValue }]
+  },
+  {
+    // Objetos de tema (app/theme): sus valores son clases, salvo defaultVariants.
+    kind: SelectorKind.Variable,
+    name: `^(${themeVariables.join('|')})$`,
+    match: [{ type: MatcherType.ObjectValue, path: '^(?!defaultVariants)' }]
   }
 ]
 

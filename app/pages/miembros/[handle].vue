@@ -15,10 +15,10 @@
         <div class="flex flex-col gap-2">
           <h1 class="text-3xl font-bold">{{ member.display_name }}</h1>
           <div class="flex flex-wrap items-center justify-center gap-2">
-            <UBadge v-if="member.coordination" variant="subtle" size="lg">
+            <UBadge v-if="member.coordination" size="lg">
               {{ coordinationLabels[member.coordination] }}
             </UBadge>
-            <UBadge v-if="member.generation" variant="subtle" color="neutral" size="lg">
+            <UBadge v-if="member.generation" color="neutral" size="lg">
               Generación {{ member.generation }}
             </UBadge>
           </div>
@@ -28,7 +28,7 @@
           {{ member.bio }}
         </p>
 
-        <UButton to="/nosotros" variant="soft" icon="i-lucide-arrow-left" class="mt-4">
+        <UButton to="/nosotros" icon="i-lucide-arrow-left" class="mt-4">
           Conoce al equipo
         </UButton>
       </article>

@@ -12,7 +12,7 @@
     <!-- Admin: sin imagen → botón "Agregar foto" centrado -->
     <div v-if="isEditor && !imagePath"
       class="absolute inset-0 flex items-center justify-center">
-      <UButton icon="i-lucide-image" size="sm" color="neutral" variant="soft" @click="fileInput?.click()">
+      <UButton icon="i-lucide-image" size="sm" color="neutral" @click="fileInput?.click()">
         Agregar foto
       </UButton>
     </div>
@@ -20,10 +20,10 @@
     <!-- Admin: con imagen → overlay en hover con Cambiar y Eliminar -->
     <div v-if="isEditor && imagePath"
       class="absolute inset-0 flex items-center justify-center gap-3 bg-black/40 opacity-0 hover:opacity-100 transition-opacity">
-      <UButton icon="i-lucide-image" size="sm" color="neutral" variant="soft" @click="fileInput?.click()">
+      <UButton icon="i-lucide-image" size="sm" color="neutral" @click="fileInput?.click()">
         Cambiar
       </UButton>
-      <UButton icon="i-lucide-trash-2" size="sm" color="error" variant="soft" :loading="isDeleting" @click="handleDelete">
+      <UButton icon="i-lucide-trash-2" size="sm" color="error" :loading="isDeleting" @click="handleDelete">
         Eliminar
       </UButton>
     </div>

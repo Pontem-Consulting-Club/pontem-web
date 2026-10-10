@@ -14,16 +14,17 @@
       aria-label="Editar proyecto" class="self-start sm:self-auto" @click="startEdit" />
   </div>
 
-  <UCard v-else variant="soft" class="rounded-xl bg-default relative flex flex-col overflow-hidden p-0">
-    <UButton v-if="isEditor" icon="i-lucide-pencil" size="xs" color="primary" variant="soft"
-      aria-label="Editar proyecto" class="absolute top-3 right-3 z-10 bg-default shadow-sm hover:bg-default"
-      @click="startEdit" />
+  <UCard v-else variant="item" class="relative flex flex-col" :ui="{ body: 'flex flex-1 flex-col gap-1' }">
+    <template #header>
+      <UButton v-if="isEditor" icon="i-lucide-pencil" size="xs" color="primary"
+        aria-label="Editar proyecto" class="absolute top-3 right-3 z-10 bg-default shadow-sm hover:bg-default"
+        @click="startEdit" />
 
-    <NuxtImg v-if="imageUrl" :src="imageUrl" :alt="project.title" class="w-full h-44 object-cover shrink-0" />
-    <!-- Sin imagen: el logo completo, no recortado por object-cover. -->
-    <NuxtImg v-else src="/LogoColorSolo.png" alt="" class="w-full h-44 object-contain p-8 bg-muted shrink-0" />
+      <NuxtImg v-if="imageUrl" :src="imageUrl" :alt="project.title" class="h-44 w-full object-cover" />
+      <!-- Sin imagen: el logo completo, no recortado por object-cover. -->
+      <NuxtImg v-else src="/LogoColorSolo.png" alt="" class="h-44 w-full bg-muted object-contain p-8" />
+    </template>
 
-    <div class="flex flex-col flex-1 p-5 gap-1">
       <div class="text-base/snug text-primary font-bold">
         {{ project.title }}
       </div>
@@ -33,10 +34,9 @@
       <div v-if="project.description" class="text-sm/relaxed text-muted flex-1">
         {{ project.description }}
       </div>
-      <UButton v-if="project.link" class="max-w-fit mt-4" :href="project.link" target="_blank" variant="soft" size="sm">
+      <UButton v-if="project.link" class="max-w-fit mt-4" :href="project.link" target="_blank" size="sm">
         {{ project.link_text || 'Ver más' }}
       </UButton>
-    </div>
   </UCard>
 </template>
 

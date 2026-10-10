@@ -22,15 +22,9 @@
             </div>
           </div>
 
-          <UFileUpload :model-value="null" accept="image/jpeg,image/png,image/webp,image/avif" :preview="false"
-            :interactive="false" :disabled="isUploading"
-            :ui="{ files: 'hidden', label: 'hidden', description: 'hidden' }" @update:model-value="uploadAvatar">
-            <template #default="{ open }">
-              <UButton block variant="soft" icon="i-lucide-camera" :loading="isUploading" @click="open()">
-                {{ profile.avatar_path ? 'Cambiar foto' : 'Subir foto' }}
-              </UButton>
-            </template>
-          </UFileUpload>
+          <ImagePicker :model-value="null" :current="profile.avatar_path" mode="button" block icon="i-lucide-camera"
+            accept="image/jpeg,image/png,image/webp,image/avif" :labels="['Subir foto', 'Cambiar foto']"
+            :loading="isUploading" @update:model-value="uploadAvatar" />
 
           <dl class="rounded-lg border border-default divide-y divide-default text-sm">
             <div class="flex items-center justify-between px-4 py-3">
@@ -58,26 +52,26 @@
         </aside>
 
         <!-- Datos editables -->
-        <UCard variant="soft" class="bg-default rounded-lg shadow-sm">
+        <UCard>
           <UForm :state="form" class="flex flex-col gap-5" @submit.prevent="save">
             <UFormField label="Nombre para mostrar" required>
-              <UInput v-model="form.display_name" size="lg" class="w-full" placeholder="Cómo quieres que te vean" />
+              <UInput v-model="form.display_name" size="lg" placeholder="Cómo quieres que te vean" />
             </UFormField>
 
             <UFormField label="Biografía"
               description="Se muestra en tu perfil público, si decides publicarlo.">
-              <UTextarea v-model.nullable="form.bio" :rows="4" autoresize class="w-full"
+              <UTextarea v-model.nullable="form.bio" :rows="4" autoresize
                 placeholder="En qué estás, qué te interesa" />
             </UFormField>
 
             <div class="grid gap-5 sm:grid-cols-2">
               <UFormField label="Coordinación">
                 <USelectMenu v-model.nullable="form.coordination" :items="coordinationOptions" value-key="value"
-                  label-key="label" class="w-full" placeholder="Sin coordinación" />
+                  label-key="label" placeholder="Sin coordinación" />
               </UFormField>
 
               <UFormField label="Generación" description="El año en que entraste al club.">
-                <UInput v-model="form.generation" type="number" min="1990" max="2100" class="w-full"
+                <UInput v-model="form.generation" type="number" min="1990" max="2100"
                   placeholder="2024" />
               </UFormField>
             </div>
@@ -93,7 +87,7 @@
             <UAlert v-if="savedMessage" color="success" icon="i-lucide-check" :description="savedMessage" />
 
             <div class="flex justify-end">
-              <UButton type="submit" size="lg" :loading="isSaving">Guardar</UButton>
+              <UButton variant="solid" type="submit" size="lg" :loading="isSaving">Guardar</UButton>
             </div>
           </UForm>
         </UCard>
@@ -126,11 +120,11 @@
                   <span v-if="row.event?.location"> · {{ row.event.location }}</span>
                 </div>
               </div>
-              <UBadge v-if="row.attended" color="success" variant="subtle" size="sm">Asististe</UBadge>
-              <UBadge v-else-if="row.status === 'cancelled'" color="neutral" variant="subtle" size="sm">
+              <UBadge v-if="row.attended" color="success" size="sm">Asististe</UBadge>
+              <UBadge v-else-if="row.status === 'cancelled'" color="neutral" size="sm">
                 Cancelada
               </UBadge>
-              <UBadge v-else color="primary" variant="subtle" size="sm">Inscrito</UBadge>
+              <UBadge v-else color="primary" size="sm">Inscrito</UBadge>
             </li>
           </ul>
         </section>

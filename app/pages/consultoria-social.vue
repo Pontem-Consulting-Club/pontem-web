@@ -36,7 +36,7 @@
               </span>
             </div>
             <div v-if="isEditor" class="flex gap-2">
-              <UButton icon="i-lucide-plus" variant="soft" color="primary" size="sm" :disabled="isCreating" @click="startCreate">
+              <UButton icon="i-lucide-plus" color="primary" size="sm" :disabled="isCreating" @click="startCreate">
                 Agregar
               </UButton>
             </div>
