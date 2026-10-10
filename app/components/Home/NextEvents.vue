@@ -1,5 +1,5 @@
 <template>
-  <section class="py-16 md:py-24 bg-gray-500/10  clip-path-[ellipse(150%_70%_at_40%_70%)]">
+  <section class="bg-accented/60 py-16 clip-wave-top md:py-24">
     <div class="w-full px-4 lg:w-3/5 mx-auto lg:mt-12">
       <div class="text-center mb-12">
         <h2 class="text-3xl md:text-4xl font-bold mb-4">
@@ -21,7 +21,7 @@
 
       <div class="text-center mt-10">
         <UButton to="/eventos" size="lg" variant="soft"
-          class="font-semibold transition-colors bg-white text-gray-500 hover:bg-white hover:outline">
+          class="font-semibold transition-colors bg-default text-muted hover:bg-default hover:outline">
           Ver todos los eventos
         </UButton>
       </div>

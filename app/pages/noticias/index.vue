@@ -13,7 +13,7 @@
       <LoadingSpinner v-if="status === 'pending'" />
 
       <div v-if="paginatedNews.length === 0" class="text-center">
-        <UIcon name="i-lucide-inbox" class="w-16 h-16 mx-auto mb-4" />
+        <UIcon name="i-lucide-inbox" class="size-16 mx-auto mb-4" />
         <p>No hay noticias disponibles</p>
       </div>
 

@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Header section -->
-    <div class="w-full bg-black/10 mt-12 clip-path-[ellipse(150%_70%_at_40%_70%)]">
+    <div class="mt-12 w-full bg-accented/60 clip-wave-top">
       <div class="text-center py-12 px-4">
         <h3 class="text-2xl font-semibold">
           Consultoras que impulsan el talento
@@ -14,7 +14,7 @@
     </div>
 
     <!-- Infinite slider -->
-    <div class="overflow-hidden bg-black/10">
+    <div class="overflow-hidden bg-accented/60">
       <div class="flex animate-scroll py-4" :style="{ animationDuration: `45s` }">
         <div v-for="(logo, index) in repeatedLogos" :key="`${index}-${logo}`" class="shrink-0 mr-24 my-6">
           <img :src="logo" :alt="`Logo ${index}`" class="h-[65px] w-auto">
@@ -23,8 +23,7 @@
     </div>
 
     <!-- Padding slider section -->
-    <div aria-hidden="true" class="w-full bg-black/10"
-      style="padding-top: 5%; clip-path: ellipse(80% 70% at 30% 0%);" />
+    <div aria-hidden="true" class="w-full bg-accented/60 pt-[5%] clip-wave-bottom" />
   </div>
 </template>
 

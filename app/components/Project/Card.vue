@@ -1,36 +1,36 @@
 <template>
   <ProjectEditForm v-if="isEditing" v-model:form="form" :is-new="_props.isNew" :is-saving="isSaving"
     :is-deleting="isDeleting" :form-error="formError"
-    :class="_props.layout === 'row' ? 'my-4 max-w-xl ring-1 ring-gray-200' : undefined"
+    :class="_props.layout === 'row' ? 'my-4 max-w-xl ring-1 ring-default' : undefined"
     @submit="saveEdit" @cancel="cancelEdit" @delete="handleDelete" />
 
   <!-- Fila de "Proyectos anteriores" -->
   <div v-else-if="_props.layout === 'row'"
     class="flex flex-col gap-1 py-3 sm:grid sm:grid-cols-[120px_1fr_2fr_auto] sm:gap-4 sm:items-center">
-    <span class="text-xs font-semibold text-gray-500 uppercase tracking-wide">{{ project.semester }}</span>
-    <span class="text-sm font-semibold text-gray-700">{{ project.title }}</span>
-    <span class="text-xs text-gray-500 sm:truncate">{{ project.subtitle }}</span>
+    <span class="text-xs font-semibold text-muted uppercase tracking-wide">{{ project.semester }}</span>
+    <span class="text-sm font-semibold text-default">{{ project.title }}</span>
+    <span class="text-xs text-muted sm:truncate">{{ project.subtitle }}</span>
     <UButton v-if="isEditor" icon="i-lucide-pencil" size="xs" color="primary" variant="ghost"
       aria-label="Editar proyecto" class="self-start sm:self-auto" @click="startEdit" />
   </div>
 
-  <UCard v-else variant="soft" class="rounded-xl bg-white relative flex flex-col overflow-hidden p-0">
+  <UCard v-else variant="soft" class="rounded-xl bg-default relative flex flex-col overflow-hidden p-0">
     <UButton v-if="isEditor" icon="i-lucide-pencil" size="xs" color="primary" variant="soft"
-      aria-label="Editar proyecto" class="absolute top-3 right-3 z-10 bg-white/90 shadow-sm hover:bg-white"
+      aria-label="Editar proyecto" class="absolute top-3 right-3 z-10 bg-default shadow-sm hover:bg-default"
       @click="startEdit" />
 
-    <NuxtImg v-if="imageUrl" :src="imageUrl" :alt="project.title" class="w-full h-44 object-cover flex-shrink-0" />
+    <NuxtImg v-if="imageUrl" :src="imageUrl" :alt="project.title" class="w-full h-44 object-cover shrink-0" />
     <!-- Sin imagen: el logo completo, no recortado por object-cover. -->
-    <NuxtImg v-else src="/LogoColorSolo.png" alt="" class="w-full h-44 object-contain p-8 bg-gray-50 flex-shrink-0" />
+    <NuxtImg v-else src="/LogoColorSolo.png" alt="" class="w-full h-44 object-contain p-8 bg-muted shrink-0" />
 
     <div class="flex flex-col flex-1 p-5 gap-1">
-      <div class="text-base text-primary font-bold leading-snug">
+      <div class="text-base/snug text-primary font-bold">
         {{ project.title }}
       </div>
-      <div v-if="project.subtitle" class="text-xs text-gray-500 font-medium mb-1">
+      <div v-if="project.subtitle" class="text-xs text-muted font-medium mb-1">
         {{ project.subtitle }}
       </div>
-      <div v-if="project.description" class="text-sm text-gray-500 leading-relaxed flex-1">
+      <div v-if="project.description" class="text-sm/relaxed text-muted flex-1">
         {{ project.description }}
       </div>
       <UButton v-if="project.link" class="max-w-fit mt-4" :href="project.link" target="_blank" variant="soft" size="sm">

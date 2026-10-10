@@ -1,83 +1,134 @@
+/*
+ * Tokens de diseño. Es el único archivo que nombra colores, tamaños de letra o
+ * curvas; los componentes usan los nombres del tema (ver docs/estilos.md).
+ */
 @import "tailwindcss";
 @import "@nuxt/ui";
 
-@font-face {
-  font-family: 'Raleway';
-  src: url('~/assets/fonts/Raleway-Regular.ttf') format('truetype');
-  font-weight: 100 900;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Raleway';
-  src: url('~/assets/fonts/Raleway-Italic.ttf') format('truetype');
-  font-weight: 100 900;
-  font-style: italic;
-}
-
+/*
+ * Paletas de marca. Pasos de luminosidad parejos en OKLCH y cada color de marca en
+ * su tono natural: rojo en 500, turquesa en 300, morado en 900. En los componentes
+ * se usan como primary, secondary y tertiary (app/theme/colors.ts).
+ */
 @theme static {
-  --color-pontemred-50: #fff2f0;
-  --color-pontemred-100: #ffe5e0;
-  --color-pontemred-200: #ffc3b8;
-  --color-pontemred-300: #ff907a;
-  --color-pontemred-400: #ff5433;
-  --color-pontemred-500: #FF421D;
-  --color-pontemred-600: #e62600;
-  --color-pontemred-700: #a31b00;
-  --color-pontemred-800: #751300;
-  --color-pontemred-900: #4d0d00;
-  --color-pontemred-950: #330800;
+  --color-pontemred-50: #fff4f1;
+  --color-pontemred-100: #ffe6e1;
+  --color-pontemred-200: #ffcdc2;
+  --color-pontemred-300: #ffa996;
+  --color-pontemred-400: #ff7c62;
+  --color-pontemred-500: #ff421d; /* marca */
+  --color-pontemred-600: #dc310d;
+  --color-pontemred-700: #b72200;
+  --color-pontemred-800: #931900;
+  --color-pontemred-900: #711100;
+  --color-pontemred-950: #510900;
 
-  --color-pontemteal-50: #f0fffc;
-  --color-pontemteal-100: #e0fff9;
-  --color-pontemteal-200: #b8fff1;
-  --color-pontemteal-300: #7affe5;
-  --color-pontemteal-400: #33ffd7;
-  --color-pontemteal-500: #00EDBF;
-  --color-pontemteal-600: #00e6b9;
-  --color-pontemteal-700: #00a384;
-  --color-pontemteal-800: #00755f;
-  --color-pontemteal-900: #004d3e;
-  --color-pontemteal-950: #003329;
-  
+  --color-pontemteal-50: #e0fff4;
+  --color-pontemteal-100: #c4ffeb;
+  --color-pontemteal-200: #6affd6;
+  --color-pontemteal-300: #00edbf; /* marca */
+  --color-pontemteal-400: #00cea6;
+  --color-pontemteal-500: #00b28f;
+  --color-pontemteal-600: #009678;
+  --color-pontemteal-700: #007a61;
+  --color-pontemteal-800: #00614c;
+  --color-pontemteal-900: #004839;
+  --color-pontemteal-950: #003126;
+
   --color-pontempurple-50: #f6f0fe;
   --color-pontempurple-100: #eee2fd;
   --color-pontempurple-200: #d7bbfb;
   --color-pontempurple-300: #b581f8;
-  --color-pontempurple-400: #8d3df5;
-  --color-pontempurple-500: #3D0784;
-  --color-pontempurple-600: #6406df;
-  --color-pontempurple-700: #4701a2;
-  --color-pontempurple-800: #330372;
-  --color-pontempurple-900: #220449;
-  --color-pontempurple-950: #160330;
+  --color-pontempurple-400: #985df7;
+  --color-pontempurple-500: #8037f6;
+  --color-pontempurple-600: #6a1fd9;
+  --color-pontempurple-700: #5816b6;
+  --color-pontempurple-800: #490e9b;
+  --color-pontempurple-900: #3d0784; /* marca */
+  --color-pontempurple-950: #2f0561;
 }
 
-@keyframes gradient-abstract {
-  0% {
-    background-position: 0% 50%, 50% 50%, 50% 0%, 0% 50%;
-  }
+@theme {
+  /* Raleway la sirve Nuxt Fonts (nuxt.config.ts): WOFF2 alojado en el sitio. */
+  --font-sans: 'Raleway', ui-sans-serif, system-ui, sans-serif;
 
-  50% {
-    background-position: 100% 50%, 50% 100%, 50% 100%, 100% 50%;
-  }
-
-  100% {
-    background-position: 0% 50%, 50% 50%, 50% 0%, 0% 50%;
-  }
+  /*
+   * Escala de títulos (tercera mayor; los dos más grandes crecen con la pantalla).
+   * Cada tamaño trae su interlineado y su peso. Al agregar uno, registrarlo también
+   * en app/theme/colors.ts (tv.twMergeConfig).
+   */
+  --text-display: clamp(2.25rem, 1.6rem + 2.8vw, 3.75rem);
+  --text-display--line-height: 1.1;
+  --text-display--letter-spacing: -0.02em;
+  --text-display--font-weight: 700;
+  --text-title: clamp(1.875rem, 1.6rem + 1.2vw, 2.25rem);
+  --text-title--line-height: 1.2;
+  --text-title--letter-spacing: -0.01em;
+  --text-title--font-weight: 700;
+  --text-heading: 1.5rem;
+  --text-heading--line-height: 1.3;
+  --text-heading--font-weight: 700;
+  --text-subheading: 1.25rem;
+  --text-subheading--line-height: 1.4;
+  --text-subheading--font-weight: 600;
 }
 
-.bg-abstract-gradient {
-  background: rgb(255, 66, 29);
-  background: -moz-radial-gradient(circle, rgba(255, 66, 29, 0.15) 0%, rgba(0, 237, 191, 0.1) 100%);
-  background: -webkit-radial-gradient(circle, rgba(255, 66, 29, 0.15) 0%, rgba(0, 237, 191, 0.1) 100%);
-  background: radial-gradient(circle, rgba(255, 66, 29, 0.15) 0%, rgba(0, 237, 191, 0.1) 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ff421d", endColorstr="#00edbf", GradientType=1);
-  background-size: 200% 200%;
-  animation: gradient-abstract 15s ease infinite alternate both;
-}
-
+/* Variables de Nuxt UI (solo modo claro: colorMode está apagado). */
 :root {
-  --font-sans: 'Raleway', sans-serif;
-  --ui-bg: #ffffff;
+  /* 500 no llega a 4.5:1 como texto ni bajo letra blanca; 600 sí (4.68:1). */
+  --ui-primary: var(--ui-color-primary-600);
+  /* El turquesa de marca (300) no se lee como texto; 700 da 5.31:1. */
+  --ui-secondary: var(--ui-color-secondary-700);
+  /* Dos pesos de borde: border-default (200) y border-muted (100). */
+  --ui-border-muted: var(--ui-color-neutral-100);
+}
+
+@layer base {
+  /* Sin movimiento para quien lo pidió al sistema operativo. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/*
+ * Texto enriquecido que llega como HTML (cuerpo de noticias). No hay plugin de
+ * tipografía: esto cubre lo que produce el editor.
+ */
+@utility prose {
+  color: var(--ui-text);
+  line-height: 1.7;
+
+  & > * + * { margin-top: 1em; }
+  & h2 { font-size: var(--text-heading); line-height: var(--text-heading--line-height); font-weight: var(--text-heading--font-weight); color: var(--ui-text-highlighted); margin-top: 1.6em; }
+  & h3 { font-size: var(--text-subheading); line-height: var(--text-subheading--line-height); font-weight: var(--text-subheading--font-weight); color: var(--ui-text-highlighted); margin-top: 1.4em; }
+  & a { color: var(--ui-primary); text-decoration: underline; text-underline-offset: 2px; }
+  & strong { color: var(--ui-text-highlighted); font-weight: 600; }
+  & ul { list-style: disc; padding-left: 1.5em; }
+  & ol { list-style: decimal; padding-left: 1.5em; }
+  & li + li { margin-top: 0.4em; }
+  & blockquote { border-left: 3px solid var(--ui-border-accented); padding-left: 1em; color: var(--ui-text-toned); }
+  & img { border-radius: var(--radius-lg); }
+}
+
+/* Fondo del sitio: un velo de marca, quieto. */
+@utility bg-brand-wash {
+  background: radial-gradient(circle,
+    color-mix(in oklab, var(--color-pontemred-500) 15%, transparent) 0%,
+    color-mix(in oklab, var(--color-pontemteal-300) 10%, transparent) 100%);
+}
+
+/* Bordes curvos de las franjas (motivo de marca). */
+@utility clip-wave-top {
+  clip-path: ellipse(150% 70% at 40% 70%);
+}
+
+@utility clip-wave-bottom {
+  clip-path: ellipse(80% 70% at 30% 0%);
 }

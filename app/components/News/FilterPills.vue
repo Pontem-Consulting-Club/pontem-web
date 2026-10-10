@@ -6,7 +6,7 @@
         'px-4 py-2 rounded-full text-sm font-medium transition-colors',
         modelValue.includes(option)
           ? `${getTypeColor(option)} border ${getTypeBorder(option)} ring-2`
-          : `bg-white border ${getTypeBorder(option)} ${getTypeText(option)}`
+          : `bg-default border ${getTypeBorder(option)} ${getTypeText(option)}`
       ]" @click="toggleOption(option)">
         {{ option }}
       </button>

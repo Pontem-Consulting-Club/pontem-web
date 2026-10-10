@@ -1,5 +1,5 @@
 <template>
-    <UCard variant="soft" class="bg-white/90 rounded-3xl px-6 pb-6 shadow-sm">
+    <UCard variant="soft" class="bg-default rounded-3xl px-6 pb-6 shadow-sm">
         <div class="flex items-center mb-4">
             <UButton variant="soft" icon="i-lucide-arrow-left" @click="emit('cancel')">
                 Volver
@@ -36,11 +36,11 @@
                         @update:model-value="setPendingFile">
                         <template #default="{ open }">
                             <button type="button"
-                                class="relative flex h-32 w-full items-center justify-center bg-gray-200 overflow-hidden rounded-lg text-white/80 transition hover:text-white"
+                                class="relative flex h-32 w-full items-center justify-center bg-accented overflow-hidden rounded-lg text-white/80 transition hover:text-white"
                                 :style="uploadBackgroundStyle" @click="open()">
                                 <span v-if="uploadBackgroundStyle" class="absolute inset-0 bg-black/30" />
                                 <span class="relative z-10 flex flex-col items-center gap-1 text-xs font-medium">
-                                    <UIcon name="i-lucide-upload" class="h-4 w-4" />
+                                    <UIcon name="i-lucide-upload" class="size-4" />
                                     <span>{{ imagePreviewUrl ? 'Cambiar' : 'Subir imagen' }}</span>
                                 </span>
                             </button>
@@ -50,9 +50,9 @@
             </div>
 
             <!-- FR-32: el modo decide si hay inscripcion y para quien. -->
-            <div class="mt-6 flex flex-col gap-4 rounded-lg bg-gray-50 p-4">
-                <div class="flex items-center gap-2 text-sm font-medium text-gray-700">
-                    <UIcon name="i-lucide-clipboard-list" class="h-4 w-4" />
+            <div class="mt-6 flex flex-col gap-4 rounded-lg bg-muted p-4">
+                <div class="flex items-center gap-2 text-sm font-medium text-default">
+                    <UIcon name="i-lucide-clipboard-list" class="size-4" />
                     Inscripción
                 </div>
                 <div class="grid gap-4 sm:grid-cols-3">
@@ -69,7 +69,7 @@
                             :disabled="form.registration_mode === 'none'" />
                     </UFormField>
                 </div>
-                <p class="text-xs text-gray-500">{{ registrationHint }}</p>
+                <p class="text-xs text-muted">{{ registrationHint }}</p>
             </div>
 
             <UAlert v-if="displayError" color="error" icon="i-lucide-alert-circle" :description="displayError"
@@ -92,7 +92,7 @@
 <script setup lang="ts">
 import type { EventRecord } from '~/types/content'
 
-const baseUIClasses = 'text-gray-600 placeholder:text-gray-400'
+const baseUIClasses = 'text-toned placeholder:text-dimmed'
 
 const form = defineModel<Partial<EventRecord>>('form', { required: true })
 

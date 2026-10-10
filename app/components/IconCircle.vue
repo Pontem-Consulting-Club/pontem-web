@@ -11,16 +11,16 @@ const _props = withDefaults(defineProps<Props>(), {
 })
 
 const sizeClasses = {
-  sm: { wrapper: 'w-12 h-12', icon: 'w-6 h-6' },
-  md: { wrapper: 'w-16 h-16', icon: 'w-8 h-8' },
-  lg: { wrapper: 'w-20 h-20', icon: 'w-10 h-10' }
+  sm: { wrapper: 'size-12', icon: 'size-6' },
+  md: { wrapper: 'size-16', icon: 'size-8' },
+  lg: { wrapper: 'size-20', icon: 'size-10' }
 }
 </script>
 
 <template>
   <div 
     :class="[
-      'bg-pontemteal-200 rounded-full flex items-center justify-center',
+      'bg-secondary-100 rounded-full flex items-center justify-center',
       sizeClasses[_props.size].wrapper
     ]"
   >

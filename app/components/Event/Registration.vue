@@ -1,5 +1,5 @@
 <template>
-  <div v-if="mode !== 'none'" class="mt-4 border-t border-gray-200 pt-4">
+  <div v-if="mode !== 'none'" class="mt-4 border-t border-default pt-4">
     <!-- Ya inscrito -->
     <div v-if="isRegistered" class="flex flex-wrap items-center gap-3">
       <UBadge color="success" variant="subtle" icon="i-lucide-check">Estás inscrito</UBadge>
@@ -9,7 +9,7 @@
     </div>
 
     <!-- Cerrado o pasado -->
-    <div v-else-if="!isOpen" class="flex items-center gap-2 text-sm text-gray-500">
+    <div v-else-if="!isOpen" class="flex items-center gap-2 text-sm text-muted">
       <UIcon name="i-lucide-lock" />
       <span>{{ closedReason }}</span>
     </div>
@@ -19,12 +19,12 @@
       <UButton icon="i-lucide-calendar-check" :loading="isBusy" @click="register">
         Inscribirme
       </UButton>
-      <span v-if="spotsLabel" class="text-sm text-gray-500">{{ spotsLabel }}</span>
+      <span v-if="spotsLabel" class="text-sm text-muted">{{ spotsLabel }}</span>
     </div>
 
     <!-- Invitado, solo en eventos abiertos (VIS-3) -->
     <div v-else-if="mode === 'open'" class="flex flex-col gap-3">
-      <p class="text-sm text-gray-600">
+      <p class="text-sm text-toned">
         Esta actividad está abierta a invitados. Déjanos tus datos y te esperamos.
       </p>
       <form class="flex flex-col gap-3 sm:flex-row sm:items-start" @submit.prevent="register">
@@ -35,7 +35,7 @@
     </div>
 
     <!-- Solo miembros y sin sesión -->
-    <div v-else class="flex flex-wrap items-center gap-3 text-sm text-gray-600">
+    <div v-else class="flex flex-wrap items-center gap-3 text-sm text-toned">
       <UIcon name="i-lucide-users" />
       <span>Esta actividad es solo para miembros.</span>
       <UButton :to="{ path: '/login', query: { redirect: route.fullPath } }" size="xs" variant="soft">

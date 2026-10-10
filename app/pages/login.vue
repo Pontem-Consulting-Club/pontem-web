@@ -1,6 +1,6 @@
 <template>
   <UContainer class="py-16 flex items-center justify-center min-h-[calc(100vh-4rem)]">
-    <UCard class="w-full max-w-md bg-white rounded-lg p-6 shadow-sm" variant="soft">
+    <UCard class="w-full max-w-md bg-default rounded-lg p-6 shadow-sm" variant="soft">
       <template #header>
         <h2 class="text-2xl font-bold text-center">
           Iniciar Sesión

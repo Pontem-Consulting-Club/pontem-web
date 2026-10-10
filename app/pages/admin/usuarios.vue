@@ -4,10 +4,10 @@
 
     <UContainer class="py-16">
       <!-- Invitar -->
-      <UCard variant="soft" class="mb-10 bg-white rounded-lg shadow-sm">
+      <UCard variant="soft" class="mb-10 bg-default rounded-lg shadow-sm">
         <template #header>
           <div class="flex items-center gap-2">
-            <UIcon name="i-lucide-user-plus" class="text-primary-600" />
+            <UIcon name="i-lucide-user-plus" class="text-primary" />
             <h2 class="font-semibold">Invitar a alguien</h2>
           </div>
         </template>
@@ -24,7 +24,7 @@
           <UButton type="submit" size="lg" :loading="isInviting">Enviar</UButton>
         </UForm>
 
-        <p class="mt-3 text-xs text-gray-500">
+        <p class="mt-3 text-xs text-muted">
           Recibe un correo para elegir su clave. Pontem nunca ve ni guarda contraseñas.
         </p>
 
@@ -37,7 +37,7 @@
         <UInput v-model="search" icon="i-lucide-search" placeholder="Buscar por nombre o correo" class="max-w-xs" />
         <USelectMenu v-model="roleFilter" :items="roleFilterOptions" value-key="value" label-key="label"
           class="w-44" />
-        <span class="ml-auto text-sm text-gray-500">{{ filtered.length }} de {{ users.length }}</span>
+        <span class="ml-auto text-sm text-muted">{{ filtered.length }} de {{ users.length }}</span>
       </div>
 
       <LoadingSpinner v-if="status === 'pending'" />
@@ -46,9 +46,9 @@
         <EmptyState icon="i-lucide-users" message="No hay personas que coincidan" />
       </div>
 
-      <div v-else class="overflow-x-auto rounded-lg border border-gray-200 bg-white">
+      <div v-else class="overflow-x-auto rounded-lg border border-default bg-default">
         <table class="w-full text-sm">
-          <thead class="bg-gray-50 text-left text-xs uppercase tracking-wide text-gray-500">
+          <thead class="bg-muted text-left text-xs uppercase tracking-wide text-muted">
             <tr>
               <th class="px-4 py-3 font-medium">Persona</th>
               <th class="px-4 py-3 font-medium">Coordinación</th>
@@ -57,13 +57,13 @@
               <th class="px-4 py-3" />
             </tr>
           </thead>
-          <tbody class="divide-y divide-gray-200">
+          <tbody class="divide-y divide-default">
             <tr v-for="person in filtered" :key="person.id" class="align-middle">
               <td class="px-4 py-3">
                 <div class="font-medium">{{ person.display_name || '—' }}</div>
-                <div class="text-xs text-gray-500">{{ person.email }}</div>
+                <div class="text-xs text-muted">{{ person.email }}</div>
               </td>
-              <td class="px-4 py-3 text-gray-600">
+              <td class="px-4 py-3 text-toned">
                 {{ person.coordination ? coordinationLabels[person.coordination] : '—' }}
               </td>
               <td class="px-4 py-3">
@@ -93,7 +93,7 @@
 
       <UAlert v-if="tableError" color="error" icon="i-lucide-alert-circle" :description="tableError" class="mt-4" />
 
-      <p class="mt-6 text-xs text-gray-500">
+      <p class="mt-6 text-xs text-muted">
         Desactivar conserva el historial de la persona y quita sus permisos de inmediato. No se puede desactivar ni
         degradar a la última cuenta administradora activa.
       </p>

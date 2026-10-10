@@ -1,0 +1,8 @@
+/*
+ * Solo para el lint (eslint.config.mjs). Dentro de Nuxt, `@nuxt/ui` toma
+ * `#build/ui.css` con los colores del proyecto; fuera de Nuxt usa su copia por
+ * defecto, que no conoce `tertiary`. Este archivo suma la versión generada
+ * (`nuxt prepare` la crea en .nuxt/).
+ */
+@import "./app/assets/css/main.css";
+@import "./.nuxt/ui.css";

@@ -1,5 +1,5 @@
 <template>
-    <UCard variant="soft" class="rounded-xl bg-white">
+    <UCard variant="soft" class="rounded-xl bg-default">
         <!-- Apilado como la tarjeta (imagen arriba, texto abajo): asi cabe en una
              columna de la grilla de tres y en la lista de proyectos anteriores. -->
         <form class="flex flex-col gap-4" @submit.prevent="handleSubmit">
@@ -10,11 +10,11 @@
                 <template #default="{ open }">
                     <button type="button"
                         class="relative flex h-44 w-full items-center justify-center overflow-hidden rounded-lg border-2 border-dashed transition"
-                        :class="imagePreviewUrl ? 'border-transparent text-white' : 'border-gray-200 bg-gray-50 text-gray-500 hover:bg-gray-100'"
+                        :class="imagePreviewUrl ? 'border-transparent text-white' : 'border-default bg-muted text-muted hover:bg-elevated'"
                         :style="uploadBackgroundStyle" @click="open()">
                         <span v-if="imagePreviewUrl" class="absolute inset-0 bg-black/40" />
                         <span class="relative z-10 flex flex-col items-center gap-2 text-sm font-medium">
-                            <UIcon name="i-lucide-upload" class="h-5 w-5" />
+                            <UIcon name="i-lucide-upload" class="size-5" />
                             <span>{{ imagePreviewUrl ? 'Cambiar imagen' : 'Subir imagen' }}</span>
                         </span>
                     </button>
@@ -53,7 +53,7 @@
 
             <UAlert v-if="displayError" color="error" icon="i-lucide-alert-circle" :description="displayError" />
 
-            <div class="flex flex-wrap items-center gap-2 pt-4 border-t border-gray-100">
+            <div class="flex flex-wrap items-center gap-2 pt-4 border-t border-muted">
                 <UButton v-if="!isNew" type="button" color="error" variant="soft" icon="i-lucide-trash-2"
                     :loading="!!isDeleting" :disabled="isSaving || !!isDeleting" @click="emit('delete')">
                     Eliminar
@@ -73,7 +73,7 @@
 <script setup lang="ts">
 import type { ProjectRecord } from '~/types/content'
 
-const inputUi = { base: 'text-gray-900 placeholder:text-gray-400' }
+const inputUi = { base: 'text-highlighted placeholder:text-dimmed' }
 
 const form = defineModel<Partial<ProjectRecord>>('form', { required: true })
 

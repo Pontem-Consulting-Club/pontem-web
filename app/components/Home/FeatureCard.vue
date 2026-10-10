@@ -1,7 +1,7 @@
 <template>
-  <div class="rounded-3xl bg-white/90 text-center p-8 shadow-sm hover:shadow-lg transition-shadow">
+  <div class="rounded-3xl bg-default text-center p-8 shadow-sm hover:shadow-lg transition-shadow">
     <div class="flex justify-center mb-4">
-      <UIcon :name="icon" class="w-12 h-12" :class="iconColor" />
+      <UIcon :name="icon" class="size-12" :class="iconColor" />
     </div>
     <h3 class="text-xl font-semibold mb-2">
       {{ title }}

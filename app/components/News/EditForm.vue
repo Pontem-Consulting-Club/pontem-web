@@ -1,5 +1,5 @@
 <template>
-    <UCard variant="soft" class="bg-white rounded-lg px-6 pb-6 shadow-sm">
+    <UCard variant="soft" class="bg-default rounded-lg px-6 pb-6 shadow-sm">
         <div class="flex items-center mb-6">
             <UButton variant="soft" icon="i-lucide-arrow-left" @click="emit('cancel')">
                 Volver
@@ -13,11 +13,11 @@
                     @update:model-value="setPendingFile">
                     <template #default="{ open }">
                         <button type="button"
-                            class="relative flex h-full min-h-75 w-full items-center justify-center bg-gray-200 overflow-hidden rounded-lg text-white/80 transition hover:text-white"
+                            class="relative flex size-full min-h-75 items-center justify-center bg-accented overflow-hidden rounded-lg text-white/80 transition hover:text-white"
                             :style="uploadBackgroundStyle" @click="open()">
                             <span v-if="uploadBackgroundStyle" class="absolute inset-0 bg-black/30" />
                             <span class="relative z-10 flex flex-col items-center gap-2 text-sm font-medium">
-                                <UIcon name="i-lucide-upload" class="h-5 w-5" />
+                                <UIcon name="i-lucide-upload" class="size-5" />
                                 <span>{{ imagePreviewUrl ? 'Cambiar imagen' : 'Subir imagen' }}</span>
                             </span>
                         </button>
@@ -45,12 +45,12 @@
 
             <div class="flex items-center justify-between text-sm mb-4 gap-2">
                 <UFormField>
-                    <span class="text-gray-700 font-medium pl-3">Autor:</span>
+                    <span class="text-default font-medium pl-3">Autor:</span>
                     <UInput v-model.nullable="form.author" placeholder="Autor" variant="none" :ui="{ base: baseUIClasses }" />
                 </UFormField>
 
                 <UFormField>
-                    <span class="text-gray-700 font-medium">Fecha:</span>
+                    <span class="text-default font-medium">Fecha:</span>
                     <UInput v-model="publishedDateModel" type="date" variant="none" :ui="{ base: baseUIClasses }" />
                 </UFormField>
             </div>
@@ -76,7 +76,7 @@
 <script setup lang="ts">
 import type { NewsRecord } from '~/types/content'
 
-const baseUIClasses = 'text-gray-600 placeholder:text-gray-400'
+const baseUIClasses = 'text-toned placeholder:text-dimmed'
 
 const form = defineModel<Partial<NewsRecord>>('form', { required: true })
 

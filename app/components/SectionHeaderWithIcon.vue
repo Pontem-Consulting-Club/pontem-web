@@ -6,13 +6,13 @@ interface Props {
 }
 
 withDefaults(defineProps<Props>(), {
-  iconColor: 'text-primary-600'
+  iconColor: 'text-primary'
 })
 </script>
 
 <template>
   <h2 class="text-2xl font-bold mb-8 flex items-center gap-3">
-    <UIcon :name="icon" :class="['w-6 h-6', iconColor]" />
+    <UIcon :name="icon" :class="['size-6', iconColor]" />
     {{ title }}
   </h2>
 </template>

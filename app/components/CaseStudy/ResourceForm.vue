@@ -81,7 +81,7 @@ const handleSubmit = async () => {
 </script>
 
 <template>
-  <div class="bg-white border border-gray-100 rounded-2xl p-4 shadow-sm">
+  <div class="bg-default border border-muted rounded-2xl p-4 shadow-sm">
     <UButton v-if="!isOpen" icon="i-lucide-plus" variant="soft" size="sm" block @click="isOpen = true">
       Agregar recurso
     </UButton>
@@ -106,7 +106,7 @@ const handleSubmit = async () => {
         <UButton icon="i-lucide-paperclip" variant="soft" size="xs" @click="documentInput?.click()">
           {{ pendingDocument ? 'Cambiar archivo' : 'Adjuntar archivo' }}
         </UButton>
-        <span v-if="pendingDocument" class="text-xs text-gray-500 truncate">{{ pendingDocument.name }}</span>
+        <span v-if="pendingDocument" class="text-xs text-muted truncate">{{ pendingDocument.name }}</span>
         <input ref="documentInput" type="file" accept="application/pdf,.pdf,.xlsx,.xls" class="hidden"
           @change="handleFileChange">
       </div>

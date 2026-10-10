@@ -64,14 +64,14 @@ const openDrive = () => {
     <!-- Encabezado editorial -->
     <section class="flex flex-col items-center text-center gap-4 pt-4">
       <div
-        class="inline-flex items-center gap-2 bg-pontemteal-50 text-pontemteal-700 text-xs font-semibold uppercase tracking-widest px-4 py-2 rounded-full border border-pontemteal-200">
-        <span class="w-2 h-2 rounded-full bg-pontemteal-500" />
+        class="inline-flex items-center gap-2 bg-secondary-50 text-secondary-800 text-xs font-semibold uppercase tracking-widest px-4 py-2 rounded-full border border-secondary-100">
+        <span class="size-2 rounded-full bg-secondary-300" />
         Learning &amp; Development
       </div>
-      <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mt-2">
+      <h1 class="text-4xl md:text-5xl font-bold text-highlighted mt-2">
         Material de <span class="text-primary">Estudio</span>
       </h1>
-      <p class="text-lg text-gray-500 max-w-xl">
+      <p class="text-lg text-muted max-w-xl">
         Accede a nuestra biblioteca de recursos curados para dominar entrevistas estructuradas y potenciar
         tu perfil consultor.
       </p>
@@ -88,7 +88,7 @@ const openDrive = () => {
       <StudySectionLabel number="02" label="Biblioteca" />
 
       <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
-        <h2 class="text-3xl font-bold text-gray-900">Casos de Estudio</h2>
+        <h2 class="text-3xl font-bold text-highlighted">Casos de Estudio</h2>
         <div class="flex items-center gap-2 w-full md:w-auto">
           <UInput v-model="search" icon="i-lucide-search" size="lg" class="w-full md:w-96"
             placeholder="Buscar por empresa, área o palabra clave..."
@@ -122,9 +122,9 @@ const openDrive = () => {
       <StudySectionLabel number="03" label="Recursos" />
 
       <div class="grid md:grid-cols-2 gap-6">
-        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-8 flex flex-col items-center text-center gap-4">
-          <h3 class="text-xl font-bold text-gray-900">Drive de Estudio</h3>
-          <p class="text-sm text-gray-500">
+        <div class="bg-default rounded-2xl border border-muted shadow-sm p-8 flex flex-col items-center text-center gap-4">
+          <h3 class="text-xl font-bold text-highlighted">Drive de Estudio</h3>
+          <p class="text-sm text-muted">
             Solicita acceso a nuestro Drive con todo el material de estudio.
           </p>
           <button class="flex-1 w-full flex items-center justify-center cursor-pointer group" aria-label="Abrir Drive de Estudio" @click="openDrive">
@@ -132,9 +132,9 @@ const openDrive = () => {
           </button>
         </div>
 
-        <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-8 flex flex-col gap-4">
-          <h3 class="text-xl font-bold text-gray-900 text-center">Case Books Recomendados</h3>
-          <p class="text-sm text-gray-500 text-center">
+        <div class="bg-default rounded-2xl border border-muted shadow-sm p-8 flex flex-col gap-4">
+          <h3 class="text-xl font-bold text-highlighted text-center">Case Books Recomendados</h3>
+          <p class="text-sm text-muted text-center">
             Recursos externos para practicar casos de consultoría.
           </p>
           <div class="flex flex-col gap-3 mt-2">

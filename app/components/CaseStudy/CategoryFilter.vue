@@ -28,14 +28,14 @@ const { getCategoryBadge, getCategoryBorder } = useCaseStudyColors()
   <div class="flex flex-wrap gap-2">
     <button type="button" class="px-4 py-2 rounded-full text-xs font-semibold border transition-colors" :class="modelValue === null
       ? 'bg-primary text-white border-primary'
-      : 'bg-white text-gray-500 border-gray-200 hover:bg-gray-50'" @click="modelValue = null">
+      : 'bg-default text-muted border-default hover:bg-muted'" @click="modelValue = null">
       Todas · {{ total }}
     </button>
 
     <button v-for="category in visibleCategories" :key="category" type="button"
       class="px-4 py-2 rounded-full text-xs font-semibold border transition-colors" :class="modelValue === category
         ? `${getCategoryBadge(category)} ${getCategoryBorder(category)}`
-        : 'bg-white text-gray-500 border-gray-200 hover:bg-gray-50'"
+        : 'bg-default text-muted border-default hover:bg-muted'"
       @click="modelValue = category">
       {{ CASE_CATEGORY_LABELS[category] }} · {{ counts[category] }}
     </button>
@@ -43,7 +43,7 @@ const { getCategoryBadge, getCategoryBorder } = useCaseStudyColors()
     <button v-if="counts.casebooks" type="button"
       class="px-4 py-2 rounded-full text-xs font-semibold border transition-colors" :class="modelValue === 'casebooks'
         ? `${getCategoryBadge(null)} ${getCategoryBorder(null)}`
-        : 'bg-white text-gray-500 border-gray-200 hover:bg-gray-50'"
+        : 'bg-default text-muted border-default hover:bg-muted'"
       @click="modelValue = 'casebooks'">
       {{ CASEBOOK_LABEL }} · {{ counts.casebooks }}
     </button>

@@ -17,6 +17,22 @@ export default defineNuxtConfig({
   // título del formulario de eventos) quedaban blancos sobre tarjetas blancas.
   ui: {
     colorMode: false,
+    theme: {
+      // `tertiary` (morado de marca) se suma a los colores de Nuxt UI; su paleta
+      // se asigna en app/theme/colors.ts.
+      colors: ['primary', 'secondary', 'tertiary', 'info', 'success', 'warning', 'error']
+    }
+  },
+
+  // Raleway desde Google, descargada en el build y servida desde el sitio (WOFF2).
+  fonts: {
+    families: [{
+      name: 'Raleway',
+      provider: 'google',
+      weights: [400, 500, 600, 700],
+      styles: ['normal', 'italic'],
+      subsets: ['latin', 'latin-ext']
+    }]
   },
 
   supabase: {

@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-4 border-t border-gray-200 pt-4">
+  <div class="mt-4 border-t border-default pt-4">
     <UButton variant="ghost" size="xs" :icon="isOpen ? 'i-lucide-chevron-down' : 'i-lucide-chevron-right'"
       @click="toggle">
       Inscritos<span v-if="rows.length"> ({{ activeCount }})</span>
@@ -11,9 +11,9 @@
       <EmptyState v-else-if="rows.length === 0" icon="i-lucide-user-x"
         message="Todavía no hay nadie inscrito" />
 
-      <div v-else class="overflow-x-auto rounded-lg border border-gray-200">
+      <div v-else class="overflow-x-auto rounded-lg border border-default">
         <table class="w-full text-sm">
-          <thead class="bg-gray-50 text-left text-xs uppercase tracking-wide text-gray-500">
+          <thead class="bg-muted text-left text-xs uppercase tracking-wide text-muted">
             <tr>
               <th class="px-3 py-2 font-medium">Persona</th>
               <th class="px-3 py-2 font-medium">Detalle</th>
@@ -21,7 +21,7 @@
               <th class="px-3 py-2 font-medium">Asistió</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-gray-200">
+          <tbody class="divide-y divide-default">
             <tr v-for="row in rows" :key="row.id">
               <td class="px-3 py-2">
                 <span class="font-medium">{{ row.name }}</span>
@@ -29,7 +29,7 @@
                   Invitado
                 </UBadge>
               </td>
-              <td class="px-3 py-2 text-gray-500">{{ detailLabel(row) }}</td>
+              <td class="px-3 py-2 text-muted">{{ detailLabel(row) }}</td>
               <td class="px-3 py-2">
                 <UBadge :color="row.status === 'cancelled' ? 'neutral' : 'primary'" variant="subtle" size="sm">
                   {{ row.status === 'cancelled' ? 'Cancelada' : 'Inscrito' }}

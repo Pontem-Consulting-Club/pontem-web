@@ -1,6 +1,6 @@
 <template>
   <UContainer class="flex min-h-[calc(100vh-4rem)] items-center justify-center py-16">
-    <UCard class="w-full max-w-md rounded-lg bg-white p-6 shadow-sm" variant="soft">
+    <UCard class="w-full max-w-md rounded-lg bg-default p-6 shadow-sm" variant="soft">
       <template #header>
         <h2 class="text-center text-2xl font-bold">{{ heading }}</h2>
       </template>
@@ -8,7 +8,7 @@
       <LoadingSpinner v-if="isResolving" />
 
       <div v-else-if="!hasSession" class="flex flex-col gap-4 text-center">
-        <UIcon name="i-lucide-link-2-off" class="mx-auto h-10 w-10 text-gray-400" />
+        <UIcon name="i-lucide-link-2-off" class="mx-auto size-10 text-dimmed" />
         <p>
           Este enlace ya no sirve. Los enlaces de recuperación caducan al usarse o
           después de un rato.
@@ -17,7 +17,7 @@
       </div>
 
       <form v-else class="flex flex-col gap-6" @submit.prevent="submit">
-        <p v-if="isInvitation" class="text-sm text-gray-600">
+        <p v-if="isInvitation" class="text-sm text-toned">
           Te damos la bienvenida a Pontem. Elige una contraseña para entrar a tu cuenta.
         </p>
 

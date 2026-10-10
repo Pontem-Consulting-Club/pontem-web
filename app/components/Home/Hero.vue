@@ -4,7 +4,7 @@
     <HomeHeroSlide v-for="(slide, index) in slides" :key="slide.id" :slide="slide"
       :is-active="currentSlide === index" />
 
-    <div v-if="slides.length === 0" class="absolute inset-0 bg-gray-800" />
+    <div v-if="slides.length === 0" class="absolute inset-0 bg-inverted" />
 
     <!-- Edit / create form -->
     <HomeHeroEditForm v-if="isEditing" v-model:form="form" :is-new="isCreating" :is-saving="isSaving"
@@ -26,7 +26,7 @@
     <!-- Slide Indicators -->
     <div v-if="!isEditing" class="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-30 flex gap-3">
       <button v-for="(slide, index) in slides" :key="slide.id" class="w-4 h-2 rounded-lg transition-all duration-300"
-        :class="currentSlide === index ? 'bg-white scale-125' : 'bg-white/50 hover:bg-white/75'"
+        :class="currentSlide === index ? 'bg-default scale-125' : 'bg-white/50 hover:bg-default'"
         :aria-label="`Go to slide ${index + 1}`" @click="goToSlide(index)" />
     </div>
   </section>

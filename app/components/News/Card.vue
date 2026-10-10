@@ -1,6 +1,6 @@
 <template>
   <UCard variant="soft"
-    class="flex flex-col rounded-xl bg-white/90 shadow-sm hover:shadow-lg transition-shadow relative">
+    class="flex flex-col rounded-xl bg-default shadow-sm hover:shadow-lg transition-shadow relative">
     <NuxtImg v-if="imageUrl" :src="imageUrl" alt="Cover Image" class="rounded-lg h-50 w-full object-cover"
       sizes="500px" />
 
@@ -12,7 +12,7 @@
       {{ newsItem.title }}
     </div>
 
-    <div v-if="newsItem.subtitle" class="mb-4 flex-1 text-gray-600">
+    <div v-if="newsItem.subtitle" class="mb-4 flex-1 text-toned">
       {{ newsItem.subtitle }}
     </div>
 

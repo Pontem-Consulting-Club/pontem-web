@@ -67,7 +67,7 @@ const pastEvents = computed(() => {
 
       <template v-else>
         <section v-if="isCreating && draftEvent" class="mb-16">
-          <SectionHeaderWithIcon title="Nuevo evento" icon="i-lucide-plus" icon-color="text-primary-600" />
+          <SectionHeaderWithIcon title="Nuevo evento" icon="i-lucide-plus" icon-color="text-primary" />
           <div class="space-y-8">
             <EventCard :event="draftEvent" :is-new="true" variant="full" @created="handleCreated"
               @cancel-create="cancelCreate" @updated="refresh" />
@@ -76,7 +76,7 @@ const pastEvents = computed(() => {
 
         <!-- Future Events -->
         <section v-if="futureEvents.length > 0" class="mb-16">
-          <SectionHeaderWithIcon title="Próximos Eventos" icon="i-lucide-calendar" icon-color="text-primary-600" />
+          <SectionHeaderWithIcon title="Próximos Eventos" icon="i-lucide-calendar" icon-color="text-primary" />
 
           <div class="space-y-8">
             <EventCard v-for="event in futureEvents" :key="event.id" :event="event" variant="full" @updated="refresh" />

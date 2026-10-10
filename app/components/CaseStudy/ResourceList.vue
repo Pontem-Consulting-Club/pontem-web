@@ -13,9 +13,9 @@ const { isEditor } = useProfile()
 const supabase = useSupabaseClient()
 
 const kindStyles: Record<string, { wrapper: string, text: string }> = {
-  APUNTE: { wrapper: 'bg-pontemteal-50 text-pontemteal-700', text: 'text-pontemteal-700' },
-  DATASET: { wrapper: 'bg-pontempurple-50 text-pontempurple-600', text: 'text-pontempurple-600' },
-  MASTERCLASS: { wrapper: 'bg-pontemred-50 text-pontemred-500', text: 'text-pontemred-500' }
+  APUNTE: { wrapper: 'bg-secondary-50 text-secondary-800', text: 'text-secondary-700' },
+  DATASET: { wrapper: 'bg-tertiary-50 text-tertiary-800', text: 'text-tertiary-700' },
+  MASTERCLASS: { wrapper: 'bg-primary-50 text-primary-800', text: 'text-primary' }
 }
 
 /**
@@ -52,13 +52,13 @@ const handleDelete = async (resource: CaseStudyResourceRecord) => {
 </script>
 
 <template>
-  <div class="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm flex flex-col gap-4">
-    <h3 class="text-lg font-bold text-gray-900 flex items-center gap-2 border-b border-gray-100 pb-3">
-      <UIcon name="i-lucide-library" class="w-5 h-5 text-pontempurple-500" />
+  <div class="bg-default border border-muted rounded-2xl p-6 shadow-sm flex flex-col gap-4">
+    <h3 class="text-lg font-bold text-highlighted flex items-center gap-2 border-b border-muted pb-3">
+      <UIcon name="i-lucide-library" class="size-5 text-tertiary-900" />
       Recursos Relacionados
     </h3>
 
-    <p v-if="props.resources.length === 0" class="text-sm text-gray-400 italic">
+    <p v-if="props.resources.length === 0" class="text-sm text-dimmed italic">
       Este caso todavía no tiene recursos asociados.
     </p>
 
@@ -66,16 +66,16 @@ const handleDelete = async (resource: CaseStudyResourceRecord) => {
       <component :is="resolveHref(resource) ? 'a' : 'div'" v-for="resource in props.resources" :key="resource.id"
         :href="resolveHref(resource) ?? undefined" :target="resolveHref(resource) ? '_blank' : undefined"
         :rel="resolveHref(resource) ? 'noopener noreferrer' : undefined"
-        class="group p-3 rounded-xl border border-transparent hover:bg-gray-50 hover:border-gray-100 transition-colors flex gap-3 items-start">
-        <div class="w-10 h-10 rounded-lg flex items-center justify-center shrink-0"
+        class="group p-3 rounded-xl border border-transparent hover:bg-muted hover:border-muted transition-colors flex gap-3 items-start">
+        <div class="size-10 rounded-lg flex items-center justify-center shrink-0"
           :class="kindStyles[resource.kind]?.wrapper">
-          <UIcon :name="CASE_RESOURCE_KIND_ICONS[resource.kind]" class="w-5 h-5" />
+          <UIcon :name="CASE_RESOURCE_KIND_ICONS[resource.kind]" class="size-5" />
         </div>
         <div class="flex flex-col min-w-0 flex-1">
           <span class="text-xs font-semibold uppercase tracking-wider mb-1" :class="kindStyles[resource.kind]?.text">
             {{ CASE_RESOURCE_KIND_LABELS[resource.kind] }}
           </span>
-          <span class="text-sm font-medium text-gray-700 group-hover:text-primary transition-colors line-clamp-2">
+          <span class="text-sm font-medium text-default group-hover:text-primary transition-colors line-clamp-2">
             {{ resource.title }}
           </span>
         </div>

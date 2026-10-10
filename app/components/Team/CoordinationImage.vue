@@ -1,13 +1,13 @@
 <template>
-  <div class="relative h-full bg-gray-100">
+  <div class="relative h-full bg-elevated">
     <!-- Imagen o placeholder -->
-    <img v-if="imageUrl" :src="imageUrl" class="w-full h-full object-cover" >
-    <div v-else class="w-full h-full bg-gradient-to-r from-pontemred-100 to-pontemteal-100 flex items-center justify-center">
-      <UIcon :name="icon" class="w-12 h-12 text-pontemred-300" />
+    <img v-if="imageUrl" :src="imageUrl" class="size-full object-cover" >
+    <div v-else class="size-full bg-linear-to-r from-primary-100 to-secondary-50 flex items-center justify-center">
+      <UIcon :name="icon" class="size-12 text-primary-400" />
     </div>
 
     <!-- Overlay gradiente siempre visible -->
-    <div class="absolute inset-0 bg-gradient-to-r from-pontemred-500/40 to-pontemteal-500/40" />
+    <div class="absolute inset-0 bg-linear-to-r from-primary-500/40 to-secondary-300/40" />
 
     <!-- Admin: sin imagen → botón "Agregar foto" centrado -->
     <div v-if="isEditor && !imagePath"

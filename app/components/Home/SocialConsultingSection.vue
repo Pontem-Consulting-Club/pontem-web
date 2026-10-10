@@ -5,7 +5,7 @@ import { HomeFeatureCard } from '../../../.nuxt/components';
       <h3 class="text-3xl md:text-4xl font-bold mb-4">
         Consultoría Social
       </h3>
-      <p class="text-base max-w-3xl mx-auto text-justify leading-relaxed font-medium pb-4 px-8">
+      <p class="text-base/relaxed max-w-3xl mx-auto text-justify font-medium pb-4 px-8">
         Aplicamos nuestras habilidades de consultoría para generar impacto social positivo,
         trabajando con organizaciones sin fines de lucro y proyectos comunitarios.
       </p>
@@ -21,7 +21,7 @@ import { HomeFeatureCard } from '../../../.nuxt/components';
 
         <HomeFeatureCard icon="i-lucide-heart" title="Impacto Social"
           description="Generamos cambios positivos en la comunidad a través de nuestro trabajo."
-          icon-color="text-pontempurple-500" />
+          icon-color="text-tertiary-900" />
       </div>
     </UContainer>
   </section>

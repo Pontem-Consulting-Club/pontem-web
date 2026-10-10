@@ -103,14 +103,14 @@ const handleDelete = async () => {
       <div class="lg:col-span-8 flex flex-col gap-8">
         <div class="flex flex-col gap-4">
           <!-- Migas -->
-          <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-gray-400">
+          <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-dimmed">
             <NuxtLink to="/material-estudio" class="hover:text-primary transition-colors">Casos</NuxtLink>
-            <UIcon name="i-lucide-chevron-right" class="w-3.5 h-3.5" />
-            <span class="text-gray-600">{{ getCaseCategoryLabel(caseStudy.category) }}</span>
+            <UIcon name="i-lucide-chevron-right" class="size-3.5" />
+            <span class="text-toned">{{ getCaseCategoryLabel(caseStudy.category) }}</span>
           </div>
 
           <div class="flex items-start justify-between gap-4">
-            <h1 class="text-3xl md:text-4xl font-bold text-gray-900 leading-tight">
+            <h1 class="text-3xl/tight md:text-4xl font-bold text-highlighted">
               {{ caseStudy.title }}
             </h1>
             <UButton v-if="isEditor" icon="i-lucide-pencil" size="md" color="primary" variant="soft"
@@ -122,29 +122,29 @@ const handleDelete = async () => {
           <!-- Metadatos -->
           <div class="flex flex-wrap gap-3">
             <span v-if="caseStudy.company"
-              class="bg-pontempurple-50 text-pontempurple-700 px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-2">
-              <UIcon name="i-lucide-building-2" class="w-3.5 h-3.5" />
+              class="bg-tertiary-50 text-tertiary-800 px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-2">
+              <UIcon name="i-lucide-building-2" class="size-3.5" />
               {{ caseStudy.company }}
             </span>
             <span class="px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-2"
               :class="getCategoryBadge(caseStudy.category)">
-              <UIcon :name="getCaseCategoryIcon(caseStudy.category)" class="w-3.5 h-3.5" />
+              <UIcon :name="getCaseCategoryIcon(caseStudy.category)" class="size-3.5" />
               {{ getCaseCategoryLabel(caseStudy.category) }}
             </span>
             <span v-if="publishedLabel"
-              class="bg-pontemred-50 text-pontemred-600 px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-2">
-              <UIcon name="i-lucide-calendar" class="w-3.5 h-3.5" />
+              class="bg-primary-50 text-primary px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-2">
+              <UIcon name="i-lucide-calendar" class="size-3.5" />
               {{ publishedLabel }}
             </span>
             <span v-if="caseStudy.duration_minutes"
-              class="bg-gray-100 text-gray-500 px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-2">
-              <UIcon name="i-lucide-timer" class="w-3.5 h-3.5" />
+              class="bg-elevated text-muted px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-2">
+              <UIcon name="i-lucide-timer" class="size-3.5" />
               {{ caseStudy.duration_minutes }} min
             </span>
             <span v-if="caseStudy.difficulty"
-              class="bg-gray-100 px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-2"
+              class="bg-elevated px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-2"
               :class="getDifficultyText(caseStudy.difficulty)">
-              <UIcon name="i-lucide-signal" class="w-3.5 h-3.5" />
+              <UIcon name="i-lucide-signal" class="size-3.5" />
               Dificultad: {{ CASE_DIFFICULTY_LABELS[caseStudy.difficulty] }}
             </span>
           </div>
@@ -152,16 +152,16 @@ const handleDelete = async () => {
 
         <!-- Planteamiento -->
         <div v-if="caseStudy.summary || caseStudy.problem_statement"
-          class="bg-white border border-gray-100 rounded-2xl p-8 shadow-sm relative overflow-hidden">
+          class="bg-default border border-muted rounded-2xl p-8 shadow-sm relative overflow-hidden">
           <div class="absolute top-0 left-0 w-1 h-full" :class="getCategoryBadge(caseStudy.category)" />
-          <h3 class="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-            <UIcon name="i-lucide-lightbulb" :class="getCategoryText(caseStudy.category)" class="w-5 h-5" />
+          <h3 class="text-xl font-bold text-highlighted mb-4 flex items-center gap-2">
+            <UIcon name="i-lucide-lightbulb" :class="getCategoryText(caseStudy.category)" class="size-5" />
             Planteamiento del Problema
           </h3>
-          <p v-if="caseStudy.summary" class="text-base text-gray-600 leading-relaxed mb-4 text-justify">
+          <p v-if="caseStudy.summary" class="text-base/relaxed text-toned mb-4 text-justify">
             {{ caseStudy.summary }}
           </p>
-          <p v-if="caseStudy.problem_statement" class="text-sm text-gray-500 leading-relaxed text-justify">
+          <p v-if="caseStudy.problem_statement" class="text-sm/relaxed text-muted text-justify">
             {{ caseStudy.problem_statement }}
           </p>
         </div>
@@ -172,13 +172,13 @@ const handleDelete = async () => {
       <!-- Barra lateral -->
       <aside class="lg:col-span-4 flex flex-col gap-6">
         <div v-if="documentUrl"
-          class="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm flex flex-col items-center text-center gap-4">
-          <div class="w-16 h-16 bg-pontemred-50 rounded-full flex items-center justify-center">
-            <UIcon name="i-lucide-download" class="w-7 h-7 text-primary" />
+          class="bg-default border border-muted rounded-2xl p-6 shadow-sm flex flex-col items-center text-center gap-4">
+          <div class="size-16 bg-primary-50 rounded-full flex items-center justify-center">
+            <UIcon name="i-lucide-download" class="size-7 text-primary" />
           </div>
           <div>
-            <h3 class="text-lg font-bold text-gray-900 mb-1">Descargar Caso Completo</h3>
-            <p class="text-sm text-gray-500">
+            <h3 class="text-lg font-bold text-highlighted mb-1">Descargar Caso Completo</h3>
+            <p class="text-sm text-muted">
               Descarga el documento para revisarlo con calma o imprimirlo.
             </p>
           </div>

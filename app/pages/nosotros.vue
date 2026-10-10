@@ -118,7 +118,7 @@ const teamByRole = computed(() => {
 
         <div v-if="teamByRole.length > 0" class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div v-for="dept in teamByRole" :key="dept.key"
-            class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 flex h-56">
+            class="bg-default rounded-2xl overflow-hidden shadow-sm border border-muted flex h-56">
 
             <!-- Imagen: 75% -->
             <div class="w-3/4 shrink-0">
@@ -134,28 +134,28 @@ const teamByRole = computed(() => {
             <div class="w-1/4 flex flex-col p-4 overflow-hidden">
               <!-- Header -->
               <div class="flex items-center gap-1.5 mb-3 shrink-0">
-                <UIcon :name="dept.icon" class="w-3.5 h-3.5 text-pontemred-500 shrink-0" />
-                <h3 class="font-bold text-gray-900 text-sm leading-tight">{{ dept.label }}</h3>
+                <UIcon :name="dept.icon" class="size-3.5 text-primary-500 shrink-0" />
+                <h3 class="font-bold text-highlighted text-sm/tight">{{ dept.label }}</h3>
               </div>
 
               <!-- Nombres -->
               <div class="flex flex-col gap-1 overflow-hidden">
                 <template v-for="member in dept.members" :key="member.id">
                   <button v-if="isEditor" type="button" :aria-label="`Editar a ${member.name}`"
-                    class="group flex min-w-0 items-center gap-1 text-left text-xs text-gray-400 leading-snug hover:text-primary"
+                    class="group flex min-w-0 items-center gap-1 text-left text-xs/snug text-dimmed hover:text-primary"
                     @click="startEdit(member)">
                     <span class="truncate">{{ member.name }}</span>
-                    <UIcon name="i-lucide-pencil" class="w-3 h-3 shrink-0 text-gray-300 group-hover:text-primary" />
+                    <UIcon name="i-lucide-pencil" class="size-3 shrink-0 text-dimmed group-hover:text-primary" />
                   </button>
-                  <p v-else class="text-xs text-gray-400 leading-snug truncate">
+                  <p v-else class="text-xs/snug text-dimmed truncate">
                     {{ member.name }}
                   </p>
                 </template>
-                <p v-if="dept.members.length === 0" class="text-xs text-gray-400 italic">Sin integrantes aún</p>
+                <p v-if="dept.members.length === 0" class="text-xs text-dimmed italic">Sin integrantes aún</p>
               </div>
 
               <!-- Contador abajo -->
-              <p class="mt-auto text-xs text-gray-300 shrink-0 pt-2">
+              <p class="mt-auto text-xs text-dimmed shrink-0 pt-2">
                 {{ dept.members.length }} {{ dept.members.length === 1 ? 'integrante' : 'integrantes' }}
               </p>
             </div>

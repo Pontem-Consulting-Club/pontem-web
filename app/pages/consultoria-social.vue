@@ -2,36 +2,36 @@
   <div>
     <!-- Hero -->
     <div class="relative h-[420px] flex items-center justify-center text-center overflow-hidden">
-      <NuxtImg src="/BienvenidaConsultores.jpg" alt="Consultoría Social" class="absolute inset-0 w-full h-full object-cover" />
+      <NuxtImg src="/BienvenidaConsultores.jpg" alt="Consultoría Social" class="absolute inset-0 size-full object-cover" />
       <div class="absolute inset-0 bg-black/50" />
       <div class="relative z-10 flex flex-col items-center px-6">
-        <h1 class="text-5xl font-bold text-white leading-tight">
+        <h1 class="text-5xl/tight font-bold text-white">
           Consultoría Social
         </h1>
       </div>
     </div>
 
     <!-- Métricas -->
-    <div class="bg-white border-b border-gray-100">
+    <div class="bg-default border-b border-muted">
       <UContainer>
-        <div class="grid grid-cols-2 md:grid-cols-4 divide-x divide-gray-100">
+        <div class="grid grid-cols-2 md:grid-cols-4 divide-x divide-muted">
           <div v-for="metric in metrics" :key="metric.label" class="flex flex-col items-center justify-center py-8 px-4 text-center">
-            <span class="text-4xl font-bold text-pontemred-500 leading-none mb-2">{{ metric.value }}</span>
-            <span class="text-sm text-gray-400 font-medium">{{ metric.label }}</span>
+            <span class="text-4xl font-bold text-primary-500 leading-none mb-2">{{ metric.value }}</span>
+            <span class="text-sm text-dimmed font-medium">{{ metric.label }}</span>
           </div>
         </div>
       </UContainer>
     </div>
 
     <!-- Proyectos activos -->
-    <div class="bg-gray-50 py-16">
+    <div class="bg-muted py-16">
       <UContainer>
         <LoadingSpinner v-if="status === 'pending'" />
         <template v-else>
           <div class="flex items-center justify-between gap-4 mb-10">
             <div class="flex flex-wrap items-center gap-x-3 gap-y-2">
-              <h2 class="text-2xl font-bold text-gray-900">Proyectos activos</h2>
-              <span class="whitespace-nowrap text-xs font-semibold bg-pontemteal-50 text-pontemteal-700 border border-pontemteal-200 rounded-full px-3 py-1">
+              <h2 class="text-2xl font-bold text-highlighted">Proyectos activos</h2>
+              <span class="whitespace-nowrap text-xs font-semibold bg-secondary-50 text-secondary-800 border border-secondary-100 rounded-full px-3 py-1">
                 {{ activeSemester }}
               </span>
             </div>
@@ -55,12 +55,12 @@
     </div>
 
     <!-- Historial -->
-    <div class="bg-white py-12">
+    <div class="bg-default py-12">
       <UContainer>
-        <h2 class="text-base font-semibold text-gray-500 mb-6">Proyectos anteriores</h2>
-        <div class="flex flex-col divide-y divide-gray-100">
+        <h2 class="text-base font-semibold text-muted mb-6">Proyectos anteriores</h2>
+        <div class="flex flex-col divide-y divide-muted">
           <ProjectCard v-for="project in pastProjects" :key="project.id" :project="project" layout="row" @updated="refresh" />
-          <div v-if="pastProjects.length === 0" class="py-4 text-sm text-gray-500">
+          <div v-if="pastProjects.length === 0" class="py-4 text-sm text-muted">
             No hay proyectos anteriores registrados.
           </div>
         </div>

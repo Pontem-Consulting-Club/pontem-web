@@ -14,10 +14,10 @@
       <div v-else class="grid gap-8 lg:grid-cols-[280px_minmax(0,1fr)]">
         <!-- Identidad -->
         <aside class="flex flex-col gap-4">
-          <div class="relative mx-auto h-40 w-40 overflow-hidden rounded-full bg-gray-100">
+          <div class="relative mx-auto size-40 overflow-hidden rounded-full bg-elevated">
             <img v-if="avatarUrl" :src="avatarUrl" :alt="form.display_name || 'Foto de perfil'"
-              class="h-full w-full object-cover">
-            <div v-else class="flex h-full w-full items-center justify-center text-4xl font-semibold text-gray-400">
+              class="size-full object-cover">
+            <div v-else class="flex size-full items-center justify-center text-4xl font-semibold text-dimmed">
               {{ initials }}
             </div>
           </div>
@@ -32,33 +32,33 @@
             </template>
           </UFileUpload>
 
-          <dl class="rounded-lg border border-gray-200 divide-y divide-gray-200 text-sm">
+          <dl class="rounded-lg border border-default divide-y divide-default text-sm">
             <div class="flex items-center justify-between px-4 py-3">
-              <dt class="text-gray-500">Rol</dt>
+              <dt class="text-muted">Rol</dt>
               <dd class="font-medium">{{ roleLabel }}</dd>
             </div>
             <div class="flex items-center justify-between px-4 py-3">
-              <dt class="text-gray-500">Estado</dt>
+              <dt class="text-muted">Estado</dt>
               <dd class="font-medium">{{ stateLabel }}</dd>
             </div>
             <div v-if="profile.handle" class="flex items-center justify-between gap-2 px-4 py-3">
-              <dt class="text-gray-500">Enlace</dt>
+              <dt class="text-muted">Enlace</dt>
               <dd class="truncate font-mono text-xs">
-                <NuxtLink v-if="profile.is_public" :to="`/miembros/${profile.handle}`" class="text-primary-600">
+                <NuxtLink v-if="profile.is_public" :to="`/miembros/${profile.handle}`" class="text-primary">
                   /miembros/{{ profile.handle }}
                 </NuxtLink>
-                <span v-else class="text-gray-400">/miembros/{{ profile.handle }}</span>
+                <span v-else class="text-dimmed">/miembros/{{ profile.handle }}</span>
               </dd>
             </div>
           </dl>
 
-          <p class="px-1 text-xs text-gray-500">
+          <p class="px-1 text-xs text-muted">
             El rol y el estado los administra la coordinación. Tu enlace público se genera a partir de tu nombre.
           </p>
         </aside>
 
         <!-- Datos editables -->
-        <UCard variant="soft" class="bg-white rounded-lg shadow-sm">
+        <UCard variant="soft" class="bg-default rounded-lg shadow-sm">
           <UForm :state="form" class="flex flex-col gap-5" @submit.prevent="save">
             <UFormField label="Nombre para mostrar" required>
               <UInput v-model="form.display_name" size="lg" class="w-full" placeholder="Cómo quieres que te vean" />
@@ -101,13 +101,13 @@
         <!-- MEM-5: números pequeños y honestos, no una capa de gamificación. -->
         <section class="lg:col-span-2">
           <SectionHeaderWithIcon title="Mi participación" icon="i-lucide-calendar-check"
-            icon-color="text-primary-600" />
+            icon-color="text-primary" />
 
           <div class="mb-6 grid gap-4 sm:grid-cols-3">
             <div v-for="tile in statTiles" :key="tile.label"
-              class="rounded-lg border border-gray-200 bg-white px-5 py-4">
+              class="rounded-lg border border-default bg-default px-5 py-4">
               <div class="text-3xl font-semibold tabular-nums">{{ tile.value }}</div>
-              <div class="text-sm text-gray-500">{{ tile.label }}</div>
+              <div class="text-sm text-muted">{{ tile.label }}</div>
             </div>
           </div>
 
@@ -116,12 +116,12 @@
               message="Todavía no te has inscrito en ninguna actividad" />
           </div>
 
-          <ul v-else class="divide-y divide-gray-200 rounded-lg border border-gray-200 bg-white">
+          <ul v-else class="divide-y divide-default rounded-lg border border-default bg-default">
             <li v-for="row in registrations" :key="row.id"
               class="flex flex-wrap items-center gap-3 px-5 py-3">
               <div class="flex-1">
                 <div class="font-medium">{{ row.event?.title ?? 'Actividad' }}</div>
-                <div class="text-xs text-gray-500">
+                <div class="text-xs text-muted">
                   {{ row.event?.date ? formatDate(row.event.date) : 'Sin fecha' }}
                   <span v-if="row.event?.location"> · {{ row.event.location }}</span>
                 </div>

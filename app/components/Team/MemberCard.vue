@@ -7,7 +7,7 @@ defineProps<Props>()
 </script>
 
 <template>
-  <UCard variant="soft" class="text-center hover:shadow-lg transition-shadow bg-white">
+  <UCard variant="soft" class="text-center hover:shadow-lg transition-shadow bg-default">
     <h3 class="text-lg font-semibold text-primary">
       {{ name }}
     </h3>

@@ -11,7 +11,7 @@ const _props = withDefaults(defineProps<Props>(), {
 
 <template>
   <div class="text-center">
-    <UIcon :name="icon" class="w-16 h-16 mx-auto mb-4" />
+    <UIcon :name="icon" class="size-16 mx-auto mb-4" />
     <p>{{ message }}</p>
   </div>
 </template>

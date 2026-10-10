@@ -1,5 +1,5 @@
 <template>
-    <UCard variant="soft" class="text-center bg-white">
+    <UCard variant="soft" class="text-center bg-default">
         <UForm class="flex flex-col items-center gap-4" @submit.prevent="handleSubmit">
             <UInput v-model="form.name" placeholder="Nombre" class="w-full" variant="none"
                 :ui="{ base: 'text-center text-lg font-semibold text-primary placeholder:text-primary/50' }" />

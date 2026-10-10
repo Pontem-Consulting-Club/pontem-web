@@ -43,43 +43,43 @@ const pillars: Pillar[] = [
       <div
         v-for="pillar in pillars"
         :key="pillar.title"
-        class="group rounded-3xl p-8 border border-gray-100 bg-white shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 flex flex-col gap-6"
+        class="group rounded-3xl p-8 border border-muted bg-default shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 flex flex-col gap-6"
       >
         <div class="flex items-start gap-4">
           <div
             :class="[
-              'w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-110',
+              'size-14 rounded-2xl flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-110',
               pillar.color === 'pontemteal'
-                ? 'bg-pontemteal-100 text-pontemteal-600'
-                : 'bg-pontemred-100 text-pontemred-500'
+                ? 'bg-secondary-50 text-secondary-300'
+                : 'bg-primary-100 text-primary-500'
             ]"
           >
-            <UIcon :name="pillar.icon" class="w-7 h-7" />
+            <UIcon :name="pillar.icon" class="size-7" />
           </div>
           <div>
-            <h3 class="text-xl font-bold text-gray-900 mb-1">{{ pillar.title }}</h3>
+            <h3 class="text-xl font-bold text-highlighted mb-1">{{ pillar.title }}</h3>
             <div
               :class="[
                 'h-1 w-10 rounded-full transition-all duration-300 group-hover:w-16',
-                pillar.color === 'pontemteal' ? 'bg-pontemteal-400' : 'bg-pontemred-400'
+                pillar.color === 'pontemteal' ? 'bg-secondary-200' : 'bg-primary-500'
               ]"
             />
           </div>
         </div>
 
-        <p class="text-gray-600 leading-relaxed text-sm">{{ pillar.description }}</p>
+        <p class="text-toned text-sm/relaxed">{{ pillar.description }}</p>
 
         <ul class="space-y-2">
           <li
             v-for="item in pillar.items"
             :key="item"
-            class="flex items-start gap-2 text-sm text-gray-700"
+            class="flex items-start gap-2 text-sm text-default"
           >
             <UIcon
               name="i-lucide-check-circle-2"
               :class="[
-                'w-4 h-4 mt-0.5 shrink-0',
-                pillar.color === 'pontemteal' ? 'text-pontemteal-500' : 'text-pontemred-500'
+                'size-4 mt-0.5 shrink-0',
+                pillar.color === 'pontemteal' ? 'text-secondary-300' : 'text-primary-500'
               ]"
             />
             {{ item }}

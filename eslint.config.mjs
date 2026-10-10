@@ -10,6 +10,12 @@ import { restrict, themeVariables } from './eslint.estilos.mjs'
 const selectors = [
   ...getDefaultSelectors(),
   {
+    // :ui="{ base: '...' }" en componentes de Nuxt UI
+    kind: SelectorKind.Attribute,
+    name: '^:?ui$',
+    match: [{ type: MatcherType.ObjectValue }]
+  },
+  {
     kind: SelectorKind.Variable,
     name: `^(\\w*(Classes|Colors|Class)|${themeVariables.join('|')})$`,
     match: [{ type: MatcherType.String }, { type: MatcherType.ObjectValue }]
@@ -27,7 +33,7 @@ export default withNuxt(
     files: ['app/**/*.vue', 'app/**/*.ts'],
     plugins: { 'better-tailwindcss': betterTailwindcss },
     settings: {
-      'better-tailwindcss': { entryPoint: 'app/assets/css/main.css', selectors }
+      'better-tailwindcss': { entryPoint: 'eslint.tailwind.css', selectors }
     },
     rules: {
       'better-tailwindcss/no-unknown-classes': 'warn',

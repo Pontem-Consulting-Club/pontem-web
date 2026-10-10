@@ -1,5 +1,5 @@
 <template>
-  <footer class="bg-gray-600/75 mt-24 pt-24 pb-12 text-white" style="clip-path: ellipse(150% 60% at 30% 61%);">
+  <footer class="mt-24 bg-neutral-600/75 pt-24 pb-12 text-white clip-wave-top">
     <UContainer>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
         <!-- Logo Column -->
@@ -24,10 +24,10 @@
           <nav class="flex flex-col gap-2">
             <a v-for="link in socialLinks" :key="link.href" :href="link.href" target="_blank" rel="noopener noreferrer"
               :class="[
-                'text-white/80 hover:text-white transition-all text-sm flex items-center gap-2 justify-center md:justify-start rounded px-2 py-1',
+                'text-white/80 hover:text-white transition-all text-sm flex items-center gap-2 justify-center md:justify-start rounded-sm px-2 py-1',
                 link.hoverClass
               ]">
-              <UIcon :name="link.icon" class="w-4 h-4" />
+              <UIcon :name="link.icon" class="size-4" />
               {{ link.label }}
             </a>
           </nav>
@@ -40,7 +40,7 @@
         <p>
           Desarrollado por
           <a href="https://www.linkedin.com/in/santiago-ernst/" target="_blank" rel="noopener noreferrer"
-            class="text-secondary hover:text-white transition-colors">
+            class="text-secondary-300 transition-colors hover:text-white">
             Santiago Ernst y Carlos Cruz
           </a>
         </p>

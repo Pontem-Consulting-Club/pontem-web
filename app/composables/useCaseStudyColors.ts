@@ -8,27 +8,30 @@ import type { CaseCategory, CaseDifficulty } from '~/constants/caseStudies'
  * en vez del gris de "sin dato".
  */
 export const useCaseStudyColors = () => {
-  // [badge, acento, texto, borde]
+  // [etiqueta, acento, texto, borde]. Cada categoría es una familia de color
+  // (rojo, turquesa, morado, gris) con su propio tono de acento. Etiqueta en tinte
+  // 50 con texto 800 y texto suelto en 700: todo pasa 4.5:1. Las clases van
+  // completas para que Tailwind las encuentre.
   const categoryColors: Record<CaseCategory, [string, string, string, string]> = {
-    'rentabilidad': ['bg-pontemred-100 text-pontemred-700', 'bg-pontemred-500', 'text-pontemred-600', 'border-pontemred-500'],
-    'crecimiento-ingresos': ['bg-pontemteal-100 text-pontemteal-800', 'bg-pontemteal-500', 'text-pontemteal-800', 'border-pontemteal-500'],
-    'entrada-mercado': ['bg-pontemteal-50 text-pontemteal-700', 'bg-pontemteal-700', 'text-pontemteal-700', 'border-pontemteal-700'],
-    'ma-inversion': ['bg-pontempurple-100 text-pontempurple-700', 'bg-pontempurple-500', 'text-pontempurple-600', 'border-pontempurple-500'],
-    'pricing': ['bg-pontemred-50 text-pontemred-600', 'bg-pontemred-300', 'text-pontemred-500', 'border-pontemred-300'],
-    'operaciones-supply-chain': ['bg-pontemred-50 text-pontemred-800', 'bg-pontemred-700', 'text-pontemred-700', 'border-pontemred-700'],
-    'estrategia-competitiva': ['bg-pontempurple-50 text-pontempurple-600', 'bg-pontempurple-300', 'text-pontempurple-600', 'border-pontempurple-300'],
-    'organizacion-transformacion': ['bg-pontempurple-100 text-pontempurple-800', 'bg-pontempurple-700', 'text-pontempurple-800', 'border-pontempurple-700'],
-    'sector-publico-impacto': ['bg-pontemteal-100 text-pontemteal-900', 'bg-pontemteal-300', 'text-pontemteal-900', 'border-pontemteal-300'],
-    'estimacion': ['bg-gray-100 text-gray-700', 'bg-gray-400', 'text-gray-600', 'border-gray-400'],
-    'no-convencional': ['bg-gray-50 text-gray-600', 'bg-gray-300', 'text-gray-500', 'border-gray-300']
+    'rentabilidad': ['bg-primary-50 text-primary-800', 'bg-primary-500', 'text-primary-700', 'border-primary-500'],
+    'crecimiento-ingresos': ['bg-secondary-50 text-secondary-800', 'bg-secondary-300', 'text-secondary-700', 'border-secondary-300'],
+    'entrada-mercado': ['bg-secondary-50 text-secondary-800', 'bg-secondary-600', 'text-secondary-700', 'border-secondary-600'],
+    'ma-inversion': ['bg-tertiary-50 text-tertiary-800', 'bg-tertiary-500', 'text-tertiary-700', 'border-tertiary-500'],
+    'pricing': ['bg-primary-50 text-primary-800', 'bg-primary-300', 'text-primary-700', 'border-primary-300'],
+    'operaciones-supply-chain': ['bg-primary-50 text-primary-800', 'bg-primary-800', 'text-primary-700', 'border-primary-800'],
+    'estrategia-competitiva': ['bg-tertiary-50 text-tertiary-800', 'bg-tertiary-300', 'text-tertiary-700', 'border-tertiary-300'],
+    'organizacion-transformacion': ['bg-tertiary-50 text-tertiary-800', 'bg-tertiary-800', 'text-tertiary-700', 'border-tertiary-800'],
+    'sector-publico-impacto': ['bg-secondary-50 text-secondary-800', 'bg-secondary-900', 'text-secondary-700', 'border-secondary-900'],
+    'estimacion': ['bg-neutral-50 text-neutral-800', 'bg-neutral-400', 'text-neutral-700', 'border-neutral-400'],
+    'no-convencional': ['bg-neutral-50 text-neutral-800', 'bg-neutral-300', 'text-neutral-700', 'border-neutral-300']
   }
   const casebookColors: [string, string, string, string] =
-    ['bg-pontempurple-50 text-pontempurple-900', 'bg-pontempurple-900', 'text-pontempurple-900', 'border-pontempurple-900']
+    ['bg-tertiary-50 text-tertiary-800', 'bg-tertiary-900', 'text-tertiary-700', 'border-tertiary-900']
 
   const difficultyText: Record<CaseDifficulty, string> = {
-    'l1-introductorio': 'text-pontemteal-700',
-    'l2-intermedio': 'text-pontempurple-600',
-    'l3-avanzado': 'text-pontemred-600'
+    'l1-introductorio': 'text-secondary-700',
+    'l2-intermedio': 'text-tertiary-700',
+    'l3-avanzado': 'text-primary-700'
   }
 
   const colors = (category?: CaseCategory | null) => category ? categoryColors[category] : casebookColors
@@ -39,7 +42,7 @@ export const useCaseStudyColors = () => {
   const getCategoryBorder = (category?: CaseCategory | null) => colors(category)[3]
 
   const getDifficultyText = (difficulty?: CaseDifficulty | null) =>
-    difficulty ? difficultyText[difficulty] : 'text-gray-500'
+    difficulty ? difficultyText[difficulty] : 'text-muted'
 
   return {
     getCategoryBadge,

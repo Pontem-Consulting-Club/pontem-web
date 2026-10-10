@@ -15,7 +15,7 @@ defineProps<Props>()
     index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
   ]">
     <div :class="['hidden md:block w-1/2', index % 2 === 0 ? 'pr-12 text-right' : 'pl-12 text-left']">
-      <UCard class="bg-white/75" variant="soft">
+      <UCard class="bg-default" variant="soft">
         <h3 class="text-xl font-bold text-primary mb-2">
           {{ year }}
         </h3>
@@ -30,11 +30,11 @@ defineProps<Props>()
 
     <!-- Center dot -->
     <div
-      class="absolute left-1/2 transform -translate-x-1/2 w-4 h-4 bg-pontemteal-600 rounded-full border-4 border-white" />
+      class="absolute left-1/2 transform -translate-x-1/2 size-4 bg-secondary-300 rounded-full border-4 border-white" />
 
     <div class="md:hidden w-full pl-8">
-      <UCard class="bg-white ">
-        <h3 class="text-xl font-bold text-primary-600 mb-2">
+      <UCard class="bg-default">
+        <h3 class="text-xl font-bold text-primary mb-2">
           {{ year }}
         </h3>
         <h4 class="text-lg font-semibold mb-2">

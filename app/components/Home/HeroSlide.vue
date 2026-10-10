@@ -3,7 +3,7 @@
     <!-- Background Image with Grayscale -->
     <div v-if="imageUrl" class="absolute inset-0 bg-cover bg-center grayscale"
       :style="{ backgroundImage: `url(${imageUrl})` }" />
-    <div v-else class="absolute inset-0 bg-gray-800" />
+    <div v-else class="absolute inset-0 bg-inverted" />
 
     <!-- Dark Overlay -->
     <div class="absolute inset-0 bg-black/60" />
@@ -19,12 +19,11 @@
             {{ slide.subtitle }}
           </h5>
           <!-- Button for links -->
-          <div v-if="slide.link && slide.button_text" class="bg-abstract-gradient h-full w-fit rounded-lg">
+          <div v-if="slide.link && slide.button_text" class="h-full w-fit rounded-lg bg-brand-wash">
             <NuxtLink :id="`hero-cta-${slide.id}`" :to="slide.link" :target="isExternalLink ? '_blank' : undefined"
               :rel="isExternalLink ? 'noopener' : undefined"
               class="inline-flex items-center justify-center rounded-lg px-6 py-3 text-lg font-semibold bg-white/20 hover:bg-white/30 transition-colors relative overflow-hidden">
               <span class="relative z-20">{{ slide.button_text }}</span>
-              <span aria-hidden="true" class="absolute inset-0 z-10 pointer-events-none hero-cta-overlay" />
             </NuxtLink>
           </div>
         </div>

@@ -174,17 +174,17 @@ const handleDelete = async () => {
     @delete="handleDelete" />
 
   <UCard v-else-if="variant === 'full'"
-    class="rounded-3xl bg-white/90 shadow-sm hover:shadow-lg transition-shadow relative">
+    class="rounded-3xl bg-default shadow-sm hover:shadow-lg transition-shadow relative">
     <UButton v-if="isEditor" icon="i-lucide-pencil" size="xs" color="primary" variant="ghost"
       class="absolute top-3 right-3 z-10" @click="startEdit" />
 
     <div class="flex flex-col md:flex-row gap-6">
       <div class="md:w-32 shrink-0">
         <div class="bg-primary-50 rounded-lg p-4 text-center">
-          <span class="block text-3xl font-bold text-primary-600">
+          <span class="block text-3xl font-bold text-primary">
             {{ dayNumber }}
           </span>
-          <span class="block text-sm text-primary-600">
+          <span class="block text-sm text-primary">
             {{ monthYear }}
           </span>
         </div>
@@ -193,20 +193,20 @@ const handleDelete = async () => {
         <div class="text-xl font-semibold mb-2">
           {{ event.title }}
         </div>
-        <div v-if="event.subtitle" class="mb-3 text-gray-600">
+        <div v-if="event.subtitle" class="mb-3 text-toned">
           {{ event.subtitle }}
         </div>
-        <div v-if="event.description" class="mb-4 text-gray-600">
+        <div v-if="event.description" class="mb-4 text-toned">
           {{ event.description }}
         </div>
         <div class="flex flex-wrap gap-4 text-sm">
           <span v-if="event.location" class="flex items-center gap-2">
-            <UIcon name="i-lucide-map-pin" class="w-4 h-4" />
+            <UIcon name="i-lucide-map-pin" class="size-4" />
             {{ event.location }}
           </span>
           <a v-if="event.link" :href="event.link" target="_blank"
-            class="flex items-center gap-2 text-primary-600 hover:underline">
-            <UIcon name="i-lucide-external-link" class="w-4 h-4" />
+            class="flex items-center gap-2 text-primary hover:underline">
+            <UIcon name="i-lucide-external-link" class="size-4" />
             Ver más
           </a>
         </div>
@@ -225,7 +225,7 @@ const handleDelete = async () => {
     </div>
   </UCard>
 
-  <UCard v-else-if="variant === 'past'" class="rounded-2xl opacity-75 bg-white/90 shadow-sm relative">
+  <UCard v-else-if="variant === 'past'" class="rounded-2xl opacity-75 bg-default shadow-sm relative">
     <UButton v-if="isEditor" icon="i-lucide-pencil" size="xs" color="primary" variant="ghost"
       class="absolute top-3 right-3 z-10" @click="startEdit" />
     <div class="flex flex-col md:flex-row gap-4 items-start md:items-center">
@@ -243,7 +243,7 @@ const handleDelete = async () => {
     </div>
   </UCard>
 
-  <div v-else class="rounded-3xl bg-white/90 hover:shadow-lg transition-shadow overflow-hidden shadow-sm">
+  <div v-else class="rounded-3xl bg-default hover:shadow-lg transition-shadow overflow-hidden shadow-sm">
     <div class="bg-linear-to-r from-primary/10 to-secondary/10 px-4 py-3">
       <span class="text-sm font-medium text-primary">
         {{ formatDate(event.date) }}
@@ -257,7 +257,7 @@ const handleDelete = async () => {
         {{ event.subtitle }}
       </p>
       <p v-if="event.location" class="text-sm flex items-center gap-2">
-        <UIcon name="i-lucide-map-pin" class="w-4 h-4" />
+        <UIcon name="i-lucide-map-pin" class="size-4" />
         {{ event.location }}
       </p>
     </div>
