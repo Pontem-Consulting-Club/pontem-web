@@ -1,6 +1,15 @@
 <template>
   <div>
-    <PageBanner title="Consultoría Social" image="/BienvenidaConsultores.jpg" :description="intro" :links="callsToAction" />
+    <PageBanner title="Consultoría Social" page="consultoria-social" />
+
+    <!-- Introducción: va bajo el banner, que es solo el título de la sección. -->
+    <UContainer class="py-12 sm:py-16">
+      <p class="max-w-3xl text-lg/relaxed text-toned">{{ intro }}</p>
+      <p class="mt-4 max-w-3xl text-toned">
+        ¿Tu organización necesita apoyo? Escríbenos a
+        <ULink to="mailto:clubconsultoria.uc@gmail.com" class="font-medium text-primary-700 underline underline-offset-4">clubconsultoria.uc@gmail.com</ULink>.
+      </p>
+    </UContainer>
 
     <UPageSection v-if="error">
       <LoadError title="No pudimos cargar los proyectos" :retry="refresh" />
@@ -9,9 +18,9 @@
     <template v-else>
       <!-- Proyectos activos. Sin ninguno, los visitantes no ven la sección (antes era
            lo primero de la página, vacío); quien edita la ve para poder agregar. -->
-      <UPageSection v-if="activeProjects.length > 0 || isEditor" title="Proyectos activos" :headline="activeSemester"
+      <UPageSection v-if="activeProjects.length > 0 || isEditor" title="Proyectos activos" :description="activeSemester"
         :links="isEditor ? [{ label: 'Agregar', icon: 'i-lucide-plus', disabled: editorOpen, onClick: startCreate }] : []"
-        class="bg-muted">
+        class="bg-elevated/60">
         <UEmpty v-if="activeProjects.length === 0 && !isCreating" icon="i-lucide-inbox" title="No hay proyectos activos"
           description="Mientras no haya ninguno, los visitantes no ven esta sección." />
         <UPageGrid v-else :class="gridClass(activeProjects.length + (isCreating ? 1 : 0))">
@@ -34,7 +43,6 @@
 </template>
 
 <script setup lang="ts">
-import type { ButtonProps } from '@nuxt/ui'
 import type { ProjectRecord } from '~/types/content'
 
 usePageMeta({
@@ -45,12 +53,6 @@ usePageMeta({
 const intro = 'Trabajamos con organizaciones, fundaciones y empresas con fines sociales en estrategia, finanzas y '
   + 'operaciones. Nuestros consultores desarrollan habilidades clave mientras fortalecen organizaciones que trabajan '
   + 'por el bien de la sociedad.'
-
-// Uno para cada público: organizaciones que buscan apoyo y estudiantes.
-const callsToAction: ButtonProps[] = [
-  { label: 'Escríbenos', icon: 'i-lucide-mail', to: 'mailto:clubconsultoria.uc@gmail.com' },
-  { label: 'Conoce el club', trailingIcon: 'i-lucide-arrow-right', to: '/nosotros' }
-]
 
 // Mientras hay un formulario abierto, "Agregar" queda desactivado.
 const { anyOpen: editorOpen } = useEditorSlot()
@@ -65,7 +67,7 @@ const pastProjects = computed(() => data.value?.past ?? [])
 
 // El de los proyectos activos; si no tienen, el semestre en curso.
 const activeSemester = computed(() =>
-  latestSemester(activeProjects.value.map(project => project.semester)) ?? currentSemester()
+  semesterLabel(latestSemester(activeProjects.value.map(project => project.semester)) ?? currentSemester())
 )
 
 // Con una o dos tarjetas, la grilla de tres dejaba el resto de la fila vacío:

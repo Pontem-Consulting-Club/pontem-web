@@ -1,18 +1,13 @@
 <script setup lang="ts">
-/** Título de una sección dentro de una página (h2), con ícono opcional. */
-withDefaults(defineProps<{
-  title: string
-  icon?: string
-  centered?: boolean
-}>(), {
-  icon: undefined,
-  centered: false
-})
+/**
+ * Título de una sección dentro de una página (h2). Va a la izquierda, alineado con
+ * su contenido, y sin ícono: los íconos como marcadores de sección no dicen nada.
+ */
+defineProps<{ title: string }>()
 </script>
 
 <template>
-  <h2 class="flex items-center gap-3 text-title text-highlighted" :class="{ 'justify-center text-center': centered }">
-    <UIcon v-if="icon" :name="icon" class="size-7 shrink-0 text-primary" />
+  <h2 class="text-title text-highlighted">
     {{ title }}
   </h2>
 </template>

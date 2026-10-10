@@ -39,8 +39,10 @@ const label = computed(() => (previewUrl.value ? props.labels[1] : props.labels[
 
 <template>
   <!-- La lista de archivos y los textos propios de UFileUpload se ocultan: el
-       contenido lo pone el slot. aria-label va al input de archivo oculto. -->
-  <UFileUpload v-model="file" :accept="accept" :preview="false" :interactive="false" :disabled="disabled || loading" :aria-label="label"
+       contenido lo pone el slot. El input de archivo oculto (al que van los atributos)
+       queda fuera del árbol de accesibilidad: el botón visible ya lo abre, y con nombre
+       los lectores de pantalla anunciaban dos botones iguales. -->
+  <UFileUpload v-model="file" :accept="accept" :preview="false" :interactive="false" :disabled="disabled || loading" aria-hidden="true"
     :ui="{ files: 'hidden', label: 'hidden', description: 'hidden' }">
     <template #default="{ open }">
       <UButton v-if="mode === 'button'" :icon="icon" :block="block" :loading="loading" :disabled="disabled"

@@ -2,7 +2,7 @@ import { badge, button } from './theme/actions'
 import { colors, tv } from './theme/colors'
 import { empty } from './theme/feedback'
 import { input, select, selectMenu, textarea } from './theme/forms'
-import { footer, footerColumns, header, marquee, pageHeader, pageHero, pageSection } from './theme/page'
+import { footer, footerColumns, header, marquee, navigationMenu, pageHeader, pageHero, pageSection } from './theme/page'
 import { card, pageCard } from './theme/surfaces'
 
 /**
@@ -26,6 +26,7 @@ export default defineAppConfig({
     pageHeader,
     pageSection,
     header,
+    navigationMenu,
     footer,
     footerColumns,
     marquee

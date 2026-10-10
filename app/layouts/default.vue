@@ -1,6 +1,8 @@
 <template>
   <!-- Textos propios de Nuxt UI (cerrar, abrir menú, siguiente...) en español. -->
   <UApp :locale="es">
+    <!-- El fundido Pontem va detrás de todo; las bandas grises son translúcidas para que
+         se vea a través. -->
     <div class="flex min-h-screen flex-col bg-brand-wash">
       <!-- Para teclado: aparece al recibir el foco y salta la navegación. -->
       <a href="#contenido"

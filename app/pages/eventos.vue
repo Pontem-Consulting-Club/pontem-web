@@ -59,7 +59,7 @@ const pastEvents = computed(() => {
 
 <template>
   <div>
-    <PageBanner title="Nuestros Eventos" image="/BTGDay.jpeg" />
+    <PageBanner title="Nuestros Eventos" page="eventos" />
 
     <UContainer class="py-16">
       <div v-if="isEditor" class="flex justify-end mb-6">
@@ -71,7 +71,7 @@ const pastEvents = computed(() => {
 
       <template v-else>
         <section v-if="isCreating && draftEvent" class="mb-16">
-          <SectionTitle class="mb-8" title="Nuevo evento" icon="i-lucide-plus" />
+          <SectionTitle class="mb-8" title="Nuevo evento" />
           <div class="space-y-8">
             <EventCard :event="draftEvent" :is-new="true" variant="full" @created="handleCreated"
               @cancel-create="cancelCreate" @updated="refresh" />
@@ -80,7 +80,7 @@ const pastEvents = computed(() => {
 
         <!-- Future Events -->
         <section v-if="futureEvents.length > 0" class="mb-16">
-          <SectionTitle class="mb-8" title="Próximos Eventos" icon="i-lucide-calendar" />
+          <SectionTitle class="mb-8" title="Próximos Eventos" />
 
           <div class="space-y-8">
             <EventCard v-for="event in futureEvents" :key="event.id" :event="event" variant="full" @updated="refresh" />
@@ -89,7 +89,7 @@ const pastEvents = computed(() => {
 
         <!-- Past Events -->
         <section v-if="pastEvents.length > 0">
-          <SectionTitle class="mb-8" title="Eventos Pasados" icon="i-lucide-history" />
+          <SectionTitle class="mb-8" title="Eventos Pasados" />
 
           <div class="space-y-4">
             <EventCard v-for="event in pastEvents" :key="event.id" :event="event" variant="past" @updated="refresh" />

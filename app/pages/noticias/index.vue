@@ -1,6 +1,6 @@
 <template>
   <div>
-    <PageBanner title="Noticias y Blog" image="/ActividadSumma.JPG" />
+    <PageBanner title="Noticias y Blog" page="noticias" />
     <UContainer class="py-8">
       <div class="flex flex-row items-center justify-between gap-4">
       <!-- Filters -->

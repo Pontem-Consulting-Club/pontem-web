@@ -9,7 +9,7 @@
     </UPageGrid>
 
 
-    <div class="mt-10 text-center">
+    <div class="mt-10">
       <UButton to="/noticias" size="lg" color="neutral" variant="outline">
         Ver todas las noticias
       </UButton>

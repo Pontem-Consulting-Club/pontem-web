@@ -1,12 +1,10 @@
 <template>
-  <UCard variant="feature" class="text-center">
-    <div class="flex justify-center mb-4">
-      <UIcon :name="icon" class="size-12" :class="iconColor" />
-    </div>
+  <UCard>
+    <UIcon :name="icon" class="mb-4 size-8" :class="iconColor" />
     <h3 class="mb-2 text-subheading text-highlighted">
       {{ title }}
     </h3>
-    <p>
+    <p class="text-toned">
       {{ description }}
     </p>
   </UCard>

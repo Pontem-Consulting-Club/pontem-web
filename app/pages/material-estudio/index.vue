@@ -70,35 +70,25 @@ const clearFilters = () => {
 </script>
 
 <template>
-  <UContainer class="py-16 flex flex-col gap-20">
-    <!-- Encabezado editorial -->
-    <section class="flex flex-col items-center text-center gap-4 pt-4">
-      <div
-        class="inline-flex items-center gap-2 bg-secondary-50 text-secondary-800 text-xs font-semibold uppercase tracking-widest px-4 py-2 rounded-full border border-secondary-100">
-        <span class="size-2 rounded-full bg-secondary-300" />
-        Learning &amp; Development
-      </div>
-      <h1 class="mt-2 text-display text-highlighted">
-        Material de <span class="text-primary">Estudio</span>
-      </h1>
-      <p class="text-lg text-muted max-w-xl">
-        Accede a nuestra biblioteca de recursos curados para dominar entrevistas estructuradas y potenciar
-        tu perfil consultor.
-      </p>
-    </section>
+  <div>
+  <!-- Como las demás secciones públicas: banner con foto y solo el título. -->
+  <PageBanner title="Material de Estudio" page="material-estudio" />
 
-    <!-- 01 · Ruta de postulación -->
+  <UContainer class="py-12 sm:py-16 flex flex-col gap-20">
+    <p class="max-w-3xl text-lg/relaxed text-toned">
+      Casos de estudio, casebooks y recursos para preparar las entrevistas de consultoría, ordenados por etapa de
+      la postulación.
+    </p>
+
     <section class="flex flex-col gap-8">
-      <StudySectionLabel number="01" label="Ruta de postulación" />
+      <h2 class="text-title text-highlighted">Ruta de postulación</h2>
       <StudyRouteTimeline :stages="stages" />
     </section>
 
-    <!-- 02 · Biblioteca de casos -->
     <section class="flex flex-col gap-8">
-      <StudySectionLabel number="02" label="Biblioteca" />
 
       <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
-        <h2 class="text-title text-highlighted">Casos de Estudio</h2>
+        <h2 class="text-title text-highlighted">Casos de estudio</h2>
         <div class="flex items-center gap-2 w-full md:w-auto">
           <UInput v-model="search" icon="i-lucide-search" size="lg" class="md:w-96" type="search"
             aria-label="Buscar casos de estudio"
@@ -127,7 +117,7 @@ const clearFilters = () => {
           <CaseStudyCard v-for="caseStudy in visibleCaseStudies" :key="caseStudy.id" :case-study="caseStudy" />
         </UPageGrid>
 
-        <div class="flex flex-col items-center gap-3">
+        <div class="flex flex-wrap items-center gap-4">
           <p class="text-sm text-muted" aria-live="polite">
             Mostrando {{ visibleCaseStudies.length }} de {{ filteredCaseStudies.length }} casos
           </p>
@@ -142,12 +132,12 @@ const clearFilters = () => {
     <!-- Recurso destacado -->
     <StudyFeaturedCasebook />
 
-    <!-- 03 · Recursos complementarios -->
+    <!-- Recursos complementarios -->
     <section class="flex flex-col gap-8">
-      <StudySectionLabel number="03" label="Recursos" />
+      <h2 class="text-title text-highlighted">Recursos</h2>
 
       <div class="grid md:grid-cols-2 gap-6">
-        <UCard :ui="{ body: 'flex flex-col items-center gap-4 text-center' }">
+        <UCard :ui="{ body: 'flex flex-col items-start gap-4' }">
           <h3 class="text-subheading text-highlighted">Drive de Estudio</h3>
           <p class="text-sm text-muted">
             Solicita acceso a nuestro Drive con todo el material de estudio.
@@ -161,8 +151,8 @@ const clearFilters = () => {
         </UCard>
 
         <UCard :ui="{ body: 'flex flex-col gap-4' }">
-          <h3 class="text-center text-subheading text-highlighted">Case Books Recomendados</h3>
-          <p class="text-sm text-muted text-center">
+          <h3 class="text-subheading text-highlighted">Case Books Recomendados</h3>
+          <p class="text-sm text-muted">
             Recursos externos para practicar casos de consultoría.
           </p>
           <div class="flex flex-col gap-3 mt-2">
@@ -173,4 +163,5 @@ const clearFilters = () => {
       </div>
     </section>
   </UContainer>
+  </div>
 </template>

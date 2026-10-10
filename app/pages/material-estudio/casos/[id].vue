@@ -110,7 +110,7 @@ const handleDelete = async () => {
       <div class="lg:col-span-8 flex flex-col gap-8">
         <div class="flex flex-col gap-4">
           <!-- Migas -->
-          <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted">
+          <div class="flex items-center gap-2 text-sm font-medium text-muted">
             <NuxtLink to="/material-estudio" class="hover:text-primary transition-colors">Casos</NuxtLink>
             <UIcon name="i-lucide-chevron-right" class="size-3.5" />
             <span class="text-toned">{{ getCaseCategoryLabel(caseStudy.category) }}</span>
@@ -188,7 +188,7 @@ const handleDelete = async () => {
             </p>
           </div>
           <UButton variant="solid" :to="documentUrl" target="_blank" rel="noopener" external download block size="lg"
-            trailing-icon="i-lucide-arrow-right" class="mt-2">
+            class="mt-2">
             Descargar PDF{{ documentSize ? ` (${documentSize})` : '' }}
           </UButton>
         </UCard>

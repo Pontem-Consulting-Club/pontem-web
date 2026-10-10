@@ -14,7 +14,9 @@
 
     <!-- Content -->
     <div class="relative z-20 h-full flex items-center">
-      <div class="container mx-auto px-4 md:px-8 lg:px-32">
+      <!-- Mismo contenedor que el resto de la página: el título queda alineado con
+           los títulos de las secciones de abajo. -->
+      <UContainer class="w-full">
         <div class="max-w-2xl text-white">
           <h2 class="mb-4 text-display">
             {{ slide.title }}
@@ -22,16 +24,14 @@
           <p v-if="slide.subtitle" class="mb-8 text-lg opacity-90 md:text-xl">
             {{ slide.subtitle }}
           </p>
-          <!-- Button for links -->
-          <div v-if="slide.link && slide.button_text" class="h-full w-fit rounded-lg bg-brand-wash">
-            <NuxtLink :id="`hero-cta-${slide.id}`" :to="slide.link" :target="isExternalLink ? '_blank' : undefined"
-              :rel="isExternalLink ? 'noopener' : undefined"
-              class="inline-flex items-center justify-center rounded-lg px-6 py-3 text-lg font-semibold bg-white/20 hover:bg-white/30 transition-colors relative overflow-hidden">
-              <span class="relative z-20">{{ slide.button_text }}</span>
-            </NuxtLink>
-          </div>
+          <!-- Botón blanco sólido: sobre la foto se distingue sin velos ni degradados. -->
+          <UButton v-if="slide.link && slide.button_text" :id="`hero-cta-${slide.id}`" :to="slide.link"
+            :target="isExternalLink ? '_blank' : undefined" size="xl" variant="solid"
+            class="bg-default text-highlighted hover:bg-elevated">
+            {{ slide.button_text }}
+          </UButton>
         </div>
-      </div>
+      </UContainer>
     </div>
   </div>
 </template>

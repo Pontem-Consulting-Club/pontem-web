@@ -124,13 +124,15 @@
 }
 
 /* Fondo del sitio: un velo de marca, quieto. */
+
+/* Bordes curvos de las franjas (motivo de marca). */
+/* El fundido Pontem: rojo y turquesa de marca, muy suaves, detrás de todo el sitio. */
 @utility bg-brand-wash {
   background: radial-gradient(circle,
     color-mix(in oklab, var(--color-pontemred-500) 15%, transparent) 0%,
     color-mix(in oklab, var(--color-pontemteal-300) 10%, transparent) 100%);
 }
 
-/* Bordes curvos de las franjas (motivo de marca). */
 @utility clip-wave-top {
   clip-path: ellipse(150% 70% at 40% 70%);
 }

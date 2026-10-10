@@ -21,7 +21,7 @@
             </UFormField>
 
             <UFormField label="Semestre">
-                <USelectMenu v-model="semesterModel" :items="semesters" :search-input="false"
+                <USelectMenu v-model="semesterModel" :items="semesters" value-key="value" :search-input="false"
                     placeholder="Elige un semestre" />
             </UFormField>
 
@@ -78,6 +78,7 @@ const emit = defineEmits<{
 // Se calcula una vez: si se recalculara con form.semester, la lista se
 // reordenaria mientras se elige.
 const semesters = semesterOptions(form.value.semester)
+    .map(value => ({ label: semesterLabel(value), value }))
 
 // USelectMenu no acepta null; en la tabla "sin semestre" es null.
 const semesterModel = computed({

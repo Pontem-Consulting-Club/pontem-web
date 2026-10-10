@@ -1,6 +1,6 @@
 <template>
   <UPageSection title="Próximos Eventos" description="No te pierdas nuestros próximos eventos y actividades"
-    class="bg-accented/60 clip-wave-top">
+    class="bg-elevated/60 clip-wave-top">
     <LoadError v-if="error" title="No pudimos cargar los eventos" :retry="refresh" />
 
     <UEmpty v-else-if="upcomingEvents.length === 0" title="No hay eventos próximos programados" icon="i-lucide-inbox"/>
@@ -11,7 +11,7 @@
     </UPageGrid>
 
 
-    <div class="mt-10 text-center">
+    <div class="mt-10">
       <UButton to="/eventos" size="lg" color="neutral" variant="outline">
         Ver todos los eventos
       </UButton>

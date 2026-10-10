@@ -72,7 +72,7 @@ const handleDelete = async (resource: CaseStudyResourceRecord) => {
           <UIcon :name="CASE_RESOURCE_KIND_ICONS[resource.kind]" class="size-5" />
         </div>
         <div class="flex flex-col min-w-0 flex-1">
-          <span class="text-xs font-semibold uppercase tracking-wider mb-1" :class="kindStyles[resource.kind]?.text">
+          <span class="text-xs font-semibold mb-1" :class="kindStyles[resource.kind]?.text">
             {{ CASE_RESOURCE_KIND_LABELS[resource.kind] }}
           </span>
           <span class="text-sm font-medium text-default group-hover:text-primary transition-colors line-clamp-2">

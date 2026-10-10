@@ -40,6 +40,16 @@ export const semesterOptions = (keep?: string | null, back = 10): string[] => {
     return options
 }
 
+/**
+ * Cómo se muestra un semestre: "2.º semestre 2026". El formato guardado ("2026 — S2")
+ * ordena bien como texto, pero en pantalla parecía una etiqueta técnica. Un valor
+ * escrito a mano que no calce se muestra tal cual.
+ */
+export const semesterLabel = (semester: string): string => {
+    const match = SEMESTER_PATTERN.exec(semester)
+    return match ? `${match[2]}.º semestre ${match[1]}` : semester
+}
+
 /** El semestre mas reciente de la lista (el formato ordena bien como texto). */
 export const latestSemester = (semesters: (string | null | undefined)[]): string | null =>
     semesters.filter((value): value is string => !!value).sort().at(-1) ?? null

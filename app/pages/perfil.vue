@@ -1,6 +1,9 @@
 <template>
   <div>
-    <PageBanner title="Mi Perfil" image="/LugarEstudio.jpg" />
+    <!-- Página de trabajo, no de presentación: encabezado simple, sin foto. -->
+    <UContainer>
+      <UPageHeader title="Mi perfil" />
+    </UContainer>
 
     <UContainer class="py-16">
       <UAlert v-if="needsOnboarding" icon="i-lucide-hand" color="primary" variant="soft" class="mb-8"
@@ -94,7 +97,7 @@
 
         <!-- MEM-5: números pequeños y honestos, no una capa de gamificación. -->
         <section class="lg:col-span-2">
-          <SectionTitle class="mb-8" title="Mi participación" icon="i-lucide-calendar-check" />
+          <SectionTitle class="mb-8" title="Mi participación" />
 
           <!-- Sin actividad, tres ceros no dicen nada: el estado vacío dice qué hacer. -->
           <div v-if="registrations.length > 0" class="mb-6 grid gap-4 sm:grid-cols-3">
@@ -119,7 +122,7 @@
                 <div class="font-medium">{{ row.event?.title ?? 'Actividad' }}</div>
                 <div class="text-xs text-muted">
                   {{ row.event?.date ? formatDate(row.event.date) : 'Sin fecha' }}
-                  <span v-if="row.event?.location"> · {{ row.event.location }}</span>
+                  <span v-if="row.event?.location">, {{ row.event.location }}</span>
                 </div>
               </div>
               <UBadge v-if="row.attended" color="success" size="sm">Asististe</UBadge>
