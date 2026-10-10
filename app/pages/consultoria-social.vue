@@ -1,72 +1,56 @@
 <template>
   <div>
-    <PageBanner title="Consultoría Social" image="/BienvenidaConsultores.jpg" />
+    <PageBanner title="Consultoría Social" image="/BienvenidaConsultores.jpg" :description="intro" :links="callsToAction" />
 
-    <!-- Métricas -->
-    <div class="bg-default border-b border-muted">
-      <UContainer>
-        <div class="grid grid-cols-2 md:grid-cols-4 divide-x divide-muted">
-          <div v-for="metric in metrics" :key="metric.label" class="flex flex-col items-center justify-center py-8 px-4 text-center">
-            <span class="text-4xl font-bold text-primary-500 leading-none mb-2">{{ metric.value }}</span>
-            <span class="text-sm text-muted font-medium">{{ metric.label }}</span>
-          </div>
-        </div>
-      </UContainer>
-    </div>
+    <UPageSection v-if="error">
+      <LoadError title="No pudimos cargar los proyectos" :retry="refresh" />
+    </UPageSection>
 
-    <!-- Proyectos activos -->
-    <div class="bg-muted py-16">
-      <UContainer>
-        <LoadError v-if="error" title="No pudimos cargar los proyectos" :retry="refresh" />
-        <template v-else>
-          <div class="flex items-center justify-between gap-4 mb-10">
-            <div class="flex flex-wrap items-center gap-x-3 gap-y-2">
-              <h2 class="text-title text-highlighted">Proyectos activos</h2>
-              <span class="whitespace-nowrap text-xs font-semibold bg-secondary-50 text-secondary-800 border border-secondary-100 rounded-full px-3 py-1">
-                {{ activeSemester }}
-              </span>
-            </div>
-            <div v-if="isEditor" class="flex gap-2">
-              <UButton icon="i-lucide-plus" color="primary" size="sm" :disabled="editorOpen" @click="startCreate">
-                Agregar
-              </UButton>
-            </div>
-          </div>
+    <template v-else>
+      <!-- Proyectos activos. Sin ninguno, los visitantes no ven la sección (antes era
+           lo primero de la página, vacío); quien edita la ve para poder agregar. -->
+      <UPageSection v-if="activeProjects.length > 0 || isEditor" title="Proyectos activos" :headline="activeSemester"
+        :links="isEditor ? [{ label: 'Agregar', icon: 'i-lucide-plus', disabled: editorOpen, onClick: startCreate }] : []"
+        class="bg-muted">
+        <UEmpty v-if="activeProjects.length === 0 && !isCreating" icon="i-lucide-inbox" title="No hay proyectos activos"
+          description="Mientras no haya ninguno, los visitantes no ven esta sección." />
+        <UPageGrid v-else :class="gridClass(activeProjects.length + (isCreating ? 1 : 0))">
+          <!-- El borrador ocupa el primer lugar de la grilla, como una tarjeta más. -->
+          <ProjectCard v-if="isCreating && draftProject" :project="draftProject" :is-new="true" @created="handleCreated"
+            @cancel-create="cancelCreate" @updated="refresh" />
+          <ProjectCard v-for="project in activeProjects" :key="project.id" :project="project" @updated="refresh" />
+        </UPageGrid>
+      </UPageSection>
 
-          <div v-if="activeProjects.length === 0 && !isCreating">
-            <UEmpty title="No hay proyectos activos" icon="i-lucide-inbox"/>
-          </div>
-          <UPageGrid v-else>
-            <!-- El borrador ocupa el primer lugar de la grilla, como una tarjeta mas. -->
-            <ProjectCard v-if="isCreating && draftProject" :project="draftProject" :is-new="true" @created="handleCreated" @cancel-create="cancelCreate" @updated="refresh" />
-            <ProjectCard v-for="project in activeProjects" :key="project.id" :project="project" @updated="refresh" />
-          </UPageGrid>
-        </template>
-      </UContainer>
-    </div>
-
-    <!-- Historial -->
-    <div v-if="!error" class="bg-default py-12">
-      <UContainer>
-        <h2 class="mb-6 text-heading text-muted">Proyectos anteriores</h2>
-        <div class="flex flex-col divide-y divide-muted">
-          <ProjectCard v-for="project in pastProjects" :key="project.id" :project="project" layout="row" @updated="refresh" />
-          <div v-if="pastProjects.length === 0" class="py-4 text-sm text-muted">
-            No hay proyectos anteriores registrados.
-          </div>
-        </div>
-      </UContainer>
-    </div>
+      <UPageSection title="Proyectos anteriores">
+        <UEmpty v-if="pastProjects.length === 0" icon="i-lucide-archive" title="Todavía no hay proyectos anteriores" />
+        <UPageGrid v-else :class="gridClass(pastProjects.length)">
+          <ProjectCard v-for="project in pastProjects" :key="project.id" :project="project" show-semester
+            @updated="refresh" />
+        </UPageGrid>
+      </UPageSection>
+    </template>
   </div>
 </template>
 
 <script setup lang="ts">
+import type { ButtonProps } from '@nuxt/ui'
 import type { ProjectRecord } from '~/types/content'
 
 usePageMeta({
   title: 'Consultoría Social - Pontem',
   description: 'Proyectos de consultoría que equipos de estudiantes de Pontem desarrollan con fundaciones y organizaciones sociales.'
 })
+
+const intro = 'Trabajamos con organizaciones, fundaciones y empresas con fines sociales en estrategia, finanzas y '
+  + 'operaciones. Nuestros consultores desarrollan habilidades clave mientras fortalecen organizaciones que trabajan '
+  + 'por el bien de la sociedad.'
+
+// Uno para cada público: organizaciones que buscan apoyo y estudiantes.
+const callsToAction: ButtonProps[] = [
+  { label: 'Escríbenos', icon: 'i-lucide-mail', to: 'mailto:clubconsultoria.uc@gmail.com' },
+  { label: 'Conoce el club', trailingIcon: 'i-lucide-arrow-right', to: '/nosotros' }
+]
 
 // Mientras hay un formulario abierto, "Agregar" queda desactivado.
 const { anyOpen: editorOpen } = useEditorSlot()
@@ -84,12 +68,13 @@ const activeSemester = computed(() =>
   latestSemester(activeProjects.value.map(project => project.semester)) ?? currentSemester()
 )
 
-const metrics = [
-  { value: '12+', label: 'Proyectos realizados' },
-  { value: '10+', label: 'Organizaciones impactadas' },
-  { value: '5', label: 'Años de trayectoria' },
-  { value: '60+', label: 'Estudiantes participantes' },
-]
+// Con una o dos tarjetas, la grilla de tres dejaba el resto de la fila vacío:
+// se angosta y se centra.
+const gridClass = (count: number) => {
+  if (count === 1) return 'sm:grid-cols-1 lg:grid-cols-1 max-w-md mx-auto w-full'
+  if (count === 2) return 'lg:grid-cols-2 max-w-4xl mx-auto w-full'
+  return undefined
+}
 
 const { isEditor } = useProfile()
 const isCreating = ref(false)
