@@ -1,6 +1,6 @@
 <template>
   <div>
-    <PageBanner title="Consultoría Social" image="/BienvenidaConsultores.jpg" />
+    <PageBanner title="Consultoría Social" page="consultoria-social" />
 
     <!-- Introducción: va bajo el banner, que es solo el título de la sección. -->
     <UContainer class="py-12 sm:py-16">

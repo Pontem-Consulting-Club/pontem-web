@@ -72,7 +72,7 @@ const clearFilters = () => {
 <template>
   <div>
   <!-- Como las demás secciones públicas: banner con foto y solo el título. -->
-  <PageBanner title="Material de Estudio" image="/LugarEstudio.jpg" />
+  <PageBanner title="Material de Estudio" page="material-estudio" />
 
   <UContainer class="py-12 sm:py-16 flex flex-col gap-20">
     <p class="max-w-3xl text-lg/relaxed text-toned">

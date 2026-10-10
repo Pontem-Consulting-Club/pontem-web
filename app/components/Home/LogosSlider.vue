@@ -25,10 +25,17 @@ defineProps<{ logos: Logo[] }>()
     <ul class="sr-only">
       <li v-for="logo in logos" :key="logo.name">{{ logo.name }}</li>
     </ul>
-    <UMarquee pause-on-hover aria-hidden="true" class="bg-elevated/60"
-      :ui="{ root: '[--duration:45s] [--gap:--spacing(24)]' }">
-      <img v-for="logo in logos" :key="logo.name" :src="logo.src" :alt="logo.name" class="my-6 h-16 w-auto">
-    </UMarquee>
+    <!-- Sin el overlay de UMarquee: pinta degradados blancos en los bordes, que sobre la
+         banda gris translúcida formaban un rectángulo más claro. La máscara funde los
+         logos con lo que haya detrás. -->
+    <!-- El gris va en el contenedor y la máscara solo en la franja: así se funden los
+         logos y no la banda. -->
+    <div class="bg-elevated/60">
+      <UMarquee pause-on-hover aria-hidden="true" :overlay="false"
+        :ui="{ root: '[--duration:45s] [--gap:--spacing(24)] mask-x-from-85%' }">
+        <img v-for="logo in logos" :key="logo.name" :src="logo.src" :alt="logo.name" class="my-6 h-16 w-auto">
+      </UMarquee>
+    </div>
     <div aria-hidden="true" class="bg-elevated/60 pt-[5%] clip-wave-bottom" />
   </section>
 </template>

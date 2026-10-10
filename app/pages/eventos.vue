@@ -59,7 +59,7 @@ const pastEvents = computed(() => {
 
 <template>
   <div>
-    <PageBanner title="Nuestros Eventos" image="/BTGDay.jpeg" />
+    <PageBanner title="Nuestros Eventos" page="eventos" />
 
     <UContainer class="py-16">
       <div v-if="isEditor" class="flex justify-end mb-6">

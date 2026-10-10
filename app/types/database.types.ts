@@ -295,6 +295,24 @@ export type Database = {
         }
         Relationships: []
       }
+      page_banners: {
+        Row: {
+          image_path: string | null
+          page: string
+          updated_at: string
+        }
+        Insert: {
+          image_path?: string | null
+          page: string
+          updated_at?: string
+        }
+        Update: {
+          image_path?: string | null
+          page?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_path: string | null

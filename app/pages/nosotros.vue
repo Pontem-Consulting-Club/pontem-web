@@ -94,7 +94,7 @@ const teamByRole = computed(() => {
  
 <template>
   <div>
-    <PageBanner title="Nosotros" image="/Equipo2024.jpeg" />
+    <PageBanner title="Nosotros" page="nosotros" />
  
     <UContainer class="py-16 space-y-28">
 
