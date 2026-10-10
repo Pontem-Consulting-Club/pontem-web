@@ -20,7 +20,7 @@
            lo primero de la página, vacío); quien edita la ve para poder agregar. -->
       <UPageSection v-if="activeProjects.length > 0 || isEditor" title="Proyectos activos" :description="activeSemester"
         :links="isEditor ? [{ label: 'Agregar', icon: 'i-lucide-plus', disabled: editorOpen, onClick: startCreate }] : []"
-        class="bg-elevated">
+        class="bg-elevated/60">
         <UEmpty v-if="activeProjects.length === 0 && !isCreating" icon="i-lucide-inbox" title="No hay proyectos activos"
           description="Mientras no haya ninguno, los visitantes no ven esta sección." />
         <UPageGrid v-else :class="gridClass(activeProjects.length + (isCreating ? 1 : 0))">

@@ -65,9 +65,10 @@ de color, mídelo.
 
 ## Composición
 
-- **Fondo blanco.** Las secciones que alternan usan una banda gris (`bg-elevated`); en
-  el inicio las bandas llevan las olas (`clip-wave-top`/`clip-wave-bottom`). Sin
-  degradados de fondo.
+- **El fundido Pontem** (`bg-brand-wash`, rojo y turquesa muy suaves) va detrás de
+  todo el sitio, en el layout. Las secciones que alternan usan una banda gris
+  translúcida (`bg-elevated/60`) para que el fundido se vea a través; en el inicio las
+  bandas llevan las olas (`clip-wave-top`/`clip-wave-bottom`).
 - **Todo alineado a la izquierda,** títulos incluidos: el tema ya lo hace en
   `UPageSection`, `UPageHero` y `SectionTitle`. Centrado solo donde no hay contenido
   con el que alinear (estados vacíos, la página de error).

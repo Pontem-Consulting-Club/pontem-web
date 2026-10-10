@@ -1,6 +1,6 @@
 <template>
   <UPageSection title="Próximos Eventos" description="No te pierdas nuestros próximos eventos y actividades"
-    class="bg-elevated clip-wave-top">
+    class="bg-elevated/60 clip-wave-top">
     <LoadError v-if="error" title="No pudimos cargar los eventos" :retry="refresh" />
 
     <UEmpty v-else-if="upcomingEvents.length === 0" title="No hay eventos próximos programados" icon="i-lucide-inbox"/>
