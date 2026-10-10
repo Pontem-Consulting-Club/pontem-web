@@ -10,9 +10,10 @@ import { restrict, themeVariables } from './eslint.estilos.mjs'
 const selectors = [
   ...getDefaultSelectors(),
   {
-    // :ui="{ base: '...' }" en componentes de Nuxt UI
+    // :ui="{ base: '...' }" en componentes de Nuxt UI. En Vue el atributo enlazado se
+    // nombra completo (v-bind:ui) y los valores del objeto se piden con ObjectValue.
     kind: SelectorKind.Attribute,
-    name: '^:?ui$',
+    name: '^v-bind:ui$',
     match: [{ type: MatcherType.ObjectValue }]
   },
   {
@@ -42,14 +43,14 @@ export default withNuxt(
       'better-tailwindcss': { entryPoint: 'eslint.tailwind.css', selectors }
     },
     rules: {
-      'better-tailwindcss/no-unknown-classes': 'warn',
-      'better-tailwindcss/no-conflicting-classes': 'warn',
-      'better-tailwindcss/no-concatenated-classes': 'warn',
-      'better-tailwindcss/no-duplicate-classes': 'warn',
-      'better-tailwindcss/no-deprecated-classes': 'warn',
-      'better-tailwindcss/no-unnecessary-whitespace': 'warn',
-      'better-tailwindcss/enforce-canonical-classes': 'warn',
-      'better-tailwindcss/no-restricted-classes': ['warn', { restrict }]
+      'better-tailwindcss/no-unknown-classes': 'error',
+      'better-tailwindcss/no-conflicting-classes': 'error',
+      'better-tailwindcss/no-concatenated-classes': 'error',
+      'better-tailwindcss/no-duplicate-classes': 'error',
+      'better-tailwindcss/no-deprecated-classes': 'error',
+      'better-tailwindcss/no-unnecessary-whitespace': 'error',
+      'better-tailwindcss/enforce-canonical-classes': 'error',
+      'better-tailwindcss/no-restricted-classes': ['error', { restrict }]
       // Sin enforce-consistent-class-order ni line-wrapping: mucho ruido en el diff
       // y nada de corrección.
     }

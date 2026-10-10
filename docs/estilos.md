@@ -107,6 +107,10 @@ lugar (como el fondo de la portada) está `useImagePreview`.
   descarta al combinar clases.
 - **Un componente nuevo de `app/theme`:** agrega su nombre a `themeVariables` en
   `eslint.estilos.mjs` para que el lint revise sus clases.
+- **Un mapa de clases en TypeScript** (colores por categoría, por ejemplo): nombra la
+  variable terminando en `Classes` o `Colors` (`categoryColors`) para que el lint la
+  revise, y escribe cada clase completa; Tailwind no encuentra las que se arman con
+  plantillas (`` `bg-${color}-50` ``).
 
 ## Capturas de revisión
 
