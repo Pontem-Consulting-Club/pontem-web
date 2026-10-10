@@ -31,6 +31,14 @@ const form = ref<Partial<EventRecord>>({})
 
 const { url: imageUrl } = useStorageImage(computed(() => event.value.image_url ?? null))
 
+const toast = useToast()
+const { confirmDelete, confirmDiscard } = useConfirm()
+const editButton = useTemplateRef('editButton')
+const { othersOpen: otherEditorOpen } = useEditorSlot(
+  () => (_props.isNew ? 'evento:nuevo' : `evento:${event.value.id}`),
+  { isEditing, focusOnClose: () => editButton.value?.focus() }
+)
+
 // El día de Chile, igual en el servidor (UTC) y en el navegador.
 const dayNumber = computed(() => Number(clubDay(event.value.date).slice(8, 10)))
 const monthYear = computed(() => formatClubDate(event.value.date, { month: 'short', year: 'numeric' }))
@@ -96,7 +104,8 @@ const startEdit = () => {
   isEditing.value = true
 }
 
-const cancelEdit = () => {
+const cancelEdit = async (hasPendingFile = false) => {
+  if ((hasPendingFile || formChanged(form.value, event.value)) && !(await confirmDiscard())) return
   if (_props.isNew) {
     emit('cancel-create')
     return
@@ -126,6 +135,7 @@ const saveEdit = async (file?: File | null) => {
     } else {
       await $fetch(`/api/admin/events/${event.value.id}`, { method: 'PUT', body: formData })
     }
+    toast.add({ title: _props.isNew ? 'Evento creado' : 'Evento guardado', icon: 'i-lucide-check', color: 'success' })
     isEditing.value = false
     emit('updated')
   } catch (error: unknown) {
@@ -142,17 +152,14 @@ const saveEdit = async (file?: File | null) => {
 
 const handleDelete = async () => {
   if (_props.isNew) return
-  const confirmed = typeof window !== 'undefined'
-    ? window.confirm('¿Eliminar este evento? Esta acción no se puede deshacer.')
-    : false
-
-  if (!confirmed) return
+  if (!(await confirmDelete('este evento'))) return
 
   isDeleting.value = true
   formError.value = ''
 
   try {
     await $fetch(`/api/admin/events/${event.value.id}`, { method: 'DELETE' })
+    toast.add({ title: 'Evento eliminado', icon: 'i-lucide-check', color: 'success' })
     isEditing.value = false
     emit('updated')
   } catch (error: unknown) {
@@ -174,7 +181,8 @@ const handleDelete = async () => {
     @delete="handleDelete" />
 
   <UCard v-else-if="variant === 'full'" variant="item" class="relative">
-    <ContentEditButton v-if="isEditor" label="Editar evento" @click="startEdit" />
+    <ContentEditButton v-if="isEditor" ref="editButton" label="Editar evento" :disabled="otherEditorOpen"
+      @click="startEdit" />
 
     <div class="flex flex-col md:flex-row gap-6">
       <div class="md:w-32 shrink-0">
@@ -224,7 +232,8 @@ const handleDelete = async () => {
   </UCard>
 
   <UCard v-else-if="variant === 'past'" class="relative opacity-75">
-    <ContentEditButton v-if="isEditor" label="Editar evento" @click="startEdit" />
+    <ContentEditButton v-if="isEditor" ref="editButton" label="Editar evento" :disabled="otherEditorOpen"
+      @click="startEdit" />
     <div class="flex flex-col md:flex-row gap-4 items-start md:items-center">
       <span class="text-sm md:w-32">
         {{ formatDate(event.date) }}

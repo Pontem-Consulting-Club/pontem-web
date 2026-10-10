@@ -18,7 +18,9 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<{
   (e: 'submit', files: { logo: File | null, document: File | null }): void
-  (e: 'cancel' | 'delete'): void
+  /** `hasPendingFile`: se eligió un logo o un documento que todavía no se sube. */
+  (e: 'cancel', hasPendingFile: boolean): void
+  (e: 'delete'): void
 }>()
 
 const form = defineModel<Partial<CaseStudyRecord>>('form', { required: true })
@@ -131,7 +133,7 @@ onBeforeUnmount(revokeLogoPreview)
 
     <form class="space-y-6" @submit.prevent="handleSubmit">
       <UFormField label="Título del caso" required>
-        <UInput v-model="form.title" placeholder="Ej. Transformación Digital en Retail" size="lg" />
+        <UInput v-model="form.title" placeholder="Ej. Transformación Digital en Retail" size="lg" autofocus />
       </UFormField>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -226,7 +228,7 @@ onBeforeUnmount(revokeLogoPreview)
           @click="emit('delete')">
           Eliminar
         </UButton>
-        <UButton color="neutral" :disabled="props.isSaving" @click="emit('cancel')">
+        <UButton color="neutral" :disabled="props.isSaving" @click="emit('cancel', !!pendingLogo || !!pendingDocument)">
           Cancelar
         </UButton>
         <UButton variant="solid" type="submit" icon="i-lucide-upload" :loading="props.isSaving">

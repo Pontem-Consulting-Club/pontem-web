@@ -4,7 +4,8 @@
         @delete="handleDelete" />
 
     <div v-else class="relative">
-        <ContentEditButton v-if="isEditor" label="Editar integrante" @click="startEdit" />
+        <ContentEditButton v-if="isEditor" ref="editButton" label="Editar integrante" :disabled="otherEditorOpen"
+            @click="startEdit" />
 
 <TeamMemberCard :name="member.name" :coordination="member.coordination" :image-url="coordinationImageUrl" />
     </div>
@@ -41,6 +42,14 @@ const isDeleting = ref(false)
 const formError = ref('')
 const form = ref<Partial<TeamRecord>>({ ..._props.member })
 
+const toast = useToast()
+const { confirmDelete, confirmDiscard } = useConfirm()
+const editButton = useTemplateRef('editButton')
+const { othersOpen: otherEditorOpen } = useEditorSlot(
+    () => (_props.isNew ? 'integrante:nuevo' : `integrante:${member.value.id}`),
+    { isEditing, focusOnClose: () => editButton.value?.focus() }
+)
+
 watch(member, (value) => {
     if (_props.isNew || !isEditing.value) {
         form.value = { ...value }
@@ -73,7 +82,8 @@ const startEdit = () => {
     isEditing.value = true
 }
 
-const cancelEdit = () => {
+const cancelEdit = async () => {
+    if (formChanged(form.value, member.value) && !(await confirmDiscard())) return
     if (_props.isNew) {
         emit('cancel-create')
         return
@@ -103,6 +113,7 @@ const saveEdit = async () => {
         } else {
             await $fetch(`/api/admin/team/${member.value.id}`, { method: 'PUT', body: payload })
         }
+        toast.add({ title: _props.isNew ? 'Integrante agregado' : 'Integrante guardado', icon: 'i-lucide-check', color: 'success' })
         isEditing.value = false
         emit('updated')
         if (!_props.isNew) emit('closed')
@@ -120,17 +131,14 @@ const saveEdit = async () => {
 
 const handleDelete = async () => {
     if (_props.isNew) return
-    const confirmed = typeof window !== 'undefined'
-        ? window.confirm('¿Eliminar este integrante? Esta acción no se puede deshacer.')
-        : false
-
-    if (!confirmed) return
+    if (!(await confirmDelete('este integrante'))) return
 
     isDeleting.value = true
     formError.value = ''
 
     try {
         await $fetch(`/api/admin/team/${member.value.id}`, { method: 'DELETE' })
+        toast.add({ title: 'Integrante eliminado', icon: 'i-lucide-check', color: 'success' })
         isEditing.value = false
         emit('updated')
         emit('closed')

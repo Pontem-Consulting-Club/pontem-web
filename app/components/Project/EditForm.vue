@@ -1,5 +1,6 @@
 <template>
-    <UCard>
+    <!-- Escape cancela, igual que el botón. -->
+    <UCard @keydown.esc.stop="emit('cancel', !!pendingFile)">
         <!-- Apilado como la tarjeta (imagen arriba, texto abajo): asi cabe en una
              columna de la grilla de tres y en la lista de proyectos anteriores. -->
         <form class="flex flex-col gap-4" @submit.prevent="handleSubmit">
@@ -7,7 +8,7 @@
                 class="h-44" />
 
             <UFormField label="Título" required>
-                <UInput v-model="form.title" placeholder="Ej. Fundación Raíces Urbanas" />
+                <UInput v-model="form.title" placeholder="Ej. Fundación Raíces Urbanas" autofocus />
             </UFormField>
 
             <UFormField label="Subtítulo">
@@ -43,7 +44,7 @@
                     Eliminar
                 </UButton>
                 <UButton type="button" color="neutral" class="ml-auto" :disabled="isSaving"
-                    @click="emit('cancel')">
+                    @click="emit('cancel', !!pendingFile)">
                     Cancelar
                 </UButton>
                 <UButton type="submit" variant="solid" :loading="isSaving" :disabled="!!isDeleting">
@@ -69,7 +70,9 @@ defineProps<{
 
 const emit = defineEmits<{
     (event: 'submit', file?: File | null): void
-    (event: 'cancel' | 'delete'): void
+    /** `hasPendingFile`: se eligió una imagen que todavía no se sube. */
+    (event: 'cancel', hasPendingFile: boolean): void
+    (event: 'delete'): void
 }>()
 
 // Se calcula una vez: si se recalculara con form.semester, la lista se

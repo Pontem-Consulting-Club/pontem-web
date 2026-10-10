@@ -6,6 +6,9 @@ usePageMeta({
   description: 'Charlas, talleres y actividades de Pontem con consultoras y organizaciones. Revisa las próximas fechas e inscríbete.'
 })
 
+// Mientras hay un formulario abierto, "Agregar" queda desactivado.
+const { anyOpen: editorOpen } = useEditorSlot()
+
 const { data: events, error, refresh } = await useFetch<EventRecord[]>('/api/events/scheduled', {
   default: () => []
 })
@@ -60,7 +63,7 @@ const pastEvents = computed(() => {
 
     <UContainer class="py-16">
       <div v-if="isEditor" class="flex justify-end mb-6">
-        <UButton icon="i-lucide-plus" color="primary" size="md" :disabled="isCreating" @click="startCreate">
+        <UButton icon="i-lucide-plus" color="primary" size="md" :disabled="editorOpen" @click="startCreate">
           Agregar
         </UButton>
       </div>

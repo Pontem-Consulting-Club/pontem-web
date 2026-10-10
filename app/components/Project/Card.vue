@@ -10,13 +10,14 @@
     <span class="text-xs font-semibold text-muted uppercase tracking-wide">{{ project.semester }}</span>
     <span class="text-sm font-semibold text-default">{{ project.title }}</span>
     <span class="text-xs text-muted sm:truncate">{{ project.subtitle }}</span>
-    <ContentEditButton v-if="isEditor" label="Editar proyecto" inline class="self-start sm:self-auto"
-      @click="startEdit" />
+    <ContentEditButton v-if="isEditor" ref="editButton" label="Editar proyecto" inline :disabled="otherEditorOpen"
+      class="self-start sm:self-auto" @click="startEdit" />
   </div>
 
   <UCard v-else variant="item" class="relative flex flex-col" :ui="{ body: 'flex flex-1 flex-col gap-1' }">
     <template #header>
-      <ContentEditButton v-if="isEditor" label="Editar proyecto" @click="startEdit" />
+      <ContentEditButton v-if="isEditor" ref="editButton" label="Editar proyecto" :disabled="otherEditorOpen"
+        @click="startEdit" />
 
       <NuxtImg v-if="imageUrl" :src="imageUrl" :alt="project.title" class="h-44 w-full object-cover" />
       <!-- Sin imagen: el logo completo, no recortado por object-cover. -->
@@ -69,6 +70,14 @@ const formError = ref('')
 const form = ref<Partial<ProjectRecord>>({})
 
 const { url: imageUrl } = useStorageImage(computed(() => project.value.image_url ?? null))
+
+const toast = useToast()
+const { confirmDelete, confirmDiscard } = useConfirm()
+const editButton = useTemplateRef('editButton')
+const { othersOpen: otherEditorOpen } = useEditorSlot(
+  () => (_props.isNew ? 'proyecto:nuevo' : `proyecto:${project.value.id}`),
+  { isEditing, focusOnClose: () => editButton.value?.focus() }
+)
 
 watch(project, (value) => {
   if (_props.isNew || !isEditing.value) {
@@ -123,7 +132,8 @@ const startEdit = () => {
   isEditing.value = true
 }
 
-const cancelEdit = () => {
+const cancelEdit = async (hasPendingFile = false) => {
+  if ((hasPendingFile || formChanged(form.value, project.value)) && !(await confirmDiscard())) return
   if (_props.isNew) {
     emit('cancel-create')
     return
@@ -152,6 +162,7 @@ const saveEdit = async (file?: File | null) => {
     } else {
       await $fetch(`/api/admin/projects/${project.value.id}`, { method: 'PUT', body: formData })
     }
+    toast.add({ title: _props.isNew ? 'Proyecto creado' : 'Proyecto guardado', icon: 'i-lucide-check', color: 'success' })
     isEditing.value = false
     emit('updated')
   } catch (error: unknown) {
@@ -168,17 +179,14 @@ const saveEdit = async (file?: File | null) => {
 
 const handleDelete = async () => {
   if (_props.isNew) return
-  const confirmed = typeof window !== 'undefined'
-    ? window.confirm('¿Eliminar este proyecto? Esta acción no se puede deshacer.')
-    : false
-
-  if (!confirmed) return
+  if (!(await confirmDelete('este proyecto'))) return
 
   isDeleting.value = true
   formError.value = ''
 
   try {
     await $fetch(`/api/admin/projects/${project.value.id}`, { method: 'DELETE' })
+    toast.add({ title: 'Proyecto eliminado', icon: 'i-lucide-check', color: 'success' })
     isEditing.value = false
     emit('updated')
   } catch (error: unknown) {

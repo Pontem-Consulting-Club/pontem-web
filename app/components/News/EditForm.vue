@@ -1,7 +1,8 @@
 <template>
-    <UCard>
+    <!-- Escape cancela, igual que "Volver". -->
+    <UCard @keydown.esc.stop="emit('cancel', !!pendingFile)">
         <div class="mb-6 flex items-center">
-            <UButton icon="i-lucide-arrow-left" @click="emit('cancel')">
+            <UButton icon="i-lucide-arrow-left" @click="emit('cancel', !!pendingFile)">
                 Volver
             </UButton>
         </div>
@@ -16,7 +17,7 @@
 
                 <UFormField>
                     <!-- Imita el título de la noticia -->
-                    <UInput v-model="form.title" placeholder="Título" variant="ghost"
+                    <UInput v-model="form.title" placeholder="Título" variant="ghost" autofocus
                         :ui="{ base: 'text-heading text-primary placeholder:text-primary/50 md:text-heading' }" />
                 </UFormField>
 
@@ -71,7 +72,9 @@ defineProps<{
 
 const emit = defineEmits<{
     (event: 'submit', file?: File | null): void
-    (event: 'cancel' | 'delete'): void
+    /** `hasPendingFile`: se eligió una imagen que todavía no se sube. */
+    (event: 'cancel', hasPendingFile: boolean): void
+    (event: 'delete'): void
 }>()
 
 const newsTypes = ['Evento', 'Artículo', 'Anuncio']

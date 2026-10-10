@@ -1,7 +1,8 @@
 <template>
-    <UCard>
+    <!-- Escape cancela, igual que "Volver". -->
+    <UCard @keydown.esc.stop="emit('cancel', !!pendingFile)">
         <div class="mb-4 flex items-center">
-            <UButton icon="i-lucide-arrow-left" @click="emit('cancel')">
+            <UButton icon="i-lucide-arrow-left" @click="emit('cancel', !!pendingFile)">
                 Volver
             </UButton>
         </div>
@@ -17,7 +18,7 @@
                 </div>
 
                 <div class="flex flex-1 flex-col gap-3">
-                    <UInput v-model="form.title" placeholder="Título" variant="ghost"
+                    <UInput v-model="form.title" placeholder="Título" variant="ghost" autofocus
                         :ui="{ base: 'text-subheading text-highlighted placeholder:text-primary/50 md:text-subheading' }" />
                     <UInput v-model.nullable="form.subtitle" placeholder="Subtítulo" variant="ghost" />
                     <UTextarea v-model.nullable="form.description" :rows="3" placeholder="Descripción" variant="ghost"
@@ -126,7 +127,9 @@ defineProps<{
 
 const emit = defineEmits<{
     (event: 'submit', file?: File | null): void
-    (event: 'cancel' | 'delete'): void
+    /** `hasPendingFile`: se eligió una imagen que todavía no se sube. */
+    (event: 'cancel', hasPendingFile: boolean): void
+    (event: 'delete'): void
 }>()
 
 // Se elige y se muestra el día de Chile. Antes se guardaba como medianoche UTC,

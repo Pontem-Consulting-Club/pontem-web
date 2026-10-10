@@ -34,16 +34,16 @@ const resolveHref = (resource: CaseStudyResourceRecord) => {
 
 const deletingId = ref<number | null>(null)
 
-const handleDelete = async (resource: CaseStudyResourceRecord) => {
-  const confirmed = typeof window !== 'undefined'
-    ? window.confirm(`¿Eliminar el recurso "${resource.title}"?`)
-    : false
+const toast = useToast()
+const { confirmDelete } = useConfirm()
 
-  if (!confirmed) return
+const handleDelete = async (resource: CaseStudyResourceRecord) => {
+  if (!(await confirmDelete(`el recurso «${resource.title}»`))) return
 
   deletingId.value = resource.id
   try {
     await $fetch(`/api/admin/case-studies/resources/${resource.id}`, { method: 'DELETE' })
+    toast.add({ title: 'Recurso eliminado', icon: 'i-lucide-check', color: 'success' })
     emit('deleted')
   } finally {
     deletingId.value = null

@@ -18,6 +18,8 @@ export const useCaseStudyForm = () => {
   const formError = ref('')
   const isSaving = ref(false)
   const isDeleting = ref(false)
+  const toast = useToast()
+  const { confirmDelete, confirmDiscard } = useConfirm()
 
   const emptyCaseStudy = (): Partial<CaseStudyRecord> => ({
     title: '',
@@ -119,6 +121,7 @@ export const useCaseStudyForm = () => {
         method: 'POST',
         body: buildFormData(files)
       })
+      toast.add({ title: 'Caso de estudio creado', icon: 'i-lucide-check', color: 'success' })
       return response.id
     } catch (error: unknown) {
       formError.value = resolveApiError(error, 'Error al crear el caso de estudio')
@@ -143,6 +146,7 @@ export const useCaseStudyForm = () => {
         method: 'PUT',
         body: buildFormData(files)
       })
+      toast.add({ title: 'Caso de estudio guardado', icon: 'i-lucide-check', color: 'success' })
       return true
     } catch (error: unknown) {
       formError.value = resolveApiError(error, 'Error al guardar los cambios')
@@ -153,17 +157,14 @@ export const useCaseStudyForm = () => {
   }
 
   const remove = async (id: number): Promise<boolean> => {
-    const confirmed = typeof window !== 'undefined'
-      ? window.confirm('¿Eliminar este caso de estudio? Esta acción no se puede deshacer.')
-      : false
-
-    if (!confirmed) return false
+    if (!(await confirmDelete('este caso de estudio'))) return false
 
     isDeleting.value = true
     formError.value = ''
 
     try {
       await $fetch(`/api/admin/case-studies/${id}`, { method: 'DELETE' })
+      toast.add({ title: 'Caso de estudio eliminado', icon: 'i-lucide-check', color: 'success' })
       return true
     } catch (error: unknown) {
       formError.value = resolveApiError(error, 'Error al eliminar el caso de estudio')
@@ -173,7 +174,12 @@ export const useCaseStudyForm = () => {
     }
   }
 
+  /** Antes de salir del formulario: si cambió algo, pregunta. `true` = se puede salir. */
+  const canLeave = async (original: object, hasPendingFile = false) =>
+    !(hasPendingFile || formChanged(form.value, original)) || await confirmDiscard()
+
   return {
+    canLeave,
     form,
     formError,
     isSaving,

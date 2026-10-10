@@ -38,7 +38,7 @@ const isEditMode = computed(() => {
   return editQuery === '1' || editQuery === 'true'
 })
 
-const { form, formError, isSaving, isDeleting, update, remove } = useCaseStudyForm()
+const { form, formError, isSaving, isDeleting, update, remove, canLeave } = useCaseStudyForm()
 
 // El formulario se rehidrata desde el caso cargado cada vez que cambia.
 watch(caseStudy, (value) => {
@@ -77,7 +77,9 @@ const handleSubmit = async (files: CaseStudyFiles) => {
   router.push(`/material-estudio/casos/${idParam}`)
 }
 
-const handleCancel = () => {
+const handleCancel = async (hasPendingFile = false) => {
+  const { resources: _resources, ...original } = caseStudy.value ?? { resources: [] }
+  if (!(await canLeave(original, hasPendingFile))) return
   router.push(`/material-estudio/casos/${idParam}`)
 }
 

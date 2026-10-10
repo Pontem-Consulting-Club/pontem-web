@@ -1,8 +1,9 @@
 <template>
-    <UCard class="text-center">
+    <!-- Escape cancela, igual que el botón. -->
+    <UCard class="text-center" @keydown.esc.stop="emit('cancel')">
         <UForm class="flex flex-col items-center gap-4" @submit.prevent="handleSubmit">
             <!-- Imita el nombre de la tarjeta del integrante -->
-            <UInput v-model="form.name" placeholder="Nombre" variant="ghost"
+            <UInput v-model="form.name" placeholder="Nombre" variant="ghost" autofocus
                 :ui="{ base: 'text-center text-lg font-semibold text-primary placeholder:text-primary/50 md:text-lg' }" />
 
             <USelect v-model="form.coordination" :items="TEAM_COORDINATION_OPTIONS" placeholder="Selecciona una coordinación"

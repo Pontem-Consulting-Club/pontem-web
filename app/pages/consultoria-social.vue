@@ -27,7 +27,7 @@
               </span>
             </div>
             <div v-if="isEditor" class="flex gap-2">
-              <UButton icon="i-lucide-plus" color="primary" size="sm" :disabled="isCreating" @click="startCreate">
+              <UButton icon="i-lucide-plus" color="primary" size="sm" :disabled="editorOpen" @click="startCreate">
                 Agregar
               </UButton>
             </div>
@@ -67,6 +67,9 @@ usePageMeta({
   title: 'Consultoría Social - Pontem',
   description: 'Proyectos de consultoría que equipos de estudiantes de Pontem desarrollan con fundaciones y organizaciones sociales.'
 })
+
+// Mientras hay un formulario abierto, "Agregar" queda desactivado.
+const { anyOpen: editorOpen } = useEditorSlot()
 
 const { data, error, refresh } = await useFetch<{ active: ProjectRecord[], past: ProjectRecord[] }>(
   '/api/projects/social-consulting',

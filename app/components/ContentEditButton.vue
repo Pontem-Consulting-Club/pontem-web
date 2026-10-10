@@ -8,16 +8,24 @@ withDefaults(defineProps<{
   label: string
   to?: string
   inline?: boolean
+  /** Otro editor está abierto (useEditorSlot). */
+  disabled?: boolean
 }>(), {
   to: undefined,
-  inline: false
+  inline: false,
+  disabled: false
 })
 
 defineEmits<{ (e: 'click', event: MouseEvent): void }>()
+
+const button = useTemplateRef('button')
+
+// La tarjeta devuelve el foco aquí al cerrar su formulario.
+defineExpose({ focus: () => elementOf(button.value)?.focus() })
 </script>
 
 <template>
-  <UButton icon="i-lucide-pencil" size="xs" :aria-label="label" :to="to"
+  <UButton ref="button" icon="i-lucide-pencil" size="xs" :aria-label="label" :to="to" :disabled="disabled"
     :class="inline ? 'shrink-0' : 'absolute top-3 right-3 z-10 bg-default/90 shadow-sm hover:bg-default'"
     @click="$emit('click', $event)" />
 </template>

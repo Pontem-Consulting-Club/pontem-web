@@ -99,7 +99,11 @@ watchEffect(() => {
   }
 })
 
-const handleCancel = () => {
+const toast = useToast()
+const { confirmDelete, confirmDiscard } = useConfirm()
+
+const handleCancel = async (hasPendingFile = false) => {
+  if ((hasPendingFile || formChanged(form.value, editNews.value ?? {})) && !(await confirmDiscard())) return
   if (isNew) {
     router.push('/noticias')
     return
@@ -118,17 +122,14 @@ const handleCreated = () => {
 
 const handleDelete = async () => {
   if (isNew || !editNews.value) return
-  const confirmed = typeof window !== 'undefined'
-    ? window.confirm('¿Eliminar esta noticia? Esta acción no se puede deshacer.')
-    : false
-
-  if (!confirmed) return
+  if (!(await confirmDelete('esta noticia'))) return
 
   isDeleting.value = true
   formError.value = ''
 
   try {
     await $fetch(`/api/admin/news/${editNews.value.id}`, { method: 'DELETE' })
+    toast.add({ title: 'Noticia eliminada', icon: 'i-lucide-check', color: 'success' })
     router.push('/noticias')
   } catch (error: unknown) {
     const apiError = typeof error === 'object' && error !== null && 'data' in error
@@ -205,9 +206,11 @@ const saveEdit = async (file?: File | null) => {
     const formData = buildFormData(payload, file)
     if (isNew) {
       await $fetch('/api/admin/news', { method: 'POST', body: formData })
+      toast.add({ title: 'Noticia publicada', icon: 'i-lucide-check', color: 'success' })
       handleCreated()
     } else if (editNews.value) {
       await $fetch(`/api/admin/news/${editNews.value.id}`, { method: 'PUT', body: formData })
+      toast.add({ title: 'Noticia guardada', icon: 'i-lucide-check', color: 'success' })
       await handleUpdated()
     }
   } catch (error: unknown) {

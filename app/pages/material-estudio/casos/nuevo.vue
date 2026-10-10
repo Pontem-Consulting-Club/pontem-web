@@ -8,7 +8,7 @@ useHead({
 const router = useRouter()
 const { isEditor, ready: profileReady } = useProfile()
 
-const { form, formError, isSaving, emptyCaseStudy, create } = useCaseStudyForm()
+const { form, formError, isSaving, emptyCaseStudy, create, canLeave } = useCaseStudyForm()
 
 form.value = emptyCaseStudy()
 
@@ -31,7 +31,8 @@ const handleSubmit = async (files: CaseStudyFiles) => {
   }
 }
 
-const handleCancel = () => {
+const handleCancel = async (hasPendingFile = false) => {
+  if (!(await canLeave(emptyCaseStudy(), hasPendingFile))) return
   router.push('/material-estudio')
 }
 </script>

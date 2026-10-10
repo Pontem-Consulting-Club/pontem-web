@@ -51,7 +51,14 @@ const handleCreated = () => {
   cancelCreate()
 }
 
-const startEdit = async (member: TeamRecord) => {
+// Mientras hay un formulario abierto, los nombres y "Agregar" quedan desactivados.
+const { anyOpen: editorOpen } = useEditorSlot()
+
+// El nombre que abrió el formulario recibe el foco al cerrarlo.
+let editTrigger: HTMLElement | null = null
+
+const startEdit = async (member: TeamRecord, event: MouseEvent) => {
+  editTrigger = event.currentTarget as HTMLElement
   cancelCreate()
   editingMember.value = { ...member }
   // El nombre puede quedar lejos del formulario: lo trae a la vista.
@@ -59,8 +66,10 @@ const startEdit = async (member: TeamRecord) => {
   editorPanel.value?.scrollIntoView({ behavior: 'smooth', block: 'center' })
 }
 
-const closeEdit = () => {
+const closeEdit = async () => {
   editingMember.value = null
+  await nextTick()
+  editTrigger?.focus()
 }
 
 const teamByRole = computed(() => {
@@ -100,7 +109,7 @@ const teamByRole = computed(() => {
         <SectionTitle title="Nuestro Equipo" centered class="mb-12" />
  
         <div v-if="isEditor" class="flex justify-end mb-6">
-          <UButton icon="i-lucide-plus" color="primary" size="md" :disabled="isCreating" @click="startCreate">
+          <UButton icon="i-lucide-plus" color="primary" size="md" :disabled="editorOpen" @click="startCreate">
             Agregar
           </UButton>
         </div>
@@ -144,8 +153,8 @@ const teamByRole = computed(() => {
               <div class="flex flex-col gap-1 overflow-hidden">
                 <template v-for="member in dept.members" :key="member.id">
                   <button v-if="isEditor" type="button" :aria-label="`Editar a ${member.name}`"
-                    class="group flex min-w-0 items-center gap-1 text-left text-xs/snug text-muted hover:text-primary"
-                    @click="startEdit(member)">
+                    class="group flex min-w-0 items-center gap-1 text-left text-xs/snug text-muted hover:text-primary disabled:pointer-events-none disabled:opacity-60"
+                    :disabled="editorOpen" @click="startEdit(member, $event)">
                     <span class="truncate">{{ member.name }}</span>
                     <UIcon name="i-lucide-pencil" class="size-3 shrink-0 text-dimmed group-hover:text-primary" />
                   </button>

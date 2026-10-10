@@ -1,5 +1,6 @@
 <template>
-    <div class="absolute inset-0 z-30">
+    <!-- Escape cancela, igual que "Volver". -->
+    <div class="absolute inset-0 z-30" @keydown.esc.stop="emit('cancel', !!pendingFile)">
         <div v-if="previewUrl" class="absolute inset-0 bg-cover bg-center grayscale"
             :style="{ backgroundImage: `url(${previewUrl})` }" />
         <div v-else class="absolute inset-0 bg-inverted" />
@@ -10,7 +11,7 @@
                 <UTheme :ui="onImage">
                     <UForm :state="form" class="flex max-w-2xl flex-col gap-3 text-white" @submit.prevent="handleSubmit">
                         <!-- Imita el título de la portada -->
-                        <UInput v-model="form.title" placeholder="Título" variant="none"
+                        <UInput v-model="form.title" placeholder="Título" variant="none" autofocus
                             :ui="{ base: [onImageField, 'text-title md:text-title'] }" />
                         <UTextarea v-model.nullable="form.subtitle" :rows="2" placeholder="Subtítulo" variant="none"
                             autoresize />
@@ -31,7 +32,7 @@
                         <div class="mt-4 flex flex-wrap justify-between gap-3">
                             <div class="flex gap-3">
                                 <UButton type="button" icon="i-lucide-arrow-left" :disabled="isSaving || !!isDeleting"
-                                    @click="emit('cancel')">
+                                    @click="emit('cancel', !!pendingFile)">
                                     Volver
                                 </UButton>
                                 <UButton v-if="!isNew" type="button" icon="i-lucide-trash-2" :loading="!!isDeleting"
@@ -65,7 +66,9 @@ defineProps<{
 
 const emit = defineEmits<{
     (event: 'submit', file?: File | null): void
-    (event: 'cancel' | 'delete'): void
+    /** `hasPendingFile`: se eligió una imagen que todavía no se sube. */
+    (event: 'cancel', hasPendingFile: boolean): void
+    (event: 'delete'): void
 }>()
 
 const pendingFile = ref<File | null>(null)

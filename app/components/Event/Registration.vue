@@ -119,7 +119,18 @@ const register = async () => {
   }
 }
 
+const { confirm } = useConfirm()
+
 const cancel = async () => {
+  const confirmed = await confirm({
+    title: '¿Cancelar tu inscripción?',
+    description: 'Si cambias de idea, puedes volver a inscribirte mientras la inscripción siga abierta.',
+    confirmLabel: 'Cancelar inscripción',
+    cancelLabel: 'Mantenerla',
+    destructive: true
+  })
+  if (!confirmed) return
+
   message.value = ''
   isBusy.value = true
 
