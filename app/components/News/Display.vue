@@ -14,7 +14,7 @@
 
         <header class="flex flex-col mb-8">
             <div v-if="headerType" class="mb-4">
-                <TypeBadge :type="headerType" size="base" />
+                <UBadge :color="getTypeBadgeColor(headerType)" :label="headerType" size="lg" />
             </div>
             <h1 class="mb-4 text-title text-highlighted">
                 {{ newsItem.title }}
@@ -37,6 +37,8 @@
 
 <script setup lang="ts">
 import type { NewsRecord } from '~/types/content'
+
+const { getTypeBadgeColor } = useNewsTypeColor()
 
 const props = defineProps<{
     newsItem: NewsRecord

@@ -2,7 +2,7 @@
   <UPageSection title="Noticias y Blog" description="Mantente al día con las últimas novedades">
     <LoadingSpinner v-if="status === 'pending'" />
 
-    <EmptyState v-else-if="latestNews.length === 0" message="No hay noticias disponibles" />
+    <UEmpty v-else-if="latestNews.length === 0" title="No hay noticias disponibles" icon="i-lucide-inbox"/>
 
     <UPageGrid v-else>
       <NewsCard v-for="newsItem in latestNews" :key="newsItem.id" :news-item="newsItem" />

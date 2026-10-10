@@ -114,7 +114,7 @@ const teamByRole = computed(() => {
           <TeamCard :key="editingMember.id" :member="editingMember" start-editing @updated="refresh" @closed="closeEdit" />
         </div>
  
-        <EmptyState v-else-if="teamByRole.length === 0" message="No hay integrantes disponibles" />
+        <UEmpty v-else-if="teamByRole.length === 0" title="No hay integrantes disponibles" icon="i-lucide-inbox"/>
 
         <div v-if="teamByRole.length > 0" class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <!-- Foto a la izquierda y nombres a la derecha, sin el relleno de la tarjeta -->

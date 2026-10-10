@@ -59,7 +59,7 @@ const NEUTRAL = [
 export const themeVariables = [
   'card', 'pageCard', 'button', 'badge', 'input', 'textarea', 'select', 'selectMenu',
   'formField', 'fileUpload', 'pageHero', 'pageHeader', 'pageSection', 'pageGrid',
-  'pageFeature', 'header', 'footer', 'marquee', 'onImage', 'inlineEdit'
+  'pageFeature', 'header', 'footer', 'footerColumns', 'marquee', 'empty', 'onImage', 'inlineEdit'
 ]
 
 const escape = (/** @type {string} */ s) => s.replace(/[/\\^$.*+?()[\]{}|]/g, '\\$&')

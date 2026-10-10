@@ -8,8 +8,8 @@
     <div v-if="isOpen" class="mt-3">
       <LoadingSpinner v-if="status === 'pending'" />
 
-      <EmptyState v-else-if="rows.length === 0" icon="i-lucide-user-x"
-        message="Todavía no hay nadie inscrito" />
+      <UEmpty v-else-if="rows.length === 0" icon="i-lucide-user-x"
+        title="Todavía no hay nadie inscrito" />
 
       <div v-else class="overflow-x-auto rounded-lg border border-default">
         <table class="w-full text-sm">

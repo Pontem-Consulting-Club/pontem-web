@@ -43,7 +43,7 @@
       <LoadingSpinner v-if="status === 'pending'" />
 
       <div v-else-if="filtered.length === 0">
-        <EmptyState icon="i-lucide-users" message="No hay personas que coincidan" />
+        <UEmpty icon="i-lucide-users" title="No hay personas que coincidan" />
       </div>
 
       <div v-else class="overflow-x-auto rounded-lg border border-default bg-default">

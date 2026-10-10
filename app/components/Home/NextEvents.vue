@@ -3,7 +3,7 @@
     class="bg-accented/60 clip-wave-top">
     <LoadingSpinner v-if="status === 'pending'" />
 
-    <EmptyState v-else-if="upcomingEvents.length === 0" message="No hay eventos próximos programados" />
+    <UEmpty v-else-if="upcomingEvents.length === 0" title="No hay eventos próximos programados" icon="i-lucide-inbox"/>
 
     <UPageGrid v-else>
       <EventCard v-for="event in upcomingEvents" :key="event.id" :event="event" variant="compact"

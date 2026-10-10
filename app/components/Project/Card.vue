@@ -10,15 +10,13 @@
     <span class="text-xs font-semibold text-muted uppercase tracking-wide">{{ project.semester }}</span>
     <span class="text-sm font-semibold text-default">{{ project.title }}</span>
     <span class="text-xs text-muted sm:truncate">{{ project.subtitle }}</span>
-    <UButton v-if="isEditor" icon="i-lucide-pencil" size="xs" color="primary" variant="ghost"
-      aria-label="Editar proyecto" class="self-start sm:self-auto" @click="startEdit" />
+    <ContentEditButton v-if="isEditor" label="Editar proyecto" inline class="self-start sm:self-auto"
+      @click="startEdit" />
   </div>
 
   <UCard v-else variant="item" class="relative flex flex-col" :ui="{ body: 'flex flex-1 flex-col gap-1' }">
     <template #header>
-      <UButton v-if="isEditor" icon="i-lucide-pencil" size="xs" color="primary"
-        aria-label="Editar proyecto" class="absolute top-3 right-3 z-10 bg-default shadow-sm hover:bg-default"
-        @click="startEdit" />
+      <ContentEditButton v-if="isEditor" label="Editar proyecto" @click="startEdit" />
 
       <NuxtImg v-if="imageUrl" :src="imageUrl" :alt="project.title" class="h-44 w-full object-cover" />
       <!-- Sin imagen: el logo completo, no recortado por object-cover. -->

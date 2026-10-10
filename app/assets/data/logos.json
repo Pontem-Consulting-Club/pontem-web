@@ -1,16 +1,58 @@
 [
-    "logos_consultoras/Bain&Co.png",
-    "logos_consultoras/BCG.png",
-    "logos_consultoras/Deloitte.png",
-    "logos_consultoras/Fix.png",
-    "logos_consultoras/GudCompany.png",
-    "logos_consultoras/Mastercard.png",
-    "logos_consultoras/MatrixConsulting.png",
-    "logos_consultoras/McKinsey&Co.png",
-    "logos_consultoras/Montblanc.png",
-    "logos_consultoras/PwC.png",
-    "logos_consultoras/Summa.png",
-    "logos_consultoras/TheHouse.png",
-    "logos_consultoras/Vinson.png",
-    "logos_consultoras/VirtusPartners.png"
+  {
+    "name": "Bain & Company",
+    "src": "/logos_consultoras/Bain&Co.png"
+  },
+  {
+    "name": "BCG",
+    "src": "/logos_consultoras/BCG.png"
+  },
+  {
+    "name": "Deloitte",
+    "src": "/logos_consultoras/Deloitte.png"
+  },
+  {
+    "name": "Fix Partners",
+    "src": "/logos_consultoras/Fix.png"
+  },
+  {
+    "name": "Gud Company",
+    "src": "/logos_consultoras/GudCompany.png"
+  },
+  {
+    "name": "Mastercard",
+    "src": "/logos_consultoras/Mastercard.png"
+  },
+  {
+    "name": "Matrix Consulting",
+    "src": "/logos_consultoras/MatrixConsulting.png"
+  },
+  {
+    "name": "McKinsey & Company",
+    "src": "/logos_consultoras/McKinsey&Co.png"
+  },
+  {
+    "name": "Montblanc",
+    "src": "/logos_consultoras/Montblanc.png"
+  },
+  {
+    "name": "PwC",
+    "src": "/logos_consultoras/PwC.png"
+  },
+  {
+    "name": "Summa",
+    "src": "/logos_consultoras/Summa.png"
+  },
+  {
+    "name": "The House",
+    "src": "/logos_consultoras/TheHouse.png"
+  },
+  {
+    "name": "Vinson",
+    "src": "/logos_consultoras/Vinson.png"
+  },
+  {
+    "name": "Virtus Partners",
+    "src": "/logos_consultoras/VirtusPartners.png"
+  }
 ]

@@ -25,8 +25,7 @@ const duration = computed(() => {
       <!-- Barra de acento segun categoria -->
       <div class="h-1.5 w-full" :class="getCategoryAccent(caseStudy.category)" />
 
-      <UButton v-if="isEditor" icon="i-lucide-pencil" size="xs" color="primary" variant="ghost"
-        class="absolute top-4 right-3 z-10" aria-label="Editar caso" :to="`${detailLink}?edit=1`" />
+      <ContentEditButton v-if="isEditor" label="Editar caso" :to="`${detailLink}?edit=1`" />
     </template>
 
 

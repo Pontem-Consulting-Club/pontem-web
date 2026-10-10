@@ -5,7 +5,7 @@
     </template>
 
     <div class="mb-4">
-      <TypeBadge v-if="newsItem.type" :type="newsItem.type" size="xs" />
+      <UBadge v-if="newsItem.type" :color="getTypeBadgeColor(newsItem.type)" :label="newsItem.type" />
     </div>
 
     <h3 class="mb-2 text-subheading text-highlighted">
@@ -36,6 +36,8 @@
 
 <script setup lang="ts">
 import type { NewsRecord } from '~/types/content'
+
+const { getTypeBadgeColor } = useNewsTypeColor()
 
 interface Props {
   newsItem: NewsRecord

@@ -93,8 +93,8 @@ const pastEvents = computed(() => {
         </section>
 
         <!-- No Events -->
-        <EmptyState v-if="futureEvents.length === 0 && pastEvents.length === 0" icon="i-lucide-calendar-x"
-          message="No hay eventos disponibles" />
+        <UEmpty v-if="futureEvents.length === 0 && pastEvents.length === 0" icon="i-lucide-calendar-x"
+          title="No hay eventos disponibles" />
       </template>
     </UContainer>
   </div>

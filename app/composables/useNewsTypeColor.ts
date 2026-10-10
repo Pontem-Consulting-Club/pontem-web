@@ -1,4 +1,16 @@
+type BadgeColor = 'primary' | 'secondary' | 'tertiary' | 'neutral'
+
 export const useNewsTypeColor = () => {
+  /** Color de UBadge para cada tipo de noticia. */
+  const getTypeBadgeColor = (type?: string | null): BadgeColor => {
+    const colors: Record<string, BadgeColor> = {
+      Evento: 'secondary',
+      'Artículo': 'primary',
+      Anuncio: 'tertiary'
+    }
+    return colors[type || ''] ?? 'neutral'
+  }
+
   const getTypeColor = (type?: string): string => {
     const typeClasses: Record<string, string> = {
       Evento: 'bg-secondary-50 text-secondary-800',
@@ -26,5 +38,5 @@ export const useNewsTypeColor = () => {
     return textClasses[type || ''] || ''
   }
 
-  return { getTypeColor, getTypeBorder, getTypeText }
+  return { getTypeBadgeColor, getTypeColor, getTypeBorder, getTypeText }
 }

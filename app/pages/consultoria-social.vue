@@ -34,7 +34,7 @@
           </div>
 
           <div v-if="activeProjects.length === 0 && !isCreating">
-            <EmptyState message="No hay proyectos activos" />
+            <UEmpty title="No hay proyectos activos" icon="i-lucide-inbox"/>
           </div>
           <UPageGrid v-else>
             <!-- El borrador ocupa el primer lugar de la grilla, como una tarjeta mas. -->

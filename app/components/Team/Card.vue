@@ -4,8 +4,7 @@
         @delete="handleDelete" />
 
     <div v-else class="relative">
-        <UButton v-if="isEditor" icon="i-lucide-pencil" size="xs" color="primary" variant="ghost"
-            class="absolute top-2 right-2 z-10" @click="startEdit" />
+        <ContentEditButton v-if="isEditor" label="Editar integrante" @click="startEdit" />
 
 <TeamMemberCard :name="member.name" :coordination="member.coordination" :image-url="coordinationImageUrl" />
     </div>

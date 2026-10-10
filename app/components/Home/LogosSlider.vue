@@ -1,63 +1,34 @@
-<template>
-  <div>
-    <!-- Header section -->
-    <div class="mt-12 w-full bg-accented/60 clip-wave-top">
-      <div class="text-center py-12 px-4">
-        <h2 class="text-heading">
-          Consultoras que impulsan el talento
-        </h2>
-        <p class="max-w-3xl mx-auto">
-          Gracias a nuestra colaboración con estas consultoras líderes, ofrecemos a los estudiantes oportunidades de
-          desarrollo profesional y la posibilidad de trabajar en proyectos que impactan en el mundo real:
-        </p>
-      </div>
-    </div>
-
-    <!-- Infinite slider -->
-    <div class="overflow-hidden bg-accented/60">
-      <div class="flex animate-scroll py-4" :style="{ animationDuration: `45s` }">
-        <div v-for="(logo, index) in repeatedLogos" :key="`${index}-${logo}`" class="shrink-0 mr-24 my-6">
-          <img :src="logo" :alt="`Logo ${index}`" class="h-[65px] w-auto">
-        </div>
-      </div>
-    </div>
-
-    <!-- Padding slider section -->
-    <div aria-hidden="true" class="w-full bg-accented/60 pt-[5%] clip-wave-bottom" />
-  </div>
-</template>
-
 <script setup lang="ts">
+interface Logo {
+  name: string
+  src: string
+}
 
-const props = defineProps({
-  logos: {
-    type: Array as () => string[],
-    required: true
-  },
-})
-
-const repeatedLogos = computed(() => {
-  return Array(2).fill(null).flatMap(() => props.logos)
-})
+defineProps<{ logos: Logo[] }>()
 </script>
 
-<style scoped>
-@keyframes scroll {
-  0% {
-    transform: translateX(0);
-  }
+<template>
+  <!-- Tres franjas del mismo fondo: borde curvo arriba, logos y borde curvo abajo. -->
+  <section class="mt-12">
+    <div class="bg-accented/60 px-4 py-12 text-center clip-wave-top">
+      <h2 class="text-heading">
+        Consultoras que impulsan el talento
+      </h2>
+      <p class="mx-auto max-w-3xl">
+        Gracias a nuestra colaboración con estas consultoras líderes, ofrecemos a los estudiantes oportunidades de
+        desarrollo profesional y la posibilidad de trabajar en proyectos que impactan en el mundo real:
+      </p>
+    </div>
 
-  100% {
-    transform: translateX(-50%);
-  }
-}
-
-.animate-scroll {
-  animation: scroll linear infinite;
-  width: max-content;
-}
-
-.animate-scroll:hover {
-  animation-play-state: paused;
-}
-</style>
+    <!-- La franja repite los logos para el efecto continuo; los lectores de pantalla
+         leen la lista de nombres una sola vez. -->
+    <ul class="sr-only">
+      <li v-for="logo in logos" :key="logo.name">{{ logo.name }}</li>
+    </ul>
+    <UMarquee pause-on-hover aria-hidden="true" class="bg-accented/60"
+      :ui="{ root: '[--duration:45s] [--gap:--spacing(24)]' }">
+      <img v-for="logo in logos" :key="logo.name" :src="logo.src" :alt="logo.name" class="my-6 h-16 w-auto">
+    </UMarquee>
+    <div aria-hidden="true" class="bg-accented/60 pt-[5%] clip-wave-bottom" />
+  </section>
+</template>

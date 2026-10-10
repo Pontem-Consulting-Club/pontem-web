@@ -103,7 +103,7 @@ const openDrive = () => {
 
       <LoadingSpinner v-if="status === 'pending'" />
 
-      <EmptyState v-else-if="filteredCaseStudies.length === 0" icon="i-lucide-folder-search"
+      <UEmpty v-else-if="filteredCaseStudies.length === 0" icon="i-lucide-folder-search"
         :message="caseStudies.length === 0
           ? 'Todavía no hay casos de estudio publicados'
           : 'Ningún caso coincide con tu búsqueda'" />

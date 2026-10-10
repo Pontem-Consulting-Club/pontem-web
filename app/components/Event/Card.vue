@@ -174,8 +174,7 @@ const handleDelete = async () => {
     @delete="handleDelete" />
 
   <UCard v-else-if="variant === 'full'" variant="item" class="relative">
-    <UButton v-if="isEditor" icon="i-lucide-pencil" size="xs" color="primary" variant="ghost"
-      class="absolute top-3 right-3 z-10" @click="startEdit" />
+    <ContentEditButton v-if="isEditor" label="Editar evento" @click="startEdit" />
 
     <div class="flex flex-col md:flex-row gap-6">
       <div class="md:w-32 shrink-0">
@@ -225,8 +224,7 @@ const handleDelete = async () => {
   </UCard>
 
   <UCard v-else-if="variant === 'past'" class="relative opacity-75">
-    <UButton v-if="isEditor" icon="i-lucide-pencil" size="xs" color="primary" variant="ghost"
-      class="absolute top-3 right-3 z-10" @click="startEdit" />
+    <ContentEditButton v-if="isEditor" label="Editar evento" @click="startEdit" />
     <div class="flex flex-col md:flex-row gap-4 items-start md:items-center">
       <span class="text-sm md:w-32">
         {{ formatDate(event.date) }}

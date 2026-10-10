@@ -1,11 +1,11 @@
 <template>
-  <!-- Textos propios de Nuxt UI (cerrar, anterior, siguiente...) en español. -->
+  <!-- Textos propios de Nuxt UI (cerrar, abrir menú, siguiente...) en español. -->
   <UApp :locale="es">
     <div class="flex min-h-screen flex-col bg-brand-wash">
       <AppNavbar />
-      <main class="w-full grow mt-20">
+      <UMain class="grow">
         <slot />
-      </main>
+      </UMain>
       <AppFooter />
     </div>
   </UApp>

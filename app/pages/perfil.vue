@@ -105,8 +105,8 @@
           </div>
 
           <div v-if="registrations.length === 0">
-            <EmptyState icon="i-lucide-calendar-x"
-              message="Todavía no te has inscrito en ninguna actividad" />
+            <UEmpty icon="i-lucide-calendar-x"
+              title="Todavía no te has inscrito en ninguna actividad" />
           </div>
 
           <ul v-else class="divide-y divide-default rounded-lg border border-default bg-default">

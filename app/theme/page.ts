@@ -32,14 +32,20 @@ export const footer = {
   slots: {
     root: 'mt-24 bg-neutral-600/75 text-white clip-wave-top',
     top: 'pt-24 pb-8',
-    bottom: 'border-t border-white/20 py-8 text-sm text-white/80'
+    container: 'border-t border-white/20 text-sm text-white/80'
   }
 }
 
+/** Columnas del pie: los enlaces se colorean por la variante `active`, no por el slot. */
 export const footerColumns = {
   slots: {
-    label: 'text-lg font-semibold text-white',
-    link: 'text-white/80 hover:text-white'
+    label: 'text-lg font-semibold text-white'
+  },
+  variants: {
+    active: {
+      true: { link: 'font-medium text-white' },
+      false: { link: 'text-white/80 hover:text-white' }
+    }
   }
 }
 

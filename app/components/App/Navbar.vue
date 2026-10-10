@@ -1,127 +1,37 @@
 <template>
-  <header class="fixed h-20 w-full z-50 bg-default drop-shadow-md backdrop-blur-xs">
-    <nav class="flex h-full items-center justify-around px-8 md:px-16 py-4 relative">
-      <!-- Logo -->
-      <NuxtLink to="/">
-        <img src="/pontemog_optimized_.png" alt="Pontem" class="object-contain h-12">
-      </NuxtLink>
+  <UHeader title="Pontem Consulting Club">
+    <template #title>
+      <img src="/pontemog_optimized_.png" alt="Pontem Consulting Club" class="h-12 w-auto">
+    </template>
 
-      <!-- Desktop Navigation -->
-      <div class="hidden md:flex items-center gap-8 pl-8">
-        <NuxtLink v-for="item in navigation" :key="item.to" :to="item.to"
-          class="hover:text-primary transition text-sm text-center font-medium" active-class="text-primary">
-          {{ item.label }}
-        </NuxtLink>
-        <template v-if="isAuthenticated">
-          <NuxtLink v-if="isAdmin" to="/admin/usuarios"
-            class="hover:text-primary transition text-sm text-center font-medium" active-class="text-primary">
-            Personas
-          </NuxtLink>
-          <NuxtLink to="/perfil" class="hover:text-primary transition text-sm text-center font-medium"
-            active-class="text-primary">
-            Mi Perfil
-          </NuxtLink>
-          <UButton icon="i-lucide-log-out" color="error" variant="outline" size="xs" @click="logout">
-            Cerrar Sesión
-          </UButton>
-        </template>
-      </div>
+    <UNavigationMenu :items="items" />
 
-      <!-- Mobile Menu Toggle -->
-      <button ref="menuButtonRef"
-        class="md:hidden p-2 rounded-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
-        aria-label="Toggle mobile menu" :aria-expanded="isMobileMenuOpen" @click="toggleMobileMenu">
-        <svg :class="['size-6 transform transition-transform duration-300', isMobileMenuOpen ? 'rotate-90' : '']"
-          xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
-      </button>
-    </nav>
+    <template #right>
+      <UButton v-if="isAuthenticated" icon="i-lucide-log-out" color="error" variant="outline" size="xs" class="hidden lg:flex"
+        @click="logout">
+        Cerrar sesión
+      </UButton>
+    </template>
 
-    <!-- Mobile Navigation Sidebar -->
-    <Transition enter-active-class="transition duration-300 ease-out"
-      enter-from-class="opacity-0 -translate-y-2 scale-95" enter-to-class="opacity-100 translate-y-0 scale-100"
-      leave-active-class="transition duration-200 ease-in" leave-from-class="opacity-100 translate-y-0 scale-100"
-      leave-to-class="opacity-0 -translate-y-2 scale-95">
-
-      <div v-if="isMobileMenuOpen" ref="menuRef"
-        class="md:hidden absolute right-0 top-full w-fit bg-default backdrop-blur-md shadow-lg z-60 rounded-bl-lg overflow-hidden">
-        <nav class="py-2 flex flex-col">
-          <NuxtLink v-for="item in navigation" :key="item.to" :to="item.to"
-            class="px-5 py-2 gap-5 transition-colors text-left font-medium" active-class="text-primary">
-            {{ item.label }}
-          </NuxtLink>
-          <template v-if="isAuthenticated">
-            <NuxtLink v-if="isAdmin" to="/admin/usuarios" class="px-5 py-2 gap-5 transition-colors text-left font-medium"
-              active-class="text-primary">
-              Personas
-            </NuxtLink>
-            <NuxtLink to="/perfil" class="px-5 py-2 gap-5 transition-colors text-left font-medium"
-              active-class="text-primary">
-              Mi Perfil
-            </NuxtLink>
-            <UButton icon="i-lucide-log-out" color="error" variant="outline" size="xs" class="m-2"
-              @click="handleLogout">
-              Cerrar Sesión
-            </UButton>
-          </template>
-        </nav>
-      </div>
-
-    </Transition>
-
-    <!-- Mobile Menu Overlay -->
-    <Transition enter-active-class="transition duration-300 ease-out" enter-from-class="opacity-0"
-      enter-to-class="opacity-100" leave-active-class="transition duration-300 ease-in" leave-from-class="opacity-100"
-      leave-to-class="opacity-0">
-      <div v-if="isMobileMenuOpen" class="fixed inset-x-0 bottom-0 top-24 bg-black/30 lg:hidden z-30"
-        @click="closeMobileMenu" />
-    </Transition>
-  </header>
+    <template #body>
+      <UNavigationMenu :items="items" orientation="vertical" class="-mx-2.5" />
+      <UButton v-if="isAuthenticated" icon="i-lucide-log-out" color="error" variant="outline" class="mt-4" @click="logout">
+        Cerrar sesión
+      </UButton>
+    </template>
+  </UHeader>
 </template>
 
 <script setup lang="ts">
-const isMobileMenuOpen = ref(false)
+import type { NavigationMenuItem } from '@nuxt/ui'
+
 const { navigation } = useNavigation()
 const { logout, isAuthenticated } = useAuth()
 const { isAdmin } = useProfile()
 
-const menuRef = ref<HTMLElement | null>(null)
-const menuButtonRef = ref<HTMLElement | null>(null)
-
-const toggleMobileMenu = () => {
-  isMobileMenuOpen.value = !isMobileMenuOpen.value
-}
-
-const closeMobileMenu = () => {
-  isMobileMenuOpen.value = false
-}
-
-const handleLogout = () => {
-  logout()
-  closeMobileMenu()
-}
-
-const onDocumentClick = (e: MouseEvent) => {
-  if (!isMobileMenuOpen.value) return
-  const target = e.target as Node | null
-  if (!target) return
-  if (menuRef.value && menuRef.value.contains(target)) return
-  if (menuButtonRef.value && menuButtonRef.value.contains(target)) return
-  closeMobileMenu()
-}
-
-const onKeydown = (e: KeyboardEvent) => {
-  if (e.key === 'Escape' && isMobileMenuOpen.value) closeMobileMenu()
-}
-
-onMounted(() => {
-  document.addEventListener('click', onDocumentClick)
-  document.addEventListener('keydown', onKeydown)
-})
-
-onBeforeUnmount(() => {
-  document.removeEventListener('click', onDocumentClick)
-  document.removeEventListener('keydown', onKeydown)
-})
+const items = computed<NavigationMenuItem[]>(() => [
+  ...navigation,
+  ...(isAuthenticated.value && isAdmin.value ? [{ label: 'Personas', to: '/admin/usuarios' }] : []),
+  ...(isAuthenticated.value ? [{ label: 'Mi Perfil', to: '/perfil' }] : [])
+])
 </script>
