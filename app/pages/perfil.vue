@@ -96,7 +96,8 @@
         <section class="lg:col-span-2">
           <SectionTitle class="mb-8" title="Mi participación" icon="i-lucide-calendar-check" />
 
-          <div class="mb-6 grid gap-4 sm:grid-cols-3">
+          <!-- Sin actividad, tres ceros no dicen nada: el estado vacío dice qué hacer. -->
+          <div v-if="registrations.length > 0" class="mb-6 grid gap-4 sm:grid-cols-3">
             <div v-for="tile in statTiles" :key="tile.label"
               class="rounded-lg border border-default bg-default px-5 py-4">
               <div class="text-3xl font-semibold tabular-nums">{{ tile.value }}</div>
@@ -106,7 +107,9 @@
 
           <div v-if="registrations.length === 0">
             <UEmpty icon="i-lucide-calendar-x"
-              title="Todavía no te has inscrito en ninguna actividad" />
+              title="Todavía no te has inscrito en ninguna actividad"
+              description="Cuando te inscribas en una actividad, aparece aquí con su fecha y si asististe."
+              :actions="[{ label: 'Ver próximos eventos', icon: 'i-lucide-calendar', to: '/eventos' }]" />
           </div>
 
           <ul v-else class="divide-y divide-default rounded-lg border border-default bg-default">
@@ -240,10 +243,7 @@ const uploadAvatar = async (file: File | null | undefined) => {
   }
 }
 
-const resolveErrorMessage = (e: unknown, fallback: string) => {
-  const candidate = e as { statusMessage?: string; data?: { statusMessage?: string; message?: string } }
-  return candidate?.data?.statusMessage || candidate?.statusMessage || candidate?.data?.message || fallback
-}
+const resolveErrorMessage = apiErrorMessage
 
 // El formulario se llena despues de esperar el perfil. Con un `watch` inmediato,
 // en el servidor corria cuando el perfil todavia era null y no volvia a correr:

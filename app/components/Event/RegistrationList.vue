@@ -103,8 +103,7 @@ const setAttendance = async (row: RegistrationRow, attended: boolean) => {
     })
     await refresh()
   } catch (e) {
-    const candidate = e as { statusMessage?: string; data?: { statusMessage?: string } }
-    error.value = candidate?.data?.statusMessage || candidate?.statusMessage || 'No pudimos guardar la asistencia.'
+    error.value = apiErrorMessage(e, 'No pudimos guardar la asistencia.')
     await refresh()
   } finally {
     busyId.value = null

@@ -29,7 +29,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
     if (!can(profile as AuthzProfile | null, 'users.manage')) {
         throw createError({
             statusCode: 403,
-            statusMessage: 'No tienes acceso a esta seccion.',
+            statusMessage: 'No tienes acceso a esta sección.',
             fatal: true
         })
     }

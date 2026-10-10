@@ -96,14 +96,7 @@ export const useCaseStudyForm = () => {
     return formData
   }
 
-  const resolveApiError = (error: unknown, fallback: string) => {
-    const apiError = typeof error === 'object' && error !== null && 'data' in error
-      ? (error as { data?: { statusMessage?: string, message?: string } })
-      : null
-    return apiError?.data?.statusMessage
-      || apiError?.data?.message
-      || (error instanceof Error ? error.message : fallback)
-  }
+  const resolveApiError = apiErrorMessage
 
   /** Crea el caso y devuelve su id, o `null` si la validacion o la API fallaron. */
   const create = async (files: CaseStudyFiles): Promise<number | null> => {
@@ -124,7 +117,7 @@ export const useCaseStudyForm = () => {
       toast.add({ title: 'Caso de estudio creado', icon: 'i-lucide-check', color: 'success' })
       return response.id
     } catch (error: unknown) {
-      formError.value = resolveApiError(error, 'Error al crear el caso de estudio')
+      formError.value = resolveApiError(error, 'No pudimos crear el caso de estudio. Inténtalo de nuevo.')
       return null
     } finally {
       isSaving.value = false
@@ -149,7 +142,7 @@ export const useCaseStudyForm = () => {
       toast.add({ title: 'Caso de estudio guardado', icon: 'i-lucide-check', color: 'success' })
       return true
     } catch (error: unknown) {
-      formError.value = resolveApiError(error, 'Error al guardar los cambios')
+      formError.value = resolveApiError(error, 'No pudimos guardar los cambios. Inténtalo de nuevo.')
       return false
     } finally {
       isSaving.value = false
@@ -167,7 +160,7 @@ export const useCaseStudyForm = () => {
       toast.add({ title: 'Caso de estudio eliminado', icon: 'i-lucide-check', color: 'success' })
       return true
     } catch (error: unknown) {
-      formError.value = resolveApiError(error, 'Error al eliminar el caso de estudio')
+      formError.value = resolveApiError(error, 'No pudimos eliminar el caso de estudio. Inténtalo de nuevo.')
       return false
     } finally {
       isDeleting.value = false

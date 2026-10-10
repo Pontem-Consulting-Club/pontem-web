@@ -186,8 +186,5 @@ const sendInvite = async () => {
   }
 }
 
-const resolveErrorMessage = (e: unknown, fallback: string) => {
-  const candidate = e as { statusMessage?: string; data?: { statusMessage?: string; message?: string } }
-  return candidate?.data?.statusMessage || candidate?.statusMessage || candidate?.data?.message || fallback
-}
+const resolveErrorMessage = apiErrorMessage
 </script>

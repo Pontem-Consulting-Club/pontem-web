@@ -62,7 +62,7 @@ const submit = async () => {
   isLoading.value = false
 
   if (authError) {
-    error.value = authError.message
+    error.value = authErrorMessage(authError, 'No pudimos enviar el enlace. Inténtalo de nuevo en un momento.')
     return
   }
 

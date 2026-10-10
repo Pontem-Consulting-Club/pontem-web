@@ -50,7 +50,7 @@ export default defineEventHandler(async (event) => {
   if (!body.title || !body.published_date) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'Title and published date are required'
+      statusMessage: 'El título y la fecha de publicación son obligatorios.'
     })
   }
 

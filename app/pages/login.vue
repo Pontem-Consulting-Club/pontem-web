@@ -96,10 +96,10 @@ const handleSubmit = async () => {
     if (result.success) {
       router.push(destination.value)
     } else {
-      error.value = result.error || 'Error al iniciar sesión'
+      error.value = result.error || 'No pudimos iniciar sesión. Inténtalo de nuevo.'
     }
   } catch {
-    error.value = 'Error al conectar con el servidor'
+    error.value = 'No pudimos conectarnos. Revisa tu conexión e inténtalo de nuevo.'
   } finally {
     isLoading.value = false
   }

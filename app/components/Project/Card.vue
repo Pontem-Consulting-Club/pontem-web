@@ -191,12 +191,7 @@ const saveEdit = async (file?: File | null) => {
     isEditing.value = false
     emit('updated')
   } catch (error: unknown) {
-    const apiError = typeof error === 'object' && error !== null && 'data' in error
-      ? (error as { data?: { statusMessage?: string; message?: string } })
-      : null
-    formError.value = apiError?.data?.statusMessage
-      || apiError?.data?.message
-      || (error instanceof Error ? error.message : 'Error al guardar los cambios')
+    formError.value = apiErrorMessage(error, 'No pudimos guardar los cambios. Inténtalo de nuevo.')
   } finally {
     isSaving.value = false
   }
@@ -215,12 +210,7 @@ const handleDelete = async () => {
     isEditing.value = false
     emit('updated')
   } catch (error: unknown) {
-    const apiError = typeof error === 'object' && error !== null && 'data' in error
-      ? (error as { data?: { statusMessage?: string; message?: string } })
-      : null
-    formError.value = apiError?.data?.statusMessage
-      || apiError?.data?.message
-      || (error instanceof Error ? error.message : 'Error al eliminar el proyecto')
+    formError.value = apiErrorMessage(error, 'No pudimos eliminar el proyecto. Inténtalo de nuevo.')
   } finally {
     isDeleting.value = false
   }

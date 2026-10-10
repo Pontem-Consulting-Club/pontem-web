@@ -127,12 +127,12 @@ const teamByRole = computed(() => {
         <UEmpty v-else-if="teamByRole.length === 0" title="No hay integrantes disponibles" icon="i-lucide-inbox"/>
 
         <div v-if="!error && teamByRole.length > 0" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <!-- Foto a la izquierda y nombres a la derecha, sin el relleno de la tarjeta -->
-          <UCard v-for="dept in teamByRole" :key="dept.key" class="h-56"
-            :ui="{ body: 'flex h-full p-0 sm:p-0' }">
+          <!-- Foto arriba en celular; desde md, foto a la izquierda y nombres a la derecha.
+               Los nombres se ven completos: la tarjeta crece con la lista. -->
+          <UCard v-for="dept in teamByRole" :key="dept.key" class="md:min-h-56"
+            :ui="{ body: 'flex h-full flex-col p-0 sm:p-0 md:flex-row' }">
 
-            <!-- Imagen: 75% -->
-            <div class="w-3/4 shrink-0">
+            <div class="h-44 shrink-0 md:h-auto md:w-3/5">
               <TeamCoordinationImage
                 :image-path="dept.imageUrl"
                 :icon="dept.icon"
@@ -141,24 +141,23 @@ const teamByRole = computed(() => {
               />
             </div>
 
-            <!-- Panel derecho: 25% -->
-            <div class="w-1/4 flex flex-col p-4 overflow-hidden">
+            <div class="flex min-w-0 flex-1 flex-col p-4">
               <!-- Header -->
               <div class="flex items-center gap-1.5 mb-3 shrink-0">
-                <UIcon :name="dept.icon" class="size-3.5 text-primary-500 shrink-0" />
-                <h3 class="font-bold text-highlighted text-sm/tight">{{ dept.label }}</h3>
+                <UIcon :name="dept.icon" class="size-4 text-primary-500 shrink-0" />
+                <h3 class="text-subheading text-highlighted">{{ dept.label }}</h3>
               </div>
 
               <!-- Nombres -->
-              <div class="flex flex-col gap-1 overflow-hidden">
+              <div class="flex flex-col gap-1">
                 <template v-for="member in dept.members" :key="member.id">
                   <button v-if="isEditor" type="button" :aria-label="`Editar a ${member.name}`"
-                    class="group flex min-w-0 items-center gap-1 text-left text-xs/snug text-muted hover:text-primary disabled:pointer-events-none disabled:opacity-60"
+                    class="group flex min-w-0 items-start gap-1 text-left text-sm/snug text-muted hover:text-primary disabled:pointer-events-none disabled:opacity-60"
                     :disabled="editorOpen" @click="startEdit(member, $event)">
-                    <span class="truncate">{{ member.name }}</span>
+                    <span class="min-w-0 wrap-break-word">{{ member.name }}</span>
                     <UIcon name="i-lucide-pencil" class="size-3 shrink-0 text-dimmed group-hover:text-primary" />
                   </button>
-                  <p v-else class="text-xs/snug text-muted truncate">
+                  <p v-else class="text-sm/snug text-muted wrap-break-word">
                     {{ member.name }}
                   </p>
                 </template>

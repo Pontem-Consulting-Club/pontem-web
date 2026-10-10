@@ -18,8 +18,9 @@ export const useAuth = () => {
       })
 
       if (error) {
-        authError.value = error.message
-        return { success: false, error: error.message }
+        const message = authErrorMessage(error, 'No pudimos iniciar sesión. Inténtalo de nuevo.')
+        authError.value = message
+        return { success: false, error: message }
       }
 
       // El modulo de Supabase actualiza useSupabaseUser() de forma asincrona
@@ -31,7 +32,7 @@ export const useAuth = () => {
 
       return { success: true }
     } catch (error) {
-      const message = (error as Error).message || 'Login failed'
+      const message = authErrorMessage(error, 'No pudimos iniciar sesión. Inténtalo de nuevo.')
       authError.value = message
       return { success: false, error: message }
     } finally {
@@ -48,7 +49,7 @@ export const useAuth = () => {
     const { data, error } = await supabase.auth.getSession()
 
     if (error) {
-      authError.value = error.message
+      authError.value = authErrorMessage(error, 'Tu sesión expiró. Vuelve a iniciar sesión.')
       return null
     }
 

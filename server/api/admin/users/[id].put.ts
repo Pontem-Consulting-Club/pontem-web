@@ -31,14 +31,14 @@ export default defineEventHandler(async (event) => {
         if (!isUserRole(body.role)) {
             throw createError({
                 statusCode: 400,
-                statusMessage: 'Rol invalido.'
+                statusMessage: 'Rol inválido.'
             })
         }
 
         if (targetId === actor.id && body.role !== actor.role) {
             throw createError({
                 statusCode: 409,
-                statusMessage: 'No puedes cambiarte el rol a ti mismo. Pideselo a otra persona administradora.'
+                statusMessage: 'No puedes cambiarte el rol a ti mismo. Pídeselo a otra persona administradora.'
             })
         }
 
@@ -49,7 +49,7 @@ export default defineEventHandler(async (event) => {
         if (!['invited', 'active', 'inactive'].includes(body.state)) {
             throw createError({
                 statusCode: 400,
-                statusMessage: 'Estado invalido.'
+                statusMessage: 'Estado inválido.'
             })
         }
         payload.state = body.state as ProfileUpdate['state']
@@ -87,7 +87,7 @@ export default defineEventHandler(async (event) => {
         if ((count ?? 0) === 0) {
             throw createError({
                 statusCode: 409,
-                statusMessage: 'Es la unica cuenta administradora activa. Nombra a otra antes de cambiar esta.'
+                statusMessage: 'Es la única cuenta administradora activa. Nombra a otra antes de cambiar esta.'
             })
         }
     }

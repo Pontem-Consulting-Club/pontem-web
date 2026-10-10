@@ -22,7 +22,7 @@ export default defineEventHandler(async (event) => {
     if (!profile) {
         throw createError({
             statusCode: 401,
-            statusMessage: 'Necesitas iniciar sesion.'
+            statusMessage: 'Necesitas iniciar sesión.'
         })
     }
 

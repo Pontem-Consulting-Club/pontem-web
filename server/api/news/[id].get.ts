@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
   if (!idParam || Number.isNaN(id)) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'News ID is required'
+      statusMessage: 'Falta el identificador de la noticia.'
     })
   }
 
@@ -23,7 +23,7 @@ export default defineEventHandler(async (event) => {
     if (error.code === 'PGRST116') {
       throw createError({
         statusCode: 404,
-        statusMessage: 'News not found'
+        statusMessage: 'No encontramos esa noticia.'
       })
     }
 

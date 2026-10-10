@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
         throw createError({
             statusCode: 401,
             statusMessage: 'Unauthorized',
-            message: 'Necesitas iniciar sesion.'
+            message: 'Necesitas iniciar sesión.'
         })
     }
 

@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
     if (!idParam || Number.isNaN(id)) {
         throw createError({
             statusCode: 400,
-            statusMessage: 'Case study ID is required'
+            statusMessage: 'Falta el identificador del caso.'
         })
     }
 
@@ -32,7 +32,7 @@ export default defineEventHandler(async (event) => {
     if (!data) {
         throw createError({
             statusCode: 404,
-            statusMessage: 'Case study not found'
+            statusMessage: 'No encontramos ese caso de estudio.'
         })
     }
 

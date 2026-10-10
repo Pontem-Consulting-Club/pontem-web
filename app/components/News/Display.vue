@@ -31,7 +31,7 @@
         </header>
 
         <!-- eslint-disable vue/no-v-html -->
-        <div v-if="rawContent" class="prose max-w-none pb-3 text-justify" v-html="rawContent" />
+        <div v-if="rawContent" class="prose max-w-none pb-3" v-html="rawContent" />
         <!-- eslint-enable vue/no-v-html -->
     </UCard>
 </template>

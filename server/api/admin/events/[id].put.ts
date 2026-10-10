@@ -17,7 +17,7 @@ export default defineEventHandler(async (event) => {
   if (!idParam || Number.isNaN(id)) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'Event ID is required'
+      statusMessage: 'Falta el identificador del evento.'
     })
   }
 
@@ -62,7 +62,7 @@ export default defineEventHandler(async (event) => {
   if (!body.title || !body.date) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'Title and date are required'
+      statusMessage: 'El título y la fecha son obligatorios.'
     })
   }
 

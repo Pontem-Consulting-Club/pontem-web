@@ -18,7 +18,7 @@ export default defineEventHandler(async (event) => {
     if (!idParam || Number.isNaN(id)) {
         throw createError({
             statusCode: 400,
-            statusMessage: 'Case study ID is required'
+            statusMessage: 'Falta el identificador del caso.'
         })
     }
 
@@ -28,7 +28,7 @@ export default defineEventHandler(async (event) => {
     if (!title) {
         throw createError({
             statusCode: 400,
-            statusMessage: 'Title is required'
+            statusMessage: 'El título es obligatorio.'
         })
     }
 
@@ -38,7 +38,7 @@ export default defineEventHandler(async (event) => {
     if (!isCasebook && !isValidCaseCategory(rawCategory)) {
         throw createError({
             statusCode: 400,
-            statusMessage: 'A valid category is required'
+            statusMessage: 'Elige una categoría válida.'
         })
     }
     const category = !isCasebook && isValidCaseCategory(rawCategory) ? rawCategory : null
@@ -47,7 +47,7 @@ export default defineEventHandler(async (event) => {
     if (difficulty && !isValidCaseDifficulty(difficulty)) {
         throw createError({
             statusCode: 400,
-            statusMessage: 'Invalid difficulty'
+            statusMessage: 'Elige una dificultad válida.'
         })
     }
 

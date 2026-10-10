@@ -4,7 +4,7 @@
         <UForm class="flex flex-col items-center gap-4" @submit.prevent="handleSubmit">
             <!-- Imita el nombre de la tarjeta del integrante -->
             <UInput v-model="form.name" placeholder="Nombre" variant="ghost" autofocus
-                :ui="{ base: 'text-center text-lg font-semibold text-primary placeholder:text-primary/50 md:text-lg' }" />
+                :ui="{ base: [inlineEditField, 'text-center text-lg font-semibold text-primary-700 md:text-lg'] }" />
 
             <USelect v-model="form.coordination" :items="TEAM_COORDINATION_OPTIONS" placeholder="Selecciona una coordinación"
                 value-key="value" :disabled="isSaving || !!isDeleting" />
@@ -33,6 +33,7 @@
 <script setup lang="ts">
 import type { TeamRecord } from '~/types/content'
 import { TEAM_COORDINATION_OPTIONS } from '~/constants/teamRoles'
+import { inlineEditField } from '~/theme/presets'
 
 const form = defineModel<Partial<TeamRecord>>('form', { required: true })
 

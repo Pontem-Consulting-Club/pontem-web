@@ -50,7 +50,7 @@ export const requireCan = async (event: H3Event, capability: Capability): Promis
         throw createError({
             statusCode: 401,
             statusMessage: 'Unauthorized',
-            message: 'Necesitas iniciar sesion.'
+            message: 'Necesitas iniciar sesión.'
         })
     }
 
@@ -58,7 +58,7 @@ export const requireCan = async (event: H3Event, capability: Capability): Promis
         throw createError({
             statusCode: 403,
             statusMessage: 'Forbidden',
-            message: 'No tienes acceso a esta seccion.'
+            message: 'No tienes acceso a esta sección.'
         })
     }
 

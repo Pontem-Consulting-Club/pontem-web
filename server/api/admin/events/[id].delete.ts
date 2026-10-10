@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
   if (!idParam || Number.isNaN(id)) {
     throw createError({
       statusCode: 400,
-      statusMessage: 'Event ID is required'
+      statusMessage: 'Falta el identificador del evento.'
     })
   }
 

@@ -139,12 +139,7 @@ const saveEdit = async (file?: File | null) => {
     isEditing.value = false
     emit('updated')
   } catch (error: unknown) {
-    const apiError = typeof error === 'object' && error !== null && 'data' in error
-      ? (error as { data?: { statusMessage?: string; message?: string } })
-      : null
-    formError.value = apiError?.data?.statusMessage
-      || apiError?.data?.message
-      || (error instanceof Error ? error.message : 'Error al guardar los cambios')
+    formError.value = apiErrorMessage(error, 'No pudimos guardar los cambios. Inténtalo de nuevo.')
   } finally {
     isSaving.value = false
   }
@@ -163,12 +158,7 @@ const handleDelete = async () => {
     isEditing.value = false
     emit('updated')
   } catch (error: unknown) {
-    const apiError = typeof error === 'object' && error !== null && 'data' in error
-      ? (error as { data?: { statusMessage?: string; message?: string } })
-      : null
-    formError.value = apiError?.data?.statusMessage
-      || apiError?.data?.message
-      || (error instanceof Error ? error.message : 'Error al eliminar el evento')
+    formError.value = apiErrorMessage(error, 'No pudimos eliminar el evento. Inténtalo de nuevo.')
   } finally {
     isDeleting.value = false
   }
@@ -210,8 +200,9 @@ const handleDelete = async () => {
             <UIcon name="i-lucide-map-pin" class="size-4" />
             {{ event.location }}
           </span>
-          <a v-if="event.link" :href="event.link" target="_blank"
-            class="flex items-center gap-2 text-primary hover:underline">
+          <a v-if="event.link" :href="event.link" target="_blank" rel="noopener"
+            :aria-label="`Ver más sobre ${event.title} (se abre en otra pestaña)`"
+            class="flex items-center gap-2 text-primary-700 hover:underline">
             <UIcon name="i-lucide-external-link" class="size-4" />
             Ver más
           </a>
@@ -224,9 +215,13 @@ const handleDelete = async () => {
         <EventRegistrationList v-if="!_props.isNew && canReadRegistrations
           && (event.registration_mode ?? 'none') !== 'none'" :event-id="event.id" />
       </div>
-      <div class="md:w-48 shrink-0 relative">
-        <NuxtImg :src="imageUrl ?? '/LogoColorSolo.png'" alt="Imagen del evento"
-          class="object-cover rounded-lg h-32 w-full" sizes="300px" />
+      <!-- En celular la foto va primero; sin foto, solo en escritorio se muestra el logo
+           (completo, sin recortar) para que la fila no quede coja. -->
+      <div class="relative order-first shrink-0 md:order-last md:w-48" :class="{ 'hidden md:block': !imageUrl }">
+        <NuxtImg v-if="imageUrl" :src="imageUrl" alt="" class="h-40 w-full rounded-lg object-cover md:h-32"
+          sizes="xs:100vw sm:100vw md:200px" />
+        <NuxtImg v-else src="/LogoColorSolo.png" alt="" class="h-32 w-full rounded-lg bg-muted object-contain p-6"
+          sizes="200px" />
       </div>
     </div>
   </UCard>

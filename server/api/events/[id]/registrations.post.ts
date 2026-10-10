@@ -51,21 +51,21 @@ export default defineEventHandler(async (event) => {
     if (target.registration_mode === 'none') {
         throw createError({
             statusCode: 409,
-            statusMessage: 'Este evento no requiere inscripcion.'
+            statusMessage: 'Este evento no requiere inscripción.'
         })
     }
 
     if (!target.registration_open) {
         throw createError({
             statusCode: 409,
-            statusMessage: 'La inscripcion para este evento esta cerrada.'
+            statusMessage: 'La inscripción para este evento está cerrada.'
         })
     }
 
     if (target.date && new Date(target.date) <= new Date()) {
         throw createError({
             statusCode: 409,
-            statusMessage: 'Este evento ya ocurrio.'
+            statusMessage: 'Este evento ya ocurrió.'
         })
     }
 
@@ -102,14 +102,14 @@ export default defineEventHandler(async (event) => {
             throw translateRegistrationError(error.message)
         }
 
-        return { message: 'Inscripcion confirmada' }
+        return { message: 'Inscripción confirmada' }
     }
 
     // --------------------------------------------------------------- invitado
     if (target.registration_mode !== 'open') {
         throw createError({
             statusCode: 401,
-            statusMessage: 'Este evento es solo para miembros. Inicia sesion para inscribirte.'
+            statusMessage: 'Este evento es solo para miembros. Inicia sesión para inscribirte.'
         })
     }
 
@@ -133,7 +133,7 @@ export default defineEventHandler(async (event) => {
         throw guestOutcomeError(outcome as string)
     }
 
-    return { message: 'Inscripcion confirmada' }
+    return { message: 'Inscripción confirmada' }
 })
 
 /**
@@ -143,13 +143,13 @@ export default defineEventHandler(async (event) => {
  */
 const GUEST_OUTCOMES: Record<string, { status: number; message: string }> = {
     falta_nombre:    { status: 400, message: 'Escribe tu nombre.' },
-    correo_invalido: { status: 400, message: 'Escribe un correo valido.' },
+    correo_invalido: { status: 400, message: 'Escribe un correo válido.' },
     limite:          { status: 429, message: 'Demasiados intentos. Prueba de nuevo en unos minutos.' },
     no_existe:       { status: 404, message: 'Ese evento no existe.' },
     sin_invitados:   { status: 409, message: 'Este evento no admite invitados.' },
-    cerrado:         { status: 409, message: 'La inscripcion para este evento esta cerrada.' },
-    ya_paso:         { status: 409, message: 'Este evento ya ocurrio.' },
-    ya_inscrito:     { status: 409, message: 'Ya estas inscrito en este evento.' },
+    cerrado:         { status: 409, message: 'La inscripción para este evento está cerrada.' },
+    ya_paso:         { status: 409, message: 'Este evento ya ocurrió.' },
+    ya_inscrito:     { status: 409, message: 'Ya estás inscrito en este evento.' },
     sin_cupo:        { status: 409, message: 'Este evento ya no tiene cupos disponibles.' }
 }
 
@@ -159,7 +159,7 @@ const guestOutcomeError = (outcome: string) => {
     if (!known) {
         return createError({
             statusCode: 500,
-            statusMessage: 'No pudimos completar la inscripcion.'
+            statusMessage: 'No pudimos completar la inscripción.'
         })
     }
 
@@ -195,11 +195,11 @@ const reviveRegistration = async (
     if (!data || data.length === 0) {
         throw createError({
             statusCode: 409,
-            statusMessage: 'Ya estas inscrito en este evento.'
+            statusMessage: 'Ya estás inscrito en este evento.'
         })
     }
 
-    return { message: 'Inscripcion confirmada' }
+    return { message: 'Inscripción confirmada' }
 }
 
 /**
@@ -237,13 +237,13 @@ const translateRegistrationError = (message: string) => {
         || message.includes('event_registrations_one_per_guest')) {
         return createError({
             statusCode: 409,
-            statusMessage: 'Ya estas inscrito en este evento.'
+            statusMessage: 'Ya estás inscrito en este evento.'
         })
     }
 
     return createError({
         statusCode: 500,
-        statusMessage: 'No pudimos completar la inscripcion',
+        statusMessage: 'No pudimos completar la inscripción.',
         message
     })
 }

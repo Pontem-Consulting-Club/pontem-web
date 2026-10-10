@@ -9,24 +9,26 @@
         <UTheme :ui="inlineEdit">
         <UForm @submit.prevent="handleSubmit">
             <div class="flex flex-col gap-6 md:flex-row">
-                <div class="shrink-0 md:w-32">
-                    <div class="rounded-lg bg-primary-50 p-4 text-center">
+                <!-- Más ancha que la fecha de la tarjeta (md:w-32): un campo de fecha no cabe
+                     en 96 px y se cortaba ("10/22/2"). -->
+                <div class="shrink-0 md:w-44">
+                    <div class="rounded-lg bg-primary-50 p-2 text-center">
                         <!-- Imita la fecha de la tarjeta -->
-                        <UInput v-model="dateModel" type="date" placeholder="Fecha" variant="ghost"
-                            :ui="{ base: 'text-center text-sm text-primary-700 md:text-sm' }" />
+                        <UInput v-model="dateModel" type="date" placeholder="Fecha" aria-label="Fecha del evento" variant="ghost"
+                            :ui="{ base: [inlineEditField, 'text-center text-sm text-primary-700 md:text-sm'] }" />
                     </div>
                 </div>
 
                 <div class="flex flex-1 flex-col gap-3">
                     <UInput v-model="form.title" placeholder="Título" variant="ghost" autofocus
-                        :ui="{ base: 'text-subheading text-highlighted placeholder:text-primary/50 md:text-subheading' }" />
+                        :ui="{ base: [inlineEditField, 'text-subheading text-highlighted md:text-subheading'] }" />
                     <UInput v-model.nullable="form.subtitle" placeholder="Subtítulo" variant="ghost" />
                     <UTextarea v-model.nullable="form.description" :rows="3" placeholder="Descripción" variant="ghost"
-                        autoresize :ui="{ base: [inlineEditField, 'text-justify'] }" />
+                        autoresize />
                     <div class="flex flex-wrap gap-4 text-sm">
-                        <UInput v-model.nullable="form.location" placeholder="Ubicación" variant="ghost" class="w-auto" />
-                        <UInput v-model.nullable="form.link" type="url" placeholder="Enlace" variant="ghost" class="w-auto"
-                            :ui="{ base: 'text-primary' }" />
+                        <UInput v-model.nullable="form.location" placeholder="Ubicación" variant="ghost" class="grow basis-60" />
+                        <UInput v-model.nullable="form.link" type="url" placeholder="Enlace" variant="ghost" class="grow basis-48"
+                            :ui="{ base: [inlineEditField, 'text-primary-700'] }" />
                     </div>
                 </div>
 
