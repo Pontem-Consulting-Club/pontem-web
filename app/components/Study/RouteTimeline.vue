@@ -32,7 +32,7 @@ const nodeStyles = [
         <span class="text-xs font-semibold uppercase tracking-wider text-center text-default">
           {{ stage.title }}
         </span>
-        <span class="text-xs/relaxed text-dimmed text-center">
+        <span class="text-xs/relaxed text-muted text-center">
           {{ stage.description }}
         </span>
       </div>

@@ -17,7 +17,7 @@
           <div class="relative mx-auto size-40 overflow-hidden rounded-full bg-elevated">
             <img v-if="avatarUrl" :src="avatarUrl" :alt="form.display_name || 'Foto de perfil'"
               class="size-full object-cover">
-            <div v-else class="flex size-full items-center justify-center text-4xl font-semibold text-dimmed">
+            <div v-else class="flex size-full items-center justify-center text-4xl font-semibold text-muted">
               {{ initials }}
             </div>
           </div>
@@ -41,7 +41,7 @@
                 <NuxtLink v-if="profile.is_public" :to="`/miembros/${profile.handle}`" class="text-primary">
                   /miembros/{{ profile.handle }}
                 </NuxtLink>
-                <span v-else class="text-dimmed">/miembros/{{ profile.handle }}</span>
+                <span v-else class="text-muted">/miembros/{{ profile.handle }}</span>
               </dd>
             </div>
           </dl>

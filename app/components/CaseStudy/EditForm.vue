@@ -198,7 +198,7 @@ onBeforeUnmount(revokeLogoPreview)
           @dragleave.prevent="isDragging = false" @drop.prevent="handleDrop">
           <UIcon name="i-lucide-upload" class="size-8 text-dimmed" />
           <p class="text-sm text-default">Arrastra y suelta tu archivo PDF aquí</p>
-          <p class="text-xs text-dimmed">o haz clic para explorar</p>
+          <p class="text-xs text-muted">o haz clic para explorar</p>
         </div>
 
         <UCard v-else variant="inset" :ui="{ body: 'flex items-center justify-between gap-3' }">
@@ -208,7 +208,7 @@ onBeforeUnmount(revokeLogoPreview)
             </div>
             <div class="min-w-0">
               <p class="text-sm font-medium text-highlighted truncate">{{ selectedDocumentName }}</p>
-              <p v-if="selectedDocumentSize" class="text-xs text-dimmed">{{ selectedDocumentSize }}</p>
+              <p v-if="selectedDocumentSize" class="text-xs text-muted">{{ selectedDocumentSize }}</p>
             </div>
           </div>
           <UButton icon="i-lucide-x" size="xs" color="neutral" variant="ghost" aria-label="Quitar archivo"

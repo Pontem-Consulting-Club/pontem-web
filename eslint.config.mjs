@@ -22,10 +22,14 @@ const selectors = [
     match: [{ type: MatcherType.String }, { type: MatcherType.ObjectValue }]
   },
   {
-    // Objetos de tema (app/theme): sus valores son clases, salvo defaultVariants.
+    // Objetos de tema (app/theme): sus valores son clases, salvo defaultVariants y,
+    // en compoundVariants, todo lo que no sea `class` (las condiciones).
     kind: SelectorKind.Variable,
     name: `^(${themeVariables.join('|')})$`,
-    match: [{ type: MatcherType.ObjectValue, path: '^(?!defaultVariants)' }]
+    match: [
+      { type: MatcherType.ObjectValue, path: '^(?!defaultVariants|compoundVariants)' },
+      { type: MatcherType.ObjectValue, path: '^compoundVariants\\[\\d+\\]\\.class.*$' }
+    ]
   }
 ]
 

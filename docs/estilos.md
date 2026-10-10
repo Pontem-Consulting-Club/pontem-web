@@ -47,7 +47,7 @@ clases prohibidas y `eslint --fix` las reemplaza solas.
 | Texto destacado (títulos) | `text-highlighted` |
 | Texto normal | `text-default` (se hereda del `body`) |
 | Texto secundario | `text-toned`, `text-muted` |
-| Texto decorativo, sin información | `text-dimmed` |
+| Iconos y adornos (nunca texto que se lea: queda en 2.6:1) | `text-dimmed` |
 | Texto sobre fotos | `text-white` o el preset `onImage` |
 | Título de portada | `text-display` |
 | Título de página o sección | `text-title` |
@@ -56,6 +56,12 @@ clases prohibidas y `eslint --fix` las reemplaza solas.
 
 Los cuatro tamaños de título llevan su interlineado y su peso; no hace falta
 agregar `font-bold`.
+
+Contraste: todo texto pasa 4.5:1. Por eso `--ui-primary` está en el tono 600, los
+colores de estado (`success`, `warning`, `error`, `info`) en 700–800, y los botones
+y etiquetas con fondo teñido (`soft`, `subtle`...) usan `text-primary-700`: el 600
+no llega sobre su propio tinte. Si agregas un color de texto sobre un fondo
+de color, mídelo.
 
 ## Tarjetas
 

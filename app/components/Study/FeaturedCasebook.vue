@@ -28,7 +28,7 @@ withDefaults(defineProps<Props>(), {
       <h2 class="text-title text-white">
         {{ title }}
       </h2>
-      <p class="text-sm text-dimmed max-w-md">
+      <p class="text-sm text-white/70 max-w-md">
         {{ description }}
       </p>
     </div>

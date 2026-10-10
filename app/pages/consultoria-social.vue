@@ -8,7 +8,7 @@
         <div class="grid grid-cols-2 md:grid-cols-4 divide-x divide-muted">
           <div v-for="metric in metrics" :key="metric.label" class="flex flex-col items-center justify-center py-8 px-4 text-center">
             <span class="text-4xl font-bold text-primary-500 leading-none mb-2">{{ metric.value }}</span>
-            <span class="text-sm text-dimmed font-medium">{{ metric.label }}</span>
+            <span class="text-sm text-muted font-medium">{{ metric.label }}</span>
           </div>
         </div>
       </UContainer>

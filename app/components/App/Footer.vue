@@ -2,7 +2,9 @@
   <UFooter>
     <template #top>
       <UContainer>
-        <UFooterColumns :columns="columns">
+        <!-- Las columnas usan h3: este h2 evita el salto desde el h1 en páginas cortas. -->
+        <h2 class="sr-only">Pie de página</h2>
+        <UFooterColumns :columns="columns" aria-label="Pie de página">
           <template #left>
             <img src="/LogoBlanco.png" alt="Pontem Consulting Club" class="mx-auto h-24 w-auto lg:mx-0">
           </template>

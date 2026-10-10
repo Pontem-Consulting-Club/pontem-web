@@ -79,6 +79,12 @@
   --ui-primary: var(--ui-color-primary-600);
   /* El turquesa de marca (300) no se lee como texto; 700 da 5.31:1. */
   --ui-secondary: var(--ui-color-secondary-700);
+  /* Los colores de estado de Nuxt UI van en 500, entre 1.8 y 3.4:1 sobre su tinte.
+     Estos tonos pasan 4.5:1 como texto sobre blanco y sobre su tinte (/10). */
+  --ui-success: var(--ui-color-success-800);
+  --ui-warning: var(--ui-color-warning-800);
+  --ui-error: var(--ui-color-error-700);
+  --ui-info: var(--ui-color-info-700);
   /* Dos pesos de borde: border-default (200) y border-muted (100). */
   --ui-border-muted: var(--ui-color-neutral-100);
 }

@@ -7,7 +7,7 @@ defineProps<{
 
 <template>
   <div class="flex items-center gap-4">
-    <span class="text-xs font-semibold uppercase tracking-widest text-dimmed whitespace-nowrap">
+    <span class="text-xs font-semibold uppercase tracking-widest text-muted whitespace-nowrap">
       {{ number }} · {{ label }}
     </span>
     <div class="h-px flex-1 bg-accented" />

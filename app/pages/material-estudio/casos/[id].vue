@@ -103,7 +103,7 @@ const handleDelete = async () => {
       <div class="lg:col-span-8 flex flex-col gap-8">
         <div class="flex flex-col gap-4">
           <!-- Migas -->
-          <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-dimmed">
+          <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-muted">
             <NuxtLink to="/material-estudio" class="hover:text-primary transition-colors">Casos</NuxtLink>
             <UIcon name="i-lucide-chevron-right" class="size-3.5" />
             <span class="text-toned">{{ getCaseCategoryLabel(caseStudy.category) }}</span>
@@ -132,7 +132,7 @@ const handleDelete = async () => {
               {{ getCaseCategoryLabel(caseStudy.category) }}
             </span>
             <span v-if="publishedLabel"
-              class="bg-primary-50 text-primary px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-2">
+              class="bg-primary-50 text-primary-700 px-3 py-1.5 rounded-full text-xs font-semibold flex items-center gap-2">
               <UIcon name="i-lucide-calendar" class="size-3.5" />
               {{ publishedLabel }}
             </span>

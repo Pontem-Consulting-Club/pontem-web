@@ -7,7 +7,7 @@
         <div class="size-36 overflow-hidden rounded-full bg-elevated">
           <img v-if="avatarUrl" :src="avatarUrl" :alt="member.display_name ?? 'Foto de perfil'"
             class="size-full object-cover">
-          <div v-else class="flex size-full items-center justify-center text-4xl font-semibold text-dimmed">
+          <div v-else class="flex size-full items-center justify-center text-4xl font-semibold text-muted">
             {{ initials }}
           </div>
         </div>

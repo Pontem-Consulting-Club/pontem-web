@@ -12,7 +12,7 @@
                     <div class="rounded-lg bg-primary-50 p-4 text-center">
                         <!-- Imita la fecha de la tarjeta -->
                         <UInput v-model="dateModel" type="date" placeholder="Fecha" variant="ghost"
-                            :ui="{ base: 'text-center text-sm text-primary md:text-sm' }" />
+                            :ui="{ base: 'text-center text-sm text-primary-700 md:text-sm' }" />
                     </div>
                 </div>
 

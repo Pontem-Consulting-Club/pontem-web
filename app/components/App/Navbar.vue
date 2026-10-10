@@ -4,7 +4,7 @@
       <img src="/pontemog_optimized_.png" alt="Pontem Consulting Club" class="h-12 w-auto">
     </template>
 
-    <UNavigationMenu :items="items" />
+    <UNavigationMenu :items="items" aria-label="Principal" />
 
     <template #right>
       <UButton v-if="isAuthenticated" icon="i-lucide-log-out" color="error" variant="outline" size="xs" class="hidden lg:flex"
@@ -14,7 +14,7 @@
     </template>
 
     <template #body>
-      <UNavigationMenu :items="items" orientation="vertical" class="-mx-2.5" />
+      <UNavigationMenu :items="items" orientation="vertical" aria-label="Principal" class="-mx-2.5" />
       <UButton v-if="isAuthenticated" icon="i-lucide-log-out" color="error" variant="outline" class="mt-4" @click="logout">
         Cerrar sesión
       </UButton>

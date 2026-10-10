@@ -179,10 +179,10 @@ const handleDelete = async () => {
     <div class="flex flex-col md:flex-row gap-6">
       <div class="md:w-32 shrink-0">
         <div class="bg-primary-50 rounded-lg p-4 text-center">
-          <span class="block text-3xl font-bold text-primary">
+          <span class="block text-3xl font-bold text-primary-700">
             {{ dayNumber }}
           </span>
-          <span class="block text-sm text-primary">
+          <span class="block text-sm text-primary-700">
             {{ monthYear }}
           </span>
         </div>

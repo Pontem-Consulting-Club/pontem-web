@@ -152,7 +152,7 @@ const teamByRole = computed(() => {
                     {{ member.name }}
                   </p>
                 </template>
-                <p v-if="dept.members.length === 0" class="text-xs text-dimmed italic">Sin integrantes aún</p>
+                <p v-if="dept.members.length === 0" class="text-xs text-muted italic">Sin integrantes aún</p>
               </div>
 
               <!-- Contador abajo -->

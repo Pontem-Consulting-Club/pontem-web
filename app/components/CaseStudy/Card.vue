@@ -38,11 +38,11 @@ const duration = computed(() => {
             :class="getCategoryBadge(caseStudy.category)">
             <UIcon :name="caseStudy.icon || getCaseCategoryIcon(caseStudy.category)" class="size-5" />
           </div>
-          <span v-if="caseStudy.company" class="text-xs font-semibold uppercase tracking-wider text-dimmed truncate">
+          <span v-if="caseStudy.company" class="text-xs font-semibold uppercase tracking-wider text-muted truncate">
             {{ caseStudy.company }}
           </span>
         </div>
-        <span v-if="duration" class="text-xs text-dimmed bg-muted px-2 py-1 rounded-sm shrink-0">
+        <span v-if="duration" class="text-xs text-muted bg-muted px-2 py-1 rounded-sm shrink-0">
           {{ duration }}
         </span>
       </div>

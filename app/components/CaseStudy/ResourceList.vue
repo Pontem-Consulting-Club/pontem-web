@@ -15,7 +15,7 @@ const supabase = useSupabaseClient()
 const kindStyles: Record<string, { wrapper: string, text: string }> = {
   APUNTE: { wrapper: 'bg-secondary-50 text-secondary-800', text: 'text-secondary-700' },
   DATASET: { wrapper: 'bg-tertiary-50 text-tertiary-800', text: 'text-tertiary-700' },
-  MASTERCLASS: { wrapper: 'bg-primary-50 text-primary-800', text: 'text-primary' }
+  MASTERCLASS: { wrapper: 'bg-primary-50 text-primary-800', text: 'text-primary-700' }
 }
 
 /**
@@ -58,7 +58,7 @@ const handleDelete = async (resource: CaseStudyResourceRecord) => {
       Recursos Relacionados
     </h3>
 
-    <p v-if="props.resources.length === 0" class="text-sm text-dimmed italic">
+    <p v-if="props.resources.length === 0" class="text-sm text-muted italic">
       Este caso todavía no tiene recursos asociados.
     </p>
 
