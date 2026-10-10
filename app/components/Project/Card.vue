@@ -1,18 +1,7 @@
 <template>
   <ProjectEditForm v-if="isEditing" v-model:form="form" :is-new="_props.isNew" :is-saving="isSaving"
     :is-deleting="isDeleting" :form-error="formError"
-    :class="_props.layout === 'row' ? 'my-4 max-w-xl ring-1 ring-default' : undefined"
     @submit="saveEdit" @cancel="cancelEdit" @delete="handleDelete" />
-
-  <!-- Fila de "Proyectos anteriores" -->
-  <div v-else-if="_props.layout === 'row'"
-    class="flex flex-col gap-1 py-3 sm:grid sm:grid-cols-[120px_1fr_2fr_auto] sm:gap-4 sm:items-center">
-    <span class="text-xs font-semibold text-muted uppercase tracking-wide">{{ project.semester }}</span>
-    <span class="text-sm font-semibold text-default">{{ project.title }}</span>
-    <span class="text-xs text-muted sm:truncate">{{ project.subtitle }}</span>
-    <ContentEditButton v-if="isEditor" ref="editButton" label="Editar proyecto" inline :disabled="otherEditorOpen"
-      class="self-start sm:self-auto" @click="startEdit" />
-  </div>
 
   <UCard v-else variant="item" class="relative flex flex-col" :ui="{ body: 'flex flex-1 flex-col gap-1' }">
     <template #header>
@@ -24,14 +13,25 @@
       <NuxtImg v-else src="/LogoColorSolo.png" alt="" class="h-44 w-full bg-muted object-contain p-8" />
     </template>
 
+      <UBadge v-if="showSemester && project.semester" color="neutral" class="mb-1 self-start">
+        {{ project.semester }}
+      </UBadge>
       <h3 class="text-subheading text-highlighted">
         {{ project.title }}
       </h3>
       <div v-if="project.subtitle" class="text-xs text-muted font-medium mb-1">
         {{ project.subtitle }}
       </div>
-      <div v-if="project.description" class="text-sm/relaxed text-muted flex-1">
-        {{ project.description }}
+      <div class="flex-1">
+        <!-- Cuatro líneas: una descripción larga estiraba la fila entera de la grilla. -->
+        <p v-if="project.description" :id="descriptionId" ref="descriptionEl" class="text-sm/relaxed text-muted"
+          :class="{ 'line-clamp-4': !expanded }">
+          {{ project.description }}
+        </p>
+        <UButton v-if="isClamped || expanded" variant="link" size="xs" class="px-0"
+          :aria-expanded="expanded" :aria-controls="descriptionId" @click="expanded = !expanded">
+          {{ expanded ? 'Ver menos' : 'Leer todo' }}
+        </UButton>
       </div>
       <UButton v-if="project.link" class="max-w-fit mt-4" :href="project.link" target="_blank"
         trailing-icon="i-lucide-external-link"
@@ -47,13 +47,13 @@ import type { ProjectRecord } from '~/types/content'
 interface Props {
   project: ProjectRecord
   isNew?: boolean
-  /** `row` es la fila compacta de "Proyectos anteriores". */
-  layout?: 'card' | 'row'
+  /** En "Proyectos anteriores" cada tarjeta dice de qué semestre es. */
+  showSemester?: boolean
 }
 
 const _props = withDefaults(defineProps<Props>(), {
   isNew: false,
-  layout: 'card'
+  showSemester: false
 })
 
 const project = toRef(_props, 'project')
@@ -70,6 +70,31 @@ const formError = ref('')
 const form = ref<Partial<ProjectRecord>>({})
 
 const { url: imageUrl } = useStorageImage(computed(() => project.value.image_url ?? null))
+
+// "Leer todo" aparece solo si el recorte de cuatro líneas se come texto.
+const descriptionId = useId()
+const descriptionEl = useTemplateRef('descriptionEl')
+const expanded = ref(false)
+const isClamped = ref(false)
+const measureClamp = async () => {
+  await nextTick()
+  const el = descriptionEl.value
+  isClamped.value = !!el && el.scrollHeight > el.clientHeight + 1
+}
+// Se vuelve a medir cuando cambia el ancho de la tarjeta y cuando termina de
+// cargar Raleway: con la fuente de respaldo, más ancha, el texto ocupa más líneas.
+let resizeObserver: ResizeObserver | undefined
+onMounted(() => document.fonts?.ready.then(measureClamp))
+watch(descriptionEl, (el, previous) => {
+  if (previous) resizeObserver?.unobserve(previous)
+  // En el servidor no hay elemento (ni ResizeObserver).
+  if (!el) return
+  resizeObserver ??= new ResizeObserver(() => measureClamp())
+  resizeObserver.observe(el)
+  measureClamp()
+}, { flush: 'post', immediate: true })
+onBeforeUnmount(() => resizeObserver?.disconnect())
+watch(() => project.value.description, measureClamp)
 
 const toast = useToast()
 const { confirmDelete, confirmDiscard } = useConfirm()

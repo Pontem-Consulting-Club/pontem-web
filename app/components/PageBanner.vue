@@ -3,18 +3,21 @@
  * Portada de una página interior: foto oscurecida con el título encima. Es una
  * UPageHero dentro del preset onImage (app/theme/presets.ts).
  */
+import type { ButtonProps } from '@nuxt/ui'
 import { onImage } from '~/theme/presets'
 
 defineProps<{
   title: string
   description?: string
   image?: string
+  /** Llamados a la acción bajo la descripción. */
+  links?: ButtonProps[]
 }>()
 </script>
 
 <template>
   <UTheme :ui="onImage">
-    <UPageHero :title="title" :description="description" :ui="{ container: 'py-20 sm:py-24 lg:py-28' }">
+    <UPageHero :title="title" :description="description" :links="links" :ui="{ container: 'py-20 sm:py-24 lg:py-28' }">
       <template #top>
         <!-- Es lo primero que se ve: va con prioridad. Sin `preload`: NuxtImg precarga
              la variante más grande (3072 px) aunque la pantalla pida otra. -->

@@ -126,8 +126,12 @@ test.describe('movimiento reducido', () => {
   test('nada se anima', async ({ page }) => {
     for (const ruta of ['/', '/consultoria-social']) {
       await abrir(page, ruta)
+      // Con movimiento reducido, main.css deja toda transición en 0.01 ms (así los
+      // eventos transitionend siguen llegando): esas no cuentan como movimiento.
       const animaciones = await page.evaluate(() =>
-        document.getAnimations().filter(a => a.playState === 'running').map(a => (a as CSSAnimation).animationName ?? 'js'))
+        document.getAnimations()
+          .filter(a => a.playState === 'running' && Number(a.effect?.getComputedTiming().duration ?? 0) > 1)
+          .map(a => (a as CSSAnimation).animationName ?? 'js'))
       expect.soft(animaciones, `${ruta}: animaciones activas`).toEqual([])
     }
   })

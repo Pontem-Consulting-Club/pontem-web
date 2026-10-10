@@ -9,6 +9,8 @@ export const pageHero = {
 export const pageHeader = {
   slots: {
     root: 'border-none py-10',
+    // El rojo 600 no llega a 4.5:1 sobre bg-muted (4.47:1); 700 sí.
+    headline: 'text-primary-700',
     title: 'text-title text-highlighted',
     description: 'text-lg text-muted'
   }
@@ -19,7 +21,10 @@ export const pageSection = {
     container: 'py-16 sm:py-24 gap-8 sm:gap-12',
     title: 'text-title text-highlighted',
     description: 'text-lg text-muted'
-  }
+  },
+  // Igual que en pageHeader, pero aquí text-primary lo pone la variante `headline`,
+  // no el slot: el cambio tiene que ir en la variante.
+  variants: { headline: { true: { headline: 'text-primary-700' } } }
 }
 
 export const header = {

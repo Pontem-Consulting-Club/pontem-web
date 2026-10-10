@@ -1,6 +1,6 @@
 <template>
   <div>
-    <UContainer class="py-24 pt-32">
+    <UContainer class="py-16">
       <!-- Un error del servidor no es "no encontrado". -->
       <LoadError v-if="(error?.statusCode ?? 0) >= 500" title="No pudimos cargar el perfil" :retry="refresh" />
       <NotFoundState v-else-if="error" title="Perfil no encontrado" message="No encontramos ese perfil" />

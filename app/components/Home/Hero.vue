@@ -1,5 +1,8 @@
 <template>
-  <section class="relative h-[80vh] w-full overflow-hidden">
+  <!-- La rotación se detiene mientras el puntero o el foco están dentro (WCAG 2.2.2). -->
+  <section class="relative h-[80vh] w-full overflow-hidden" aria-roledescription="carrusel" aria-label="Destacados"
+    @mouseenter="isHovering = true" @mouseleave="isHovering = false"
+    @focusin="hasFocusInside = true" @focusout="hasFocusInside = false">
     <!-- Slides -->
     <HomeHeroSlide v-for="(slide, index) in slides" :key="slide.id" :slide="slide"
       :is-active="currentSlide === index" :load="loadedSlides.has(index)" :priority="index === 0" />
@@ -25,7 +28,12 @@
 
     <!-- Slide Indicators -->
     <!-- El punto es chico; el botón alrededor mide 24 px para poder tocarlo. -->
-    <div v-if="!isEditing" class="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-30 flex gap-1">
+    <div v-if="!isEditing" class="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-30 flex items-center gap-1">
+      <button v-if="slides.length > 1" type="button"
+        class="mr-2 grid size-8 place-items-center rounded-full bg-black/30 text-white hover:bg-black/50 focus-visible:outline-2 focus-visible:outline-white"
+        :aria-label="isPaused ? 'Reanudar el carrusel' : 'Pausar el carrusel'" @click="isPaused = !isPaused">
+        <UIcon :name="isPaused ? 'i-lucide-play' : 'i-lucide-pause'" class="size-4" />
+      </button>
       <button v-for="(slide, index) in slides" :key="slide.id" type="button"
         class="group grid size-6 place-items-center rounded-full focus-visible:outline-2 focus-visible:outline-white"
         :aria-label="`Ir a la diapositiva ${index + 1}`" :aria-current="currentSlide === index ? 'true' : undefined"
@@ -118,14 +126,16 @@ watch(slides, (value) => {
   }
 })
 
-// pause the carousel while a slide is being edited or created
-watch(isEditing, (editing) => {
-  if (editing) {
-    stopAutoplay()
-  } else {
-    startAutoplay()
-  }
-})
+// La rotación corre solo si nadie la está usando: se detiene al editar, con el
+// puntero o el foco dentro, con el botón de pausa y, desde el inicio, si el
+// visitante pidió menos movimiento.
+const isPaused = ref(false)
+const isHovering = ref(false)
+const hasFocusInside = ref(false)
+const shouldPlay = computed(() => slides.value.length > 1 && !isEditing.value && !isPaused.value
+  && !isHovering.value && !hasFocusInside.value)
+
+watch(shouldPlay, play => (play ? startAutoplay() : stopAutoplay()))
 
 const normalizeValue = (value?: string | number | null) => {
   if (value === undefined || value === null) return null
@@ -274,7 +284,8 @@ const moveSlide = async (direction: -1 | 1) => {
 }
 
 onMounted(() => {
-  startAutoplay()
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) isPaused.value = true
+  if (shouldPlay.value) startAutoplay()
 })
 
 onUnmounted(() => {
