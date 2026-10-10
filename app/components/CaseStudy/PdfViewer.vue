@@ -26,7 +26,7 @@ const displayName = computed(() => props.documentName || 'documento.pdf')
     </template>
 
     <!-- `object` degrada solo: si el navegador no puede renderizar el PDF muestra el fallback -->
-    <object :data="documentUrl" type="application/pdf" class="w-full h-[600px] bg-muted">
+    <object :data="documentUrl" type="application/pdf" class="w-full h-150 bg-muted">
       <div class="h-full flex flex-col items-center justify-center gap-4 p-8 text-center">
         <UIcon name="i-lucide-file-text" class="size-12 text-dimmed" />
         <p class="text-sm text-muted">
