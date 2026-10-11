@@ -53,7 +53,7 @@ export const pageSection = {
 // UI (75%) para que los enlaces se lean cuando pasa sobre una foto oscura.
 export const header = {
   slots: {
-    root: 'shadow-sm bg-default/85'
+    root: 'bg-default/85 border-white/70 shadow-[0_8px_24px_-18px_color-mix(in_oklab,var(--color-pontemred-700)_35%,transparent)]'
   }
 }
 
@@ -75,7 +75,7 @@ export const navigationMenu = {
 export const footer = {
   slots: {
     // El neutro más oscuro: el logo blanco y los enlaces se leen bien. La ola se queda.
-    root: 'mt-8 bg-inverted text-white clip-wave-top',
+    root: 'mt-8 bg-footer text-white clip-wave-top',
     top: 'pt-24 pb-8',
     container: 'border-t border-white/20 text-sm text-white/80'
   }

@@ -24,10 +24,10 @@
           <p v-if="slide.subtitle" class="mb-8 text-lg opacity-90 md:text-xl">
             {{ slide.subtitle }}
           </p>
-          <!-- Botón blanco sólido: sobre la foto se distingue sin velos ni degradados. -->
+          <!-- El fundido Pontem dentro de un vidrio (glass-on-image). -->
           <UButton v-if="slide.link && slide.button_text" :id="`hero-cta-${slide.id}`" :to="slide.link"
             :target="isExternalLink ? '_blank' : undefined" size="xl" variant="solid"
-            class="bg-default text-highlighted hover:bg-elevated">
+            class="glass-on-image text-white hover:brightness-110">
             {{ slide.button_text }}
           </UButton>
         </div>

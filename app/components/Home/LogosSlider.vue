@@ -10,7 +10,7 @@ defineProps<{ logos: Logo[] }>()
 <template>
   <!-- Tres franjas del mismo fondo: borde curvo arriba, logos y borde curvo abajo. -->
   <section class="mt-12">
-    <div class="bg-elevated/60 pt-16 pb-8 clip-wave-top">
+    <div class="glass-band pt-16 pb-8 clip-wave-top">
       <UContainer class="flex flex-col gap-4">
         <h2 class="text-title text-highlighted">Consultoras que impulsan el talento</h2>
         <p class="max-w-3xl text-lg text-toned">
@@ -30,12 +30,12 @@ defineProps<{ logos: Logo[] }>()
          logos con lo que haya detrás. -->
     <!-- El gris va en el contenedor y la máscara solo en la franja: así se funden los
          logos y no la banda. -->
-    <div class="bg-elevated/60">
+    <div class="glass-band">
       <UMarquee pause-on-hover aria-hidden="true" :overlay="false"
         :ui="{ root: '[--duration:45s] [--gap:--spacing(24)] mask-x-from-85%' }">
         <img v-for="logo in logos" :key="logo.name" :src="logo.src" :alt="logo.name" class="my-6 h-16 w-auto">
       </UMarquee>
     </div>
-    <div aria-hidden="true" class="bg-elevated/60 pt-[5%] clip-wave-bottom" />
+    <div aria-hidden="true" class="glass-band pt-[5%] clip-wave-bottom" />
   </section>
 </template>
