@@ -1,6 +1,6 @@
 /**
- * Superficies: tarjetas y paneles. Una sola escala de radios y tres niveles de
- * sombra (plano, tarjeta, elevado). Ver docs/estilos.md.
+ * Superficies: tarjetas y paneles de vidrio (utilidades glass y glass-raised de
+ * main.css) sobre el fundido Pontem. Una sola escala de radios. Ver docs/estilos.md.
  */
 export const card = {
   slots: {
@@ -10,22 +10,22 @@ export const card = {
   variants: {
     variant: {
       /** Paneles de contenido, formularios, cuentas, administración. */
-      panel: { root: 'bg-default ring ring-default shadow-sm' },
+      panel: { root: 'glass' },
       /** Tarjetas de un listado; la imagen va en #header y llega al borde. */
       item: {
-        root: 'bg-default ring ring-default shadow-sm transition-shadow hover:shadow-lg',
+        root: 'glass transition-shadow duration-300 hover:glass-raised',
         header: 'p-0 sm:p-0',
         body: 'p-5 sm:p-6',
-        footer: 'border-t border-muted px-5 py-4 sm:px-6'
+        footer: 'border-t border-white/60 px-5 py-4 sm:px-6'
       },
       /** Bloques destacados (misión, pilares). */
       feature: {
-        root: 'bg-default ring ring-default shadow-lg rounded-3xl',
+        root: 'glass rounded-3xl',
         body: 'p-8 sm:p-10'
       },
       /** Recuadros dentro de un formulario o panel. */
       inset: {
-        root: 'bg-muted ring ring-default rounded-lg',
+        root: 'bg-default/50 ring ring-white/70 rounded-lg',
         body: 'p-4 sm:p-4'
       }
     }
@@ -44,7 +44,7 @@ export const pageCard = {
   },
   variants: {
     variant: {
-      outline: { root: 'bg-default ring ring-default shadow-sm transition-shadow hover:shadow-lg' }
+      outline: { root: 'glass transition-shadow duration-300 hover:glass-raised' }
     }
   }
 }

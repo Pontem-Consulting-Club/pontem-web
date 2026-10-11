@@ -67,8 +67,16 @@ de color, mídelo.
 
 - **El fundido Pontem** (`bg-brand-wash`, rojo y turquesa muy suaves) va detrás de
   todo el sitio, en el layout. Las secciones que alternan usan una banda gris
-  translúcida (`bg-elevated/60`) para que el fundido se vea a través; en el inicio las
+  de vidrio (`glass-band`) para que el fundido se vea a través; en el inicio las
   bandas llevan las olas (`clip-wave-top`/`clip-wave-bottom`).
+- **Vidrio Pontem.** Las superficies son de vidrio sobre el fundido (utilidades de
+  `main.css`): `glass` en tarjetas y paneles (ya lo ponen las variantes de `UCard` y
+  `UPageCard`), `glass-raised` al pasar el puntero, `glass-band` en las bandas y
+  `glass-on-image` en botones sobre una foto (el preset `onImage` ya lo usa). Las
+  sombras van teñidas de rojo de marca, nunca gris: no usar `shadow-*` de Tailwind.
+- **Olas.** Las fotos de portada y los banners terminan en `clip-wave-hero`; las
+  bandas del inicio y el pie, en `clip-wave-top`/`clip-wave-bottom`. El pie lleva el
+  resplandor del fundido (`bg-footer`).
 - **Todo alineado a la izquierda,** títulos incluidos: el tema ya lo hace en
   `UPageSection`, `UPageHero` y `SectionTitle`. Centrado solo donde no hay contenido
   con el que alinear (estados vacíos, la página de error).

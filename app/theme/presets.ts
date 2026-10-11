@@ -12,8 +12,9 @@ export const inlineEditField = 'text-toned placeholder:text-muted ring-1 ring-in
 
 /** Sobre una foto oscura (portadas, banners): texto y controles en blanco. */
 export const onImage = {
+  // El fundido Pontem dentro de un vidrio blanco (glass-on-image, main.css).
   button: {
-    base: 'bg-white/20 text-white hover:bg-white/30 active:bg-white/30'
+    base: 'glass-on-image text-white hover:brightness-110 active:brightness-110'
   },
   // Sobre una foto cada campo necesita su propia superficie para leerse como editable.
   input: { base: onImageField },

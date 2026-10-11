@@ -58,7 +58,8 @@ const resetImage = async () => {
 
 <template>
   <UTheme :ui="onImage">
-    <UPageHero :title="title" :ui="{ container: 'py-20 sm:py-24 lg:py-28' }">
+    <!-- La foto termina en una ola suave, como las bandas y el pie. -->
+    <UPageHero :title="title" class="clip-wave-hero" :ui="{ container: 'pt-20 pb-24 sm:pt-24 sm:pb-28 lg:pt-28 lg:pb-32' }">
       <template #top>
         <!-- Es lo primero que se ve: va con prioridad. Sin `preload`: NuxtImg precarga
              la variante más grande (3072 px) aunque la pantalla pida otra. -->
@@ -66,7 +67,8 @@ const resetImage = async () => {
           alt="" class="absolute inset-0 -z-10 size-full object-cover" />
         <div aria-hidden="true" class="absolute inset-0 -z-10 bg-black/50" />
 
-        <div v-if="isEditor" class="absolute right-4 bottom-4 z-10 flex flex-wrap justify-end gap-2">
+        <!-- Arriba a la derecha: abajo los recortaría la ola. -->
+        <div v-if="isEditor" class="absolute top-4 right-4 z-10 flex flex-wrap justify-end gap-2">
           <ImagePicker v-model="file" mode="button" icon="i-lucide-image" :loading="saving"
             :labels="['Cambiar foto', 'Cambiar foto']" />
           <UButton v-if="isCustom" icon="i-lucide-rotate-ccw" :disabled="saving" @click="resetImage">

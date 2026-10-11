@@ -1,6 +1,6 @@
 <template>
   <!-- La rotación se detiene mientras el puntero o el foco están dentro (WCAG 2.2.2). -->
-  <section class="relative h-[80vh] w-full overflow-hidden" aria-roledescription="carrusel" aria-label="Destacados"
+  <section class="relative h-[80vh] w-full overflow-hidden clip-wave-hero" aria-roledescription="carrusel" aria-label="Destacados"
     @mouseenter="isHovering = true" @mouseleave="isHovering = false"
     @focusin="hasFocusInside = true" @focusout="hasFocusInside = false">
     <!-- Slides -->
