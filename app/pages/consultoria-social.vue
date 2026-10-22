@@ -5,10 +5,10 @@
     <!-- Introducción: va bajo el banner, que es solo el título de la sección. -->
     <UContainer class="py-12 sm:py-16">
       <p class="max-w-3xl text-lg/relaxed text-toned">{{ intro }}</p>
-      <p class="mt-4 max-w-3xl text-toned">
-        ¿Tu organización necesita apoyo? Escríbenos a
-        <ULink to="mailto:clubconsultoria.uc@gmail.com" class="font-medium text-primary-700 underline underline-offset-4">clubconsultoria.uc@gmail.com</ULink>.
-      </p>
+      <!-- Lleva a la sección de postulación, al final: primero se ven los proyectos. -->
+      <UButton to="#postula" icon="i-lucide-arrow-down" size="lg" variant="soft" class="mt-6">
+        ¿Tu organización necesita apoyo? Postula
+      </UButton>
     </UContainer>
 
     <UPageSection v-if="error">
@@ -39,6 +39,9 @@
         </UPageGrid>
       </UPageSection>
     </template>
+
+    <!-- Fuera del v-else: aunque fallen los proyectos, se puede postular. -->
+    <ProjectApplySection />
   </div>
 </template>
 

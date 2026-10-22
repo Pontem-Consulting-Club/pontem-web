@@ -1,6 +1,7 @@
 <template>
   <UPageSection title="Consultoría Social"
-    description="Aplicamos nuestras habilidades de consultoría para generar impacto social positivo, trabajando con organizaciones sin fines de lucro y proyectos comunitarios.">
+    description="Aplicamos nuestras habilidades de consultoría para generar impacto social positivo, trabajando con organizaciones sin fines de lucro y proyectos comunitarios."
+    :links="[{ label: 'Postula tu organización', to: '/consultoria-social#postula', trailingIcon: 'i-lucide-arrow-right' }]">
     <UPageGrid>
       <HomeFeatureCard icon="i-lucide-users" title="Trabajo en Equipo"
         description="Colaboramos en equipos multidisciplinarios para resolver problemas complejos."
