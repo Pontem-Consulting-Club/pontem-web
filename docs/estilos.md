@@ -72,7 +72,8 @@ de color, mídelo.
 - **Vidrio Pontem.** Las superficies son de vidrio sobre el fundido (utilidades de
   `main.css`): `glass` en tarjetas y paneles (ya lo ponen las variantes de `UCard` y
   `UPageCard`), `glass-raised` al pasar el puntero, `glass-band` en las bandas y
-  `glass-on-image` en botones sobre una foto (el preset `onImage` ya lo usa). Las
+  `onImageButton` (`glass-on-image` más su color) en botones sobre una foto (el
+  preset `onImage` ya lo usa; un botón suelto lo pone en `class`). Las
   sombras van teñidas de rojo de marca, nunca gris: no usar `shadow-*` de Tailwind.
 - **Olas.** Las fotos de portada y los banners terminan en `clip-wave-hero`; las
   bandas del inicio y el pie, en `clip-wave-top`/`clip-wave-bottom`. El pie lleva el

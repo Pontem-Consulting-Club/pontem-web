@@ -9,13 +9,14 @@ export const onImageField = 'rounded-lg bg-white/10 text-white ring-1 ring-white
 // El contorno gris en reposo dice "esto se edita": sin él, los campos ghost se veían
 // como texto común hasta hacer clic. Al enfocar, el anillo pasa a primary (forms.ts).
 export const inlineEditField = 'text-toned placeholder:text-muted ring-1 ring-inset ring-default'
+// El fundido Pontem dentro de un vidrio (glass-on-image, main.css). Los bg-white/*
+// reemplazan los bg-primary de la variante solid: sin ellos, al pasar el puntero el
+// botón se volvía rojo casi opaco.
+export const onImageButton = 'glass-on-image bg-white/6 hover:bg-white/14 active:bg-white/14 disabled:bg-white/6 aria-disabled:bg-white/6 text-white'
 
 /** Sobre una foto oscura (portadas, banners): texto y controles en blanco. */
 export const onImage = {
-  // El fundido Pontem dentro de un vidrio blanco (glass-on-image, main.css).
-  button: {
-    base: 'glass-on-image text-white hover:brightness-110 active:brightness-110'
-  },
+  button: { base: onImageButton },
   // Sobre una foto cada campo necesita su propia superficie para leerse como editable.
   input: { base: onImageField },
   textarea: { base: onImageField },

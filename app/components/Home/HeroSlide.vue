@@ -24,10 +24,9 @@
           <p v-if="slide.subtitle" class="mb-8 text-lg opacity-90 md:text-xl">
             {{ slide.subtitle }}
           </p>
-          <!-- El fundido Pontem dentro de un vidrio (glass-on-image). -->
+          <!-- El fundido Pontem dentro de un vidrio (onImageButton). -->
           <UButton v-if="slide.link && slide.button_text" :id="`hero-cta-${slide.id}`" :to="slide.link"
-            :target="isExternalLink ? '_blank' : undefined" size="xl" variant="solid"
-            class="glass-on-image text-white hover:brightness-110">
+            :target="isExternalLink ? '_blank' : undefined" size="xl" variant="solid" :class="onImageButton">
             {{ slide.button_text }}
           </UButton>
         </div>
@@ -38,6 +37,7 @@
 
 <script setup lang="ts">
 import type { HeroSlideRecord } from '~/types/content'
+import { onImageButton } from '~/theme/presets'
 
 const props = withDefaults(defineProps<{
   slide: HeroSlideRecord
