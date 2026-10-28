@@ -51,7 +51,7 @@ const { logout, isAuthenticated } = useAuth()
 const { isAdmin } = useProfile()
 
 const accountLinks = computed<NavigationMenuItem[]>(() => [
-  { label: 'Mi perfil', icon: 'i-lucide-user', to: '/perfil' },
+  { label: 'Mi cuenta', icon: 'i-lucide-user', to: '/perfil' },
   { label: 'Mi progreso', icon: 'i-lucide-chart-no-axes-column', to: '/mi-progreso' },
   ...(isAdmin.value ? [{ label: 'Personas', icon: 'i-lucide-users', to: '/admin/usuarios' }] : [])
 ])
