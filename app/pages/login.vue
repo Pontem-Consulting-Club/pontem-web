@@ -9,6 +9,8 @@
 
       <form method="post" class="space-y-6" autocomplete="on" @submit.prevent="handleSubmit">
         <UAlert v-if="error" icon="i-lucide-alert-circle" :description="error" />
+        <UAlert v-else-if="justConfirmed" icon="i-lucide-mail-check" color="success" variant="soft"
+          description="Tu correo quedó confirmado. Ya puedes iniciar sesión." />
 
         <UFormField label="Correo electrónico">
           <UInput v-model="email" type="email" name="email" autocomplete="email" placeholder="Ingresa tu correo" size="lg"
@@ -34,6 +36,16 @@
         <UButton to="/recuperar-clave" variant="ghost" block size="sm">
           Olvidé mi contraseña
         </UButton>
+
+        <USeparator />
+
+        <p class="text-center text-sm text-muted">
+          ¿No tienes cuenta?
+          <NuxtLink :to="{ path: '/registro', query: route.query.redirect ? { redirect: destination } : undefined }"
+            class="font-medium text-primary hover:underline">
+            Crear una
+          </NuxtLink>
+        </p>
       </form>
     </UCard>
   </UContainer>
@@ -42,7 +54,7 @@
 <script setup lang="ts">
 usePageMeta({
   title: 'Iniciar sesión - Pontem',
-  description: 'Acceso para miembros de Pontem Consulting Club.'
+  description: 'Inicia sesión en Pontem Consulting Club para guardar tu progreso en los casos de estudio.'
 })
 
 const { login, isAuthenticated } = useAuth()
@@ -74,10 +86,19 @@ const destination = computed(() => {
   return path && path.startsWith('/') && !path.startsWith('//') ? path : '/'
 })
 
+// El enlace de confirmacion de /registro vuelve aqui con ?confirmado=1.
+const justConfirmed = computed(() => route.query.confirmado !== undefined)
+
 onMounted(() => {
   if (isAuthenticated.value) {
     router.push(destination.value)
   }
+})
+
+// Si el enlace de confirmacion se abre en el mismo navegador del registro, el
+// cliente canjea el ?code= y la sesion aparece despues del montaje.
+watch(isAuthenticated, (value) => {
+  if (value) router.push(destination.value)
 })
 
 const handleSubmit = async () => {

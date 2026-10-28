@@ -16,6 +16,11 @@
           <span class="hidden xl:inline">Mi cuenta</span>
         </UButton>
       </UDropdownMenu>
+      <!-- Con el registro abierto, entrar tiene que estar a la vista y no solo en el pie. -->
+      <UButton v-else to="/login" icon="i-lucide-log-in" color="neutral" variant="ghost"
+        class="hidden shrink-0 whitespace-nowrap lg:inline-flex">
+        Entrar
+      </UButton>
     </template>
 
     <template #body>
@@ -26,6 +31,13 @@
         <UButton icon="i-lucide-log-out" color="neutral" variant="ghost" class="mt-2" @click="logout">
           Cerrar sesión
         </UButton>
+      </template>
+      <template v-else>
+        <USeparator class="my-4" />
+        <div class="flex flex-col gap-2">
+          <UButton to="/login" icon="i-lucide-log-in" color="neutral" variant="outline" block>Entrar</UButton>
+          <UButton to="/registro" icon="i-lucide-user-plus" block>Crear cuenta</UButton>
+        </div>
       </template>
     </template>
   </UHeader>
@@ -40,6 +52,7 @@ const { isAdmin } = useProfile()
 
 const accountLinks = computed<NavigationMenuItem[]>(() => [
   { label: 'Mi perfil', icon: 'i-lucide-user', to: '/perfil' },
+  { label: 'Mi progreso', icon: 'i-lucide-chart-no-axes-column', to: '/mi-progreso' },
   ...(isAdmin.value ? [{ label: 'Personas', icon: 'i-lucide-users', to: '/admin/usuarios' }] : [])
 ])
 

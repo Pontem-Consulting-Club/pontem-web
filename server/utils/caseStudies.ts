@@ -30,3 +30,13 @@ export const isValidCaseResourceKind = (value: string | null | undefined): value
   if (!value) return false
   return CASE_RESOURCE_KIND_SET.has(value)
 }
+
+type CaseProgressStatus = Database['public']['Enums']['case_progress_status']
+
+const CASE_PROGRESS_STATUS_SET = new Set<string>(Constants.public.Enums.case_progress_status)
+
+export const isValidCaseProgressStatus = (value: unknown): value is CaseProgressStatus =>
+  typeof value === 'string' && CASE_PROGRESS_STATUS_SET.has(value)
+
+// Mismo tope que el check de la columna `notes` en case_study_progress.
+export const CASE_NOTES_MAX_LENGTH = 5000

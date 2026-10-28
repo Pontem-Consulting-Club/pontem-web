@@ -132,6 +132,125 @@ export type Database = {
           },
         ]
       }
+      case_study_activity: {
+        Row: {
+          case_study_id: number
+          created_at: string
+          id: number
+          kind: Database["public"]["Enums"]["case_activity_kind"]
+          profile_id: string
+          self_rating: number | null
+          status: Database["public"]["Enums"]["case_progress_status"] | null
+        }
+        Insert: {
+          case_study_id: number
+          created_at?: string
+          id?: number
+          kind: Database["public"]["Enums"]["case_activity_kind"]
+          profile_id: string
+          self_rating?: number | null
+          status?: Database["public"]["Enums"]["case_progress_status"] | null
+        }
+        Update: {
+          case_study_id?: number
+          created_at?: string
+          id?: number
+          kind?: Database["public"]["Enums"]["case_activity_kind"]
+          profile_id?: string
+          self_rating?: number | null
+          status?: Database["public"]["Enums"]["case_progress_status"] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "case_study_activity_case_study_id_fkey"
+            columns: ["case_study_id"]
+            isOneToOne: false
+            referencedRelation: "CaseStudies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "case_study_activity_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "case_study_activity_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "public_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      case_study_progress: {
+        Row: {
+          case_study_id: number
+          completed_at: string | null
+          created_at: string
+          first_viewed_at: string | null
+          last_viewed_at: string | null
+          notes: string | null
+          profile_id: string
+          self_rating: number | null
+          status: Database["public"]["Enums"]["case_progress_status"] | null
+          status_changed_at: string | null
+          updated_at: string
+          view_count: number
+        }
+        Insert: {
+          case_study_id: number
+          completed_at?: string | null
+          created_at?: string
+          first_viewed_at?: string | null
+          last_viewed_at?: string | null
+          notes?: string | null
+          profile_id: string
+          self_rating?: number | null
+          status?: Database["public"]["Enums"]["case_progress_status"] | null
+          status_changed_at?: string | null
+          updated_at?: string
+          view_count?: number
+        }
+        Update: {
+          case_study_id?: number
+          completed_at?: string | null
+          created_at?: string
+          first_viewed_at?: string | null
+          last_viewed_at?: string | null
+          notes?: string | null
+          profile_id?: string
+          self_rating?: number | null
+          status?: Database["public"]["Enums"]["case_progress_status"] | null
+          status_changed_at?: string | null
+          updated_at?: string
+          view_count?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "case_study_progress_case_study_id_fkey"
+            columns: ["case_study_id"]
+            isOneToOne: false
+            referencedRelation: "CaseStudies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "case_study_progress_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "case_study_progress_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "public_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       event_registrations: {
         Row: {
           attended: boolean
@@ -580,6 +699,10 @@ export type Database = {
         }
         Returns: boolean
       }
+      record_case_view: {
+        Args: { p_case_study_id: number }
+        Returns: undefined
+      }
       register_guest: {
         Args: {
           p_email: string
@@ -616,10 +739,16 @@ export type Database = {
         | "EXTERNAL_REL"
         | "IT"
         | "FINANCE"
+      case_activity_kind: "visita" | "estado" | "autoevaluacion"
+      case_progress_status:
+        | "pendiente"
+        | "en-progreso"
+        | "completado"
+        | "revisado"
       profile_state: "invited" | "active" | "inactive"
       registration_mode: "none" | "members_only" | "open"
       registration_status: "registered" | "cancelled" | "waitlisted"
-      user_role: "admin" | "editor" | "member"
+      user_role: "admin" | "editor" | "member" | "usuario"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -775,10 +904,17 @@ export const Constants = {
         "IT",
         "FINANCE",
       ],
+      case_activity_kind: ["visita", "estado", "autoevaluacion"],
+      case_progress_status: [
+        "pendiente",
+        "en-progreso",
+        "completado",
+        "revisado",
+      ],
       profile_state: ["invited", "active", "inactive"],
       registration_mode: ["none", "members_only", "open"],
       registration_status: ["registered", "cancelled", "waitlisted"],
-      user_role: ["admin", "editor", "member"],
+      user_role: ["admin", "editor", "member", "usuario"],
     },
   },
 } as const

@@ -47,6 +47,13 @@ export function authErrorMessage(error: unknown, fallback: string): string {
         case 'over_request_rate_limit':
         case 'over_email_send_rate_limit':
             return 'Hiciste demasiados intentos. Espera unos minutos y vuelve a probar.'
+        case 'signup_disabled':
+            return 'El registro de cuentas nuevas no está disponible por ahora.'
+        case 'user_already_exists':
+        case 'email_exists':
+            return 'Ya hay una cuenta con ese correo. Inicia sesión o recupera tu contraseña.'
+        case 'email_address_invalid':
+            return 'Escribe un correo válido.'
         case 'weak_password':
             return 'Esa contraseña es muy fácil de adivinar. Prueba con una más larga.'
         case 'same_password':

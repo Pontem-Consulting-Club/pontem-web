@@ -7,8 +7,9 @@ import { isUserRole, type UserRole } from '~~/shared/authz'
  * Invitacion por correo (ADM-1, FR-02).
  *
  * Supabase manda el correo y la persona elige su clave: Pontem nunca ve ni
- * guarda una contrasena (FR-05). El trigger crea el perfil como `member` e
- * `invited`; si la invitacion pedia otro rol, lo ajustamos despues.
+ * guarda una contrasena (FR-05). Desde el registro abierto el trigger crea todo
+ * perfil como `usuario` y activo, asi que aqui se le pone siempre el rol pedido
+ * y se deja `invited` para que termine el onboarding.
  */
 export default defineEventHandler(async (event) => {
     await requireCan(event, 'users.manage')
@@ -49,10 +50,10 @@ export default defineEventHandler(async (event) => {
         })
     }
 
-    if (role !== 'member' && data.user) {
+    if (data.user) {
         const { error: roleError } = await admin
             .from('profiles')
-            .update({ role })
+            .update({ role, state: 'invited' })
             .eq('id', data.user.id)
 
         if (roleError) {

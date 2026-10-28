@@ -9,6 +9,7 @@ servidor.
 | ------------------------ | ---------------------------------------------------------------- |
 | `authz_test.sql`         | Roles, perfiles, RLS de contenido, bootstrap del primer admin     |
 | `registrations_test.sql` | Cupo, unicidad de inscripciones, coherencia miembro/invitado      |
+| `case_progress_test.sql` | Registro abierto (rol usuario), progreso, historial y visitas     |
 
 Se corren contra la base **local**, nunca contra produccion:
 
@@ -18,6 +19,8 @@ docker exec -i supabase_db_pontem-web \
   psql -U postgres -d postgres -v ON_ERROR_STOP=1 -q < supabase/tests/authz_test.sql
 docker exec -i supabase_db_pontem-web \
   psql -U postgres -d postgres -v ON_ERROR_STOP=1 -q < supabase/tests/registrations_test.sql
+docker exec -i supabase_db_pontem-web \
+  psql -U postgres -d postgres -v ON_ERROR_STOP=1 -q < supabase/tests/case_progress_test.sql
 ```
 
 Cada comprobacion imprime `PASS`. La primera que falle corta la corrida con

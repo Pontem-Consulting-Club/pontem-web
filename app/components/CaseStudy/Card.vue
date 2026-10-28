@@ -1,12 +1,21 @@
 <script setup lang="ts">
 import type { CaseStudyRecord } from '~/types/content'
-import { CASE_DIFFICULTY_LABELS, getCaseCategoryIcon, getCaseCategoryLabel } from '~/constants/caseStudies'
+import {
+  CASE_DIFFICULTY_LABELS,
+  CASE_PROGRESS_COLORS,
+  CASE_PROGRESS_ICONS,
+  CASE_PROGRESS_LABELS,
+  getCaseCategoryIcon,
+  getCaseCategoryLabel
+} from '~/constants/caseStudies'
 
 const props = defineProps<{
   caseStudy: CaseStudyRecord
 }>()
 
 const { isEditor } = useProfile()
+const { progressFor } = useMyCaseProgress()
+const progressStatus = computed(() => progressFor(props.caseStudy.id)?.status ?? null)
 const { getCategoryAccent, getCategoryBadge, getCategoryText, getDifficultyText } = useCaseStudyColors()
 
 const { url: logoUrl } = useStorageImage(computed(() => props.caseStudy.company_logo_url ?? null))
@@ -42,9 +51,15 @@ const duration = computed(() => {
             {{ caseStudy.company }}
           </span>
         </div>
-        <span v-if="duration" class="text-xs text-muted bg-muted px-2 py-1 rounded-sm shrink-0">
-          {{ duration }}
-        </span>
+        <div class="flex items-center gap-2 shrink-0">
+          <UBadge v-if="progressStatus" :color="CASE_PROGRESS_COLORS[progressStatus]" variant="soft" size="sm"
+            :icon="CASE_PROGRESS_ICONS[progressStatus]">
+            {{ CASE_PROGRESS_LABELS[progressStatus] }}
+          </UBadge>
+          <span v-if="duration" class="text-xs text-muted bg-muted px-2 py-1 rounded-sm">
+            {{ duration }}
+          </span>
+        </div>
       </div>
 
       <h3 class="text-subheading text-highlighted">

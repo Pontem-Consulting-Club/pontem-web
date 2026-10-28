@@ -38,7 +38,7 @@
               <dt class="text-muted">Estado</dt>
               <dd class="font-medium">{{ stateLabel }}</dd>
             </div>
-            <div v-if="profile.handle" class="flex items-center justify-between gap-2 px-4 py-3">
+            <div v-if="profile.handle && isClubMember" class="flex items-center justify-between gap-2 px-4 py-3">
               <dt class="text-muted">Enlace</dt>
               <dd class="truncate font-mono text-xs">
                 <NuxtLink v-if="profile.is_public" :to="`/miembros/${profile.handle}`" class="text-primary">
@@ -67,7 +67,8 @@
                 placeholder="En qué estás, qué te interesa" />
             </UFormField>
 
-            <div class="grid gap-5 sm:grid-cols-2">
+            <!-- Datos del club: quien se registro solo (rol usuario) no los tiene. -->
+            <div v-if="isClubMember" class="grid gap-5 sm:grid-cols-2">
               <UFormField label="Coordinación">
                 <USelectMenu v-model.nullable="form.coordination" :items="coordinationOptions" value-key="value"
                   label-key="label" placeholder="Sin coordinación" />
@@ -79,12 +80,14 @@
               </UFormField>
             </div>
 
-            <USeparator />
+            <template v-if="isClubMember">
+              <USeparator />
 
-            <UFormField>
-              <UCheckbox v-model="form.is_public" label="Publicar mi perfil"
-                description="Muestra tu nombre, foto, coordinación y biografía en una página que puedes compartir. Tu correo, tus estadísticas y tu progreso no se publican nunca." />
-            </UFormField>
+              <UFormField>
+                <UCheckbox v-model="form.is_public" label="Publicar mi perfil"
+                  description="Muestra tu nombre, foto, coordinación y biografía en una página que puedes compartir. Tu correo, tus estadísticas y tu progreso no se publican nunca." />
+              </UFormField>
+            </template>
 
             <UAlert v-if="error" color="error" icon="i-lucide-alert-circle" :description="error" />
             <UAlert v-if="savedMessage" color="success" icon="i-lucide-check" :description="savedMessage" />
@@ -151,7 +154,8 @@ useHead({
   meta: [{ name: 'robots', content: 'noindex, nofollow' }]
 })
 
-const { profile, refresh, needsOnboarding, ready: profileReady } = useProfile()
+const { profile, refresh, needsOnboarding, can, ready: profileReady } = useProfile()
+const isClubMember = computed(() => can('profile.publish'))
 const { registrations, stats } = useMyRegistrations()
 const { formatDate } = useDateFormatting()
 

@@ -13,6 +13,8 @@ const stages = studyMaterials.stages
 const caseBooks = studyMaterials.caseBooks
 
 const { isEditor } = useProfile()
+const { isAuthenticated } = useAuth()
+const { canTrack } = useMyCaseProgress()
 
 const { data: caseStudies, error, refresh } = await useFetch<CaseStudyRecord[]>('/api/case-studies', {
   default: () => []
@@ -79,6 +81,20 @@ const clearFilters = () => {
       Casos de estudio, casebooks y recursos para preparar las entrevistas de consultoría, ordenados por etapa de
       la postulación.
     </p>
+
+    <!-- Registro abierto: el progreso es la razón para crear una cuenta. -->
+    <UAlert v-if="!isAuthenticated" icon="i-lucide-chart-no-axes-column" color="primary" variant="soft"
+      title="Guarda tu progreso"
+      description="Crea una cuenta gratis para marcar los casos que resolviste, autoevaluarte y tomar notas."
+      :actions="[
+        { label: 'Crear cuenta', to: '/registro?redirect=/material-estudio' },
+        { label: 'Iniciar sesión', to: '/login?redirect=/material-estudio', variant: 'ghost', color: 'neutral' }
+      ]" class="-mt-12" />
+    <div v-else-if="canTrack" class="-mt-12">
+      <UButton to="/mi-progreso" icon="i-lucide-chart-no-axes-column" variant="outline">
+        Ver mi progreso
+      </UButton>
+    </div>
 
     <section class="flex flex-col gap-8">
       <h2 class="text-title text-highlighted">Ruta de postulación</h2>

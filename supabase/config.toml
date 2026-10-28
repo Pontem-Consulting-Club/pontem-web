@@ -173,12 +173,14 @@ enable_refresh_token_rotation = true
 # Allows refresh tokens to be reused after expiry, up to the specified interval in seconds.
 # Requires enable_refresh_token_rotation = true.
 refresh_token_reuse_interval = 10
-# FR-02: las cuentas se crean SOLO por invitacion de un administrador. Con esto
-# en true, cualquiera con la clave publishable (que viaja al navegador) podia
-# llamar a /auth/v1/signup y crearse una cuenta, aunque la app no tuviera
-# pantalla de registro. La invitacion usa la API de admin, que no pasa por este
-# interruptor, asi que sigue funcionando.
-enable_signup = false
+# Registro abierto desde /registro. Antes estaba en false porque toda cuenta
+# nueva nacia como `member`; desde 20261028130000_self_signup.sql nace como
+# `usuario`, que solo guarda su progreso en los casos y no edita nada, asi que
+# crearse una cuenta por /auth/v1/signup ya no da acceso a nada del club. Las
+# invitaciones siguen por la API de admin y asignan el rol pedido.
+# Esto vale SOLO para local: en produccion y canary se activa en el panel, en
+# Authentication > Sign In / Providers > "Allow new users to sign up".
+enable_signup = true
 # Allow/disallow anonymous sign-ins to your project.
 enable_anonymous_sign_ins = false
 # Allow/disallow testing manual linking of accounts

@@ -83,7 +83,7 @@ delete from auth.users where id in (
 insert into auth.users (id, email, raw_user_meta_data) values
     ('11111111-1111-1111-1111-111111111111', 'clubconsultoria.uc@gmail.com', '{}'::jsonb),
     ('22222222-2222-2222-2222-222222222222', 'marketing@pontemcc.cl', '{"display_name":"José Ramírez"}'::jsonb),
-    ('33333333-3333-3333-3333-333333333333', 'miembro@pontemcc.cl',   '{"display_name":"José Ramírez"}'::jsonb),
+    ('33333333-3333-3333-3333-333333333333', 'miembro@pontemcc.cl',   '{"display_name":"José Ramírez","role":"admin"}'::jsonb),
     ('44444444-4444-4444-4444-444444444444', 'otro@pontemcc.cl',      '{}'::jsonb);
 
 -- Se cuentan solo las cuentas de esta prueba: el seed ya dejo las suyas.
@@ -100,11 +100,17 @@ select pg_temp.check('FR-31 la cuenta institucional arranca como admin',
 select pg_temp.check('FR-31 la cuenta institucional arranca activa, no invitada',
     (select state from public.profiles where id = '11111111-1111-1111-1111-111111111111') = 'active');
 
-select pg_temp.check('las cuentas invitadas arrancan en invited',
-    (select state from public.profiles where id = '22222222-2222-2222-2222-222222222222') = 'invited');
+-- Desde el registro abierto toda cuenta nueva arranca como usuario activo. La
+-- invitacion (server/api/admin/users/invite.post.ts) le pone despues el rol
+-- pedido y la deja en invited; eso lo simula el update de mas abajo.
+select pg_temp.check('las demas cuentas arrancan activas',
+    (select state from public.profiles where id = '22222222-2222-2222-2222-222222222222') = 'active');
 
-select pg_temp.check('las demas cuentas arrancan como member',
-    (select role from public.profiles where id = '22222222-2222-2222-2222-222222222222') = 'member');
+select pg_temp.check('las demas cuentas arrancan como usuario, no como member',
+    (select role from public.profiles where id = '22222222-2222-2222-2222-222222222222') = 'usuario');
+
+select pg_temp.check('el rol no sale de lo que la persona manda al registrarse',
+    (select role from public.profiles where id = '33333333-3333-3333-3333-333333333333') = 'usuario');
 
 -- ============================================================
 -- 2. Handles derivados (FR-15)
@@ -118,10 +124,11 @@ select pg_temp.check('FR-15 colision de handle recibe sufijo',
 
 update public.profiles set role = 'editor', state = 'active'
  where id = '22222222-2222-2222-2222-222222222222';
-update public.profiles set state = 'active'
- where id in ('11111111-1111-1111-1111-111111111111',
-              '33333333-3333-3333-3333-333333333333',
+update public.profiles set role = 'member', state = 'active'
+ where id in ('33333333-3333-3333-3333-333333333333',
               '44444444-4444-4444-4444-444444444444');
+update public.profiles set state = 'active'
+ where id = '11111111-1111-1111-1111-111111111111';
 
 -- ============================================================
 -- 3. Columnas privilegiadas (FR-10)

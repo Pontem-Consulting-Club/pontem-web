@@ -2,6 +2,7 @@ import { serverSupabaseClient } from '#supabase/server'
 import type { Database } from '~/types/database.types'
 import { getRequestProfile } from '~~/server/utils/requireCan'
 import { isValidTeamCoordination } from '~~/server/utils/teamRoles'
+import { can, type AuthzProfile } from '~~/shared/authz'
 
 type ProfileUpdate = Database['public']['Tables']['profiles']['Update']
 
@@ -58,13 +59,16 @@ export default defineEventHandler(async (event) => {
         }
     }
 
-    const isPublic = body?.is_public === true || body?.is_public === 'true'
+    // Coordinacion, generacion y perfil publico son datos del club: un `usuario`
+    // no los tiene. La vista `public_profiles` tampoco lo mostraria.
+    const isClubMember = can(profile as AuthzProfile, 'profile.publish')
+    const isPublic = isClubMember && (body?.is_public === true || body?.is_public === 'true')
 
     const payload: ProfileUpdate = {
         display_name: displayName,
         bio: normalize(body?.bio),
-        coordination: coordination as ProfileUpdate['coordination'],
-        generation,
+        coordination: isClubMember ? coordination as ProfileUpdate['coordination'] : null,
+        generation: isClubMember ? generation : null,
         is_public: isPublic,
         // MEM-1: aceptar la invitacion y completar el perfil es lo que activa la
         // cuenta. Es la unica transicion de estado que permite el trigger.

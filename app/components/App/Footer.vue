@@ -41,7 +41,7 @@ const { isAuthenticated } = useAuth()
 const columns = computed<FooterColumn[]>(() => [
   {
     label: 'Pontem',
-    children: isAuthenticated.value ? navigation : [...navigation, { label: 'Acceso miembros', to: '/login' }]
+    children: isAuthenticated.value ? navigation : [...navigation, { label: 'Iniciar sesión', to: '/login' }]
   },
   {
     label: 'Contacto',

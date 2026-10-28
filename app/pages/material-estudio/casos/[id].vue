@@ -177,6 +177,8 @@ const handleDelete = async () => {
 
       <!-- Barra lateral -->
       <aside class="lg:col-span-4 flex flex-col gap-6">
+        <CaseStudyProgressPanel :case-study-id="caseStudy.id" />
+
         <UCard v-if="documentUrl" :ui="{ body: 'flex flex-col items-center gap-4 text-center' }">
           <div class="size-16 bg-primary-50 rounded-full flex items-center justify-center">
             <UIcon name="i-lucide-download" class="size-7 text-primary" />

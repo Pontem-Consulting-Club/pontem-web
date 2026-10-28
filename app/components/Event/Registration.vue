@@ -14,6 +14,12 @@
       <span>{{ closedReason }}</span>
     </div>
 
+    <!-- Cuenta activa que no es del club (rol usuario) en una actividad interna -->
+    <div v-else-if="isAuthenticated && isClubOnlyForMe" class="flex items-center gap-2 text-sm text-toned">
+      <UIcon name="i-lucide-users" />
+      <span>Esta actividad es solo para miembros del club.</span>
+    </div>
+
     <!-- Miembro con sesión -->
     <div v-else-if="isAuthenticated" class="flex flex-wrap items-center gap-3">
       <UButton variant="solid" icon="i-lucide-calendar-check" :loading="isBusy" @click="register">
@@ -67,6 +73,12 @@ const props = defineProps<{
 
 const route = useRoute()
 const { isAuthenticated } = useAuth()
+const { profile, can } = useProfile()
+
+// Solo para cuentas activas: a una invitada el servidor le pide completar el
+// perfil, que es mas util que decirle que no es del club.
+const isClubOnlyForMe = computed(() =>
+  props.mode === 'members_only' && profile.value?.state === 'active' && !can('events.register'))
 
 const { isRegisteredFor, refresh: refreshRegistrations } = useMyRegistrations()
 

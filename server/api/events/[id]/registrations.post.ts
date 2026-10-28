@@ -73,14 +73,19 @@ export default defineEventHandler(async (event) => {
 
     // ---------------------------------------------------------------- miembro
     if (profile) {
-        // Una cuenta invitada o desactivada no se inscribe (FR-03). RLS exige lo
-        // mismo; esto le da a la persona un mensaje que entienda.
-        if (!can(profile as AuthzProfile, 'events.register')) {
+        // Una cuenta invitada o desactivada no se inscribe (FR-03), y un
+        // `usuario` solo entra a eventos abiertos. RLS exige lo mismo; esto le da
+        // a la persona un mensaje que entienda.
+        const capability = target.registration_mode === 'open' ? 'events.register.open' : 'events.register'
+
+        if (!can(profile as AuthzProfile, capability)) {
             throw createError({
                 statusCode: 403,
                 statusMessage: profile.state === 'invited'
                     ? 'Completa tu perfil antes de inscribirte.'
-                    : 'Tu cuenta esta desactivada. Pide a la coordinacion que la reactive.'
+                    : profile.state === 'inactive'
+                        ? 'Tu cuenta esta desactivada. Pide a la coordinacion que la reactive.'
+                        : 'Este evento es solo para miembros del club.'
             })
         }
 

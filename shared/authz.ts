@@ -15,22 +15,38 @@ export type ProfileState = Database['public']['Enums']['profile_state']
  */
 export const CAPABILITIES = {
     admin: [
+        'cases.track',
         'content.edit',
         'events.register',
+        'events.register.open',
+        'profile.publish',
         'registrations.read',
         'registrations.manage',
         'users.manage'
     ],
     editor: [
+        'cases.track',
         'content.edit',
         'events.register',
+        'events.register.open',
+        'profile.publish',
         'registrations.read',
         'registrations.manage'
     ],
     // Inscribirse a actividades (MEM-4). Como toda capacidad, se pierde con la
     // cuenta desactivada y no llega hasta terminar el onboarding.
     member: [
-        'events.register'
+        'cases.track',
+        'events.register',
+        'events.register.open',
+        'profile.publish'
+    ],
+    // Quien se registra solo: no es del club. Guarda su progreso en los casos y
+    // se inscribe en eventos abiertos, pero no en los "solo miembros" ni aparece
+    // en el directorio de /miembros.
+    usuario: [
+        'cases.track',
+        'events.register.open'
     ]
 } as const satisfies Record<UserRole, readonly string[]>
 
@@ -59,7 +75,8 @@ export const can = (
 export const ROLE_LABELS: Record<UserRole, string> = {
     admin: 'Administrador',
     editor: 'Editor de contenido',
-    member: 'Miembro'
+    member: 'Miembro',
+    usuario: 'Usuario'
 }
 
 export const PROFILE_STATE_LABELS: Record<ProfileState, string> = {
@@ -68,7 +85,7 @@ export const PROFILE_STATE_LABELS: Record<ProfileState, string> = {
     inactive: 'Inactivo'
 }
 
-export const USER_ROLES: UserRole[] = ['admin', 'editor', 'member']
+export const USER_ROLES: UserRole[] = ['admin', 'editor', 'member', 'usuario']
 
 export const isUserRole = (value: unknown): value is UserRole =>
     typeof value === 'string' && (USER_ROLES as string[]).includes(value)

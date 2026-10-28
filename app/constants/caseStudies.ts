@@ -111,3 +111,41 @@ export const isValidCaseResourceKind = (value: string | null | undefined): value
   if (!value) return false
   return CASE_RESOURCE_KIND_SET.has(value as CaseResourceKind)
 }
+
+// Progreso de cada persona en un caso. Sin estado, el caso esta "sin empezar".
+export type CaseProgressStatus = Database['public']['Enums']['case_progress_status']
+
+export const CASE_PROGRESS_STATUSES: readonly CaseProgressStatus[] = Constants.public.Enums.case_progress_status
+
+export const CASE_PROGRESS_LABELS: Record<CaseProgressStatus, string> = {
+  'pendiente': 'Pendiente',
+  'en-progreso': 'En progreso',
+  'completado': 'Completado',
+  'revisado': 'Revisado'
+}
+
+export const CASE_PROGRESS_ICONS: Record<CaseProgressStatus, string> = {
+  'pendiente': 'i-lucide-bookmark',
+  'en-progreso': 'i-lucide-loader-circle',
+  'completado': 'i-lucide-circle-check',
+  'revisado': 'i-lucide-repeat'
+}
+
+// Colores semanticos de Nuxt UI para UBadge y UButton.
+export const CASE_PROGRESS_COLORS: Record<CaseProgressStatus, 'neutral' | 'warning' | 'success' | 'info'> = {
+  'pendiente': 'neutral',
+  'en-progreso': 'warning',
+  'completado': 'success',
+  'revisado': 'info'
+}
+
+export const CASE_PROGRESS_DESCRIPTIONS: Record<CaseProgressStatus, string> = {
+  'pendiente': 'Lo guardaste para hacerlo después.',
+  'en-progreso': 'Lo estás resolviendo.',
+  'completado': 'Ya lo resolviste.',
+  'revisado': 'Lo volviste a repasar después de resolverlo.'
+}
+
+// Completado y revisado cuentan los dos como caso resuelto.
+export const isCaseProgressDone = (status?: CaseProgressStatus | null) =>
+  status === 'completado' || status === 'revisado'

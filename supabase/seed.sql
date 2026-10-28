@@ -209,7 +209,8 @@ begin
         select * from (values
             ('admin@pontem.test',   'Admin de Prueba',    'admin'),
             ('editor@pontem.test',  'Editora de Prueba',  'editor'),
-            ('miembro@pontem.test', 'Miembro de Prueba',  'member')
+            ('miembro@pontem.test', 'Miembro de Prueba',  'member'),
+            ('usuario@pontem.test', 'Usuario de Prueba',  'usuario')
         ) as t(email, display_name, role)
     loop
         nuevo_id := gen_random_uuid();
@@ -245,17 +246,19 @@ begin
             now(), now(), now()
         );
 
-        -- El trigger ya creo el perfil como member/invited. Aqui le ponemos el
-        -- rol que toca y lo dejamos activo para poder entrar y probar.
+        -- El trigger ya creo el perfil como usuario/active. Aqui le ponemos el
+        -- rol que toca y lo dejamos activo para poder entrar y probar. El
+        -- usuario no es del club: sin coordinacion ni generacion.
         update public.profiles
            set role = cuenta.role::public.user_role,
                state = 'active',
                coordination = case cuenta.role
-                   when 'admin'  then 'IT'::public."ClubCoordination"
-                   when 'editor' then 'COMMS_MKT'::public."ClubCoordination"
+                   when 'admin'   then 'IT'::public."ClubCoordination"
+                   when 'editor'  then 'COMMS_MKT'::public."ClubCoordination"
+                   when 'usuario' then null
                    else 'LEARNING_DEV'::public."ClubCoordination"
                end,
-               generation = 2024,
+               generation = case when cuenta.role = 'usuario' then null else 2024 end,
                bio = 'Cuenta de prueba. No corresponde a ninguna persona real.'
          where id = nuevo_id;
     end loop;
